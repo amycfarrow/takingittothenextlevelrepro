@@ -1,0 +1,654 @@
+variables,full_names
+id,Unique Identifier
+use,Experimental Sample
+use2,Non-Experimental Sample
+treatment,Condition
+teacherid,Teacher ID
+r_startdate,R - Start Time
+r_enddate,R - End Time
+r_finished,R - Finished
+r_female,R - Female
+r_female_text,R - Gender - other
+r_coursesize,R - Anticipated Course Size
+r_exclude,R - Exclude from Project
+r_nudge,R - Email Nudge to pick specific course
+t1_startdate,T1 - Start Time
+t1_enddate,T1 - End Time
+t1_finished,T1 - Finished
+t1_prof_gtky_survey,T1 - Professor GTKY Survey
+t1_consent,T1 - Consent
+t1_courseday,T1 - Course Day
+t1_coursetime,T1 - Course Time
+t1_q1,Q1: When do you think students learn the most?
+t1_q2,"Q2: Of the following, which is the best learning opportunity for students?"
+t1_q3,Q3: The best way students and instructors can give each other the benefit of the
+t1_q4,Q4: Which of the following is most important for instructors to reveal about the
+t1_q5,Q5: Which would be the more important thing to have in common for instructors an
+t1_q6,"Q6: Of the following, which characteristic is most important for an instructor?"
+t1_q7,"Q7: When real-life intervenes, and a student does not get classwork done, it is "
+t1_q8,Q8: Which is more important for an instructor to do to help a student's career:
+t1_q9,Q9: The most important thing for students and instructors to realize about their
+t1_q10,"Q10: To get to know their students, it is most important for instructors to lear"
+t1_q11,"Q11: Of the various goals that students and instructors might share, which of th"
+t1_q12,"Q12: When it comes to being successful, which of the following is more important"
+t1_q13,Q13: What is the best way instructors can engage students?
+t1_q14,Q14: Which of the following is most important to you?
+t1_q15,Q15: Which of the following is one area you'd like to improve in your life?
+t1_q16,Q16: Which personal characteristic about an instructor [a student] would be most
+t1_q17,Q17: Have you significantly struggled in a college class before?
+t1_q18,"Q18: When not talking about your courses, what would you most like to talk to [i"
+t1_q19,Q19: Which of the following traits do you think best describes you?
+t1_q20,Q20: The most important quality in a friend is someone who:
+t1_q21,Q21: How much do you worry about climate change?
+t1_q22,Q22: Which of the following is more important for instructors to know about a st
+t1_q23,Q23: What do you do to de-stress?
+t1_q24,Q24: Which of the following habits would you most like to work on this semester?
+t1_q25,Q25: Of the following what is the biggest issue our country faces today?
+t1_q26,Q26: What else would you most like this [instructor/student] to know about you?
+t1_q27,Q27: Which of the following do you find most challenging?
+t1_q28,Q28: How nervous do you get when you have give public speaking presentations to 
+t1_q29,"Q29: If you were president of COLLEGE, which student priority would you put the "
+t1_q30,"Q30: If you were president of COLLEGE, which faculty priority would you put the "
+t1_q31,Q31: It is most important for professors to be available to talk to students whe
+t1_q32,Q32: Which is the better way for students to connect with faculty outside of the
+t1_demosintro,T1 - Demo page
+t1_years_teach,T1 - For how many years have you taught?
+t1_years_college,T1 - For how many years have you taught at COLLEGE?
+t1_continue,"T1 - If you had to take your best guess, how many more years do you think you wi"
+t_age,Teacher Age
+t1_language,Teacher Primary Language
+t1_race_1,T - White/Caucasian
+t1_race_1_text,T - White/Caucasian Text
+t1_race_2,T - Black or African American
+t1_race_2_text,T - Black or African American Text
+t1_race_3,T - Hispanic American or Latino/a
+t1_race_3_text,T - Hispanic American or Latino/a Text
+t1_race_4,T - Asian or Pacific Islander
+t1_race_4_text,T - Asian or Pacific Islander Text
+t1_race_5,T - American Indian or Alaskan
+t1_race_5_text,T - American Indian or Alaskan Text
+t1_race_6,T - Middle Eastern
+t1_race_6_text,T - Middle Eastern Text
+t1_race_7,T - Other Race
+t1_race_7_text,T - Other Race Text
+t1_recommend,"T1 - If a friend or colleague were looking for teaching job, to what extent, if "
+t1_mother_ed,T1 - Mother's highest level of education completed
+t1_father_ed,T1 - Father's highest level of education completed
+t1_difficulty,"T1 - Relative to the average course at COLLEGE, how difficult do students find t"
+t1_final_exam,T1 - Do you give a final exam in this course?
+t1_exam_objective,T1 - Which best describes how this exam is graded?
+t1_grading_objective,T1 - To what extent do you need to use your professional judgment while grading 
+t1_assignment_weights_1,T1 - Percent of Assignments: Exams
+t1_assignment_weights_2,T1 - Percent of Assignments: Papers
+t1_assignment_weights_3,T1 - Percent of Assignments: Participation
+t1_assignment_weights_4,T1 - Percent of Assignments: Other
+t1_studentevals,"T1 - If you have taught this course before, how satisfied have you been with the"
+t1_participate,T1 - Would you participate for no money?
+t1_administration,T1 - Professor Survey Administration Selection (A or B)
+t1_end,T1 - Saw last page
+t1_complete,T1 - Completed Professor GTKY Survey
+t1_timer_consent_3,T1 - Timer: Consent Page
+t1_timer_gtky1_3,T1 - Timer: GTKY Page 1
+t1_timer_gtky2_3,T1 - Timer: GTKY Page 2
+t1_timer_gtky3_3,T1 - Timer: GTKY Page 2
+t1_timer_demos1_3,T1 - Timer: DemosPage 1
+t1_timer_demos2_3,T1 - Timer: DemosPage 2
+merge1,Merge - Recruit + Prof GTKY survey
+n,NULL
+s1_responseid,S1 - Response ID
+s1_startdate,S1 - Start Time
+s1_enddate,S1 - End Time
+s1_finished,S1 - Finished
+s1_heshe,Teacher She/He
+s1_hisher,Teacher Her/His
+s1_student_gtky_survey,NULL
+s1_consent,S1 - Student Consent
+s1_timer_consent_3,S1 - Timer Consent
+s1_intro2,intro2
+s1_taken,S1 - Took with Other Professor
+s1_taken_prof,S1 - Other Professor
+s1_timer_gtky1_3,S1 - Timer: GTKY Page 1
+s1_q1,Q1: When do you think students learn the most?
+s1_q2,"Q2: Of the following, which is the best learning opportunity for students?"
+s1_q3,Q3: The best way students and instructors can give each other the benefit of the
+s1_q4,Q4: Which of the following is most important for instructors to reveal about the
+s1_q5,Q5: Which would be the more important thing to have in common for instructors an
+s1_q6,"Q6: Of the following, which characteristic is most important for an instructor?"
+s1_q7,"Q7: When real-life intervenes, and a student does not get classwork done, it is "
+s1_q8,Q8: Which is more important for an instructor to do to help a student's career:
+s1_q9,Q9: The most important thing for students and instructors to realize about their
+s1_q10,"Q10: To get to know their students, it is most important for instructors to lear"
+s1_timer_gtky2_3,S1 - Timer: GTKY Page 2
+s1_q11,"Q11: Of the various goals that students and instructors might share, which of th"
+s1_q12,"Q12: When it comes to being successful, which of the following is more important"
+s1_q13,Q13: What is the best way instructors can engage students?
+s1_q14,Q14: Which of the following is most important to you?
+s1_q15,Q15: Which of the following is one area you'd like to improve in your life?
+s1_q16,Q16: Which personal characteristic about an instructor [a student] would be most
+s1_q17,Q17: Have you significantly struggled in a college class before?
+s1_q18,"Q18: When not talking about your courses, what would you most like to talk to [i"
+s1_q19,Q19: Which of the following traits do you think best describes you?
+s1_timer_gtky3_3,S1 - Timer: GTKY Page 3
+s1_q20,Q20: The most important quality in a friend is someone who:
+s1_q21,Q21: How much do you worry about climate change?
+s1_q22,Q22: Which of the following is more important for instructors to know about a st
+s1_q23,Q23: What do you do to de-stress?
+s1_q24,Q24: Which of the following habits would you most like to work on this semester?
+s1_q25,Q25: Of the following what is the biggest issue our country faces today?
+s1_q26,Q26: What else would you most like this [instructor/student] to know about you?
+s1_q27,Q27: Which of the following do you find most challenging?
+s1_q28,Q28: How nervous do you get when you have give public speaking presentations to 
+s1_q29,"Q29: If you were president of COLLEGE, which student priority would you put the "
+s1_q31,Q31: It is most important for professors to be available to talk to students whe
+s1_q32,Q32: Which is the better way for students to connect with faculty outside of the
+s1_timerpre1_3,S1 - Timer: Pre-Int Page 1
+s1_tsr1,How much do you think you will enjoy learning from this instructor 
+s1_exp1,How often do you think this instructor will make you explain your answers?
+s1_tsr2,How friendly do you think this instructor will be towards you?
+s1_exp2,"When you feel like giving up on a difficult task, how likely is it that this ins"
+s1_tsr3,How encouraging do you think this instructor will be towards you?
+s1_timerpre2_3,S1 - Timer: Pre-Int Page 2
+s1_tsr4,"If you came back to visit this instructor three years from now, how excited do y"
+s1_exp3,How much do you think this instructor will encourage you to do your best?
+s1_tsr5,How motivating do you think you will find this instructor's class?
+s1_tsr6,How caring do you think this instructor will be towards you?
+s1_exp4,How often do you think this instructor will take time to make sure you understan
+s1_exp5,"Overall, how high do you think Professor 's expectations are for you?"
+s1_tsr7,"Overall, how much do you think you will learn from this instructor?"
+s1_timercontrolfeedback_3,S1 - Timer: View Control Responses
+s1_sim1_c,S1 - C: Saw Similarity 1
+s1_sim2_c,S1 - C: Saw Similarity 2
+s1_sim3_c,S1 - C: Saw Similarity 3
+s1_sim4_c,S1 - C: Saw Similarity 4
+s1_sim5_c,S1 - C: Saw Similarity 5
+s1_sim6_c,S1 - C: Saw Similarity 6
+s1_sim7_c,S1 - C: Saw Similarity 7
+s1_sim8_c,S1 - C: Saw Similarity 8
+s1_sim9_c,S1 - C: Saw Similarity 9
+s1_sim10_c,S1 - C: Saw Similarity 10
+s1_sim11_c,S1 - C: Saw Similarity 11
+s1_sim12_c,S1 - C: Saw Similarity 12
+s1_sim13_c,S1 - C: Saw Similarity 13
+s1_sim14_c,S1 - C: Saw Similarity 14
+s1_sim15_c,S1 - C: Saw Similarity 15
+s1_sim16_c,S1 - C: Saw Similarity 16
+s1_sim17_c,S1 - C: Saw Similarity 17
+s1_sim18_c,S1 - C: Saw Similarity 18
+s1_sim19_c,S1 - C: Saw Similarity 19
+s1_sim20_c,S1 - C: Saw Similarity 20
+s1_sim21_c,S1 - C: Saw Similarity 21
+s1_sim22_c,S1 - C: Saw Similarity 22
+s1_sim23_c,S1 - C: Saw Similarity 23
+s1_sim24_c,S1 - C: Saw Similarity 24
+s1_sim25_c,S1 - C: Saw Similarity 25
+s1_sim26_c,S1 - C: Saw Similarity 26
+s1_sim27_c,S1 - C: Saw Similarity 27
+s1_sim28_c,S1 - C: Saw Similarity 28
+s1_sim29_c,S1 - C: Saw Similarity 29
+s1_sim31_c,S1 - C: Saw Similarity 31
+s1_sim32_c,S1 - C: Saw Similarity 32
+s1_timercontrolresponse_3,S1 - Timer: C - Intervention Feedback
+s1_timertreatmentfeedba_3,S1 - Timer: View Treatment Responses
+s1_sim1_t,S1 - T: Saw Similarity 1
+s1_sim2_t,S1 - T: Saw Similarity 2
+s1_sim3_t,S1 - T: Saw Similarity 3
+s1_sim4_t,S1 - T: Saw Similarity 4
+s1_sim5_t,S1 - T: Saw Similarity 5
+s1_sim6_t,S1 - T: Saw Similarity 6
+s1_sim7_t,S1 - T: Saw Similarity 7
+s1_sim8_t,S1 - T: Saw Similarity 8
+s1_sim9_t,S1 - T: Saw Similarity 9
+s1_sim10_t,S1 - T: Saw Similarity 10
+s1_sim11_t,S1 - T: Saw Similarity 11
+s1_sim12_t,S1 - T: Saw Similarity 12
+s1_sim13_t,S1 - T: Saw Similarity 13
+s1_sim14_t,S1 - T: Saw Similarity 14
+s1_sim15_t,S1 - T: Saw Similarity 15
+s1_sim16_t,S1 - T: Saw Similarity 16
+s1_sim17_t,S1 - T: Saw Similarity 17
+s1_sim18_t,S1 - T: Saw Similarity 18
+s1_sim19_t,S1 - T: Saw Similarity 19
+s1_sim20_t,S1 - T: Saw Similarity 20
+s1_sim21_t,S1 - T: Saw Similarity 21
+s1_sim22_t,S1 - T: Saw Similarity 22
+s1_sim23_t,S1 - T: Saw Similarity 23
+s1_sim24_t,S1 - T: Saw Similarity 24
+s1_sim25_t,S1 - T: Saw Similarity 25
+s1_sim26_t,S1 - T: Saw Similarity 26
+s1_sim27_t,S1 - T: Saw Similarity 27
+s1_sim28_t,S1 - T: Saw Similarity 28
+s1_sim29_t,S1 - T: Saw Similarity 29
+s1_sim31_t,S1 - T: Saw Similarity 31
+s1_sim32_t,S1 - T: Saw Similarity 32
+s1_timertreatmentrespon_3,S1 - Timer: T - Intervention Feedback
+s1_treatment1,S1 - T1: Which of these things that you have in common are you most likely to ta
+s1_treatment2,S1 - T2: Of these commonalities please choose the one that you think is the most
+s1_timerpost1_3,S1 - Timer: Post-Intervention 1
+s1_enj1,How excited are you about this class?
+s1_sim1,"Overall, how similar to your instructor's values do you think your values are?"
+s1_enj2,How enjoyable do you think it will be to participate in this class?
+s1_sim2,How similar are your goals for the course and your instructor's goals?
+s1_enj3,How much fun do you think the assignments for this class will be?
+s1_timerpost2_3,S1 - Timer: Post-Intervention 2
+s1_sim3,"In general, how similar do you think your views about the course content and you"
+s1_sim4,How much do you think you have in common with your instructor?
+s1_enj4,How eager are you to learn the course material?
+s1_sim5,How similar do you think your personality is compared to your instructor's?
+s1_enj5,"Overall, how much do you think you will like this course?"
+s1_sim6,"Overall, how similar do you think you and your instructor are?"
+s1_demos,S1 - Demos Intro
+s1_years_college,S1 - For how many years have you been at COLLEGE?
+s1_transfer,S1 - Did you transfer to COLLEGE from another college?
+s1_age,Student Age
+s1_language,Student Primary Language
+s1_female,Student Gender
+s1_female_text,Student Gender Text
+s1_race_1,S - White/Caucasian
+s1_race_1_text,S - White/Caucasian Text
+s1_race_2,S - Black or African American
+s1_race_2_text,S - Black or African American Text
+s1_race_3,S - Hispanic American or Latino/a
+s1_race_3_text,S - Hispanic American or Latino/a Text
+s1_race_4,S - Asian or Pacific Islander
+s1_race_4_text,S - Asian or Pacific Islander Text
+s1_race_5,S - American Indian or Alaskan
+s1_race_5_text,S - American Indian or Alaskan Text
+s1_race_6,S - Middle Eastern
+s1_race_6_text,S - Middle Eastern Text
+s1_race_7,S - Other Race
+s1_race_7_text,S - Other Race Text
+s1_mother_ed,S1 - Mother's highest level of education completed
+s1_father_ed,S1 - Father's highest level of education completed
+s1_difficulty,"S1 - Relative to the average course at COLLEGE, how difficult do you expect to f"
+s1_recommend,"S1 - If a friend or colleague were looking to attend college, to what extent, if"
+s1_gpa_guess,S1 - Student Self-Reported GPA Estimate
+s1_ses,S1 - SES
+s1_timerdemo1_3,S1 - Timer: Demos
+s1_end,S1 - Saw last page
+s1_comments,S1 - Student GTKY Comments
+s1_fullsurvey,S1 - Completed Full Survey
+s1_partialsurvey_nodemos,S1 - Did not complete demos
+s1_partialsurvey_parttreat,S1 - Did not complete/Treated
+s1_partialsurvey_viewsims,S1 - Did not complete/viewed sims
+q1match,Match on Q1
+q2match,Match on Q2
+q3match,Match on Q3
+q4match,Match on Q4
+q5match,Match on Q5
+q6match,Match on Q6
+q7match,Match on Q7
+q8match,Match on Q8
+q9match,Match on Q9
+q10match,Match on Q10
+q11match,Match on Q11
+q12match,Match on Q12
+q13match,Match on Q13
+q14match,Match on Q14
+q15match,Match on Q15
+q16match,Match on Q16
+q17match,Match on Q17
+q18match,Match on Q18
+q19match,Match on Q19
+q20match,Match on Q20
+q21match,Match on Q21
+q22match,Match on Q22
+q23match,Match on Q23
+q24match,Match on Q24
+q25match,Match on Q25
+q26match,Match on Q26
+q27match,Match on Q27
+q28match,Match on Q28
+q29match,Match on Q29
+q31match,Match on Q31
+q32match,Match on Q32
+feedback1,Received Feedback on Q1
+feedback2,Received Feedback on Q2
+feedback3,Received Feedback on Q3
+feedback4,Received Feedback on Q4
+feedback5,Received Feedback on Q5
+feedback6,Received Feedback on Q6
+feedback7,Received Feedback on Q7
+feedback8,Received Feedback on Q8
+feedback9,Received Feedback on Q9
+feedback10,Received Feedback on Q10
+feedback11,Received Feedback on Q11
+feedback12,Received Feedback on Q12
+feedback13,Received Feedback on Q13
+feedback14,Received Feedback on Q14
+feedback15,Received Feedback on Q15
+feedback16,Received Feedback on Q16
+feedback17,Received Feedback on Q17
+feedback18,Received Feedback on Q18
+feedback19,Received Feedback on Q19
+feedback20,Received Feedback on Q20
+feedback21,Received Feedback on Q21
+feedback22,Received Feedback on Q22
+feedback23,Received Feedback on Q23
+feedback24,Received Feedback on Q24
+feedback25,Received Feedback on Q25
+feedback26,Received Feedback on Q26
+feedback27,Received Feedback on Q27
+feedback28,Received Feedback on Q28
+feedback29,Received Feedback on Q29
+feedback31,Received Feedback on Q31
+feedback32,Received Feedback on Q32
+feedbackr1,NULL
+feedbackr2,NULL
+feedbackr3,NULL
+feedbackr4,NULL
+feedbackr5,NULL
+feedbackr6,NULL
+feedbackr7,NULL
+sentence1,NULL
+sentence2,NULL
+sentence3,NULL
+sentence4,NULL
+sentence5,NULL
+sentence6,NULL
+sentence7,NULL
+short1,NULL
+short2,NULL
+short3,NULL
+short4,NULL
+short5,NULL
+short6,NULL
+short7,NULL
+short8,NULL
+short9,NULL
+short10,NULL
+short11,NULL
+short12,NULL
+short13,NULL
+short14,NULL
+short15,NULL
+short16,NULL
+short17,NULL
+short18,NULL
+short19,NULL
+short20,NULL
+short21,NULL
+short22,NULL
+short23,NULL
+short24,NULL
+short25,NULL
+short26,NULL
+short27,NULL
+short28,NULL
+short29,NULL
+short31,NULL
+short32,NULL
+shorthandle1,NULL
+shorthandle2,NULL
+shorthandle3,NULL
+shorthandle4,NULL
+shorthandle5,NULL
+shorthandle6,NULL
+shorthandle7,NULL
+s2_responseid,S2 - Response ID
+s2_status,Status
+s2_startdate,S2 - Start Time
+s2_enddate,S2 - End Time
+s2_finished,S2 - Finished
+s2_tsr1,How much do you enjoy learning from this professor? 
+s2_enj3,How much fun do you think the assignments for this class are?
+s2_se1,How confident are you that you can complete all the work that is assigned in thi
+s2_tsr2,How friendly do you think this professor is towards you?
+s2_sim2,How similar are your goals for the course and your professor's goals?
+s2_se2,"When complicated ideas are presented in this class, how confident are you that y"
+s2_enj2,How enjoyable do you think it is to participate in this class?
+s2_tsr4,"If you came back to visit this professor three years from now, how excited do yo"
+s2_sim4,How much do you think you have in common with your professor?
+s2_se3,How confident are you that you are learning all the material presented in class?
+s2_sim3,"In general, how similar do you think your views about the course content and you"
+s2_timer1a_3,S2 - Timer: Part 1A
+s2_tsr5,How motivating do you find this professor's class?
+s2_enj4,How eager have you been to learn the course material?
+s2_se4,How confident are you that you could do the hardest work that was assigned in th
+s2_sim1,"Overall, how similar to your professor's values do you think your values are?"
+s2_tsr6,How caring do you think this professor is towards you?
+s2_enj1,How excited were you about this class?
+s2_sim6,"Overall, how similar do you think you and your professor are?"
+s2_tsr3,How encouraging do you think this professor is towards you?
+s2_sim5,How similar do you think your personality is compared to your professor's?
+s2_se5,How confident are you that you will remember what you learned in this class next
+s2_tsr7,"Overall, how much do you think you have learned from this professor?"
+s2_learn_amount,"Compared to your typical classes at COLLEGE, how much did you learn in this cour"
+s2_timer1b_3,S2 - Timer: Part 1B
+s2_spt1,How hard do you try to understand Professor X's point of view?
+s2_spt2,How much do you try to understand Professor X's motivation for doing different c
+s2_spt3,"During class, how hard do you try to understand what Professor X is feeling?"
+s2_spt4,How much effort have you put into figuring out what Professor X's goals are?
+s2_spt5,"When Professor X seems to be in a worse mood than usual, how hard do you try to "
+s2_spt6,"During class, how much effort do you put into figuring out what Professor X is t"
+s2_timer2a_3,S2 - Timer: Part 2A
+s2_int1,How interesting do you find this class?
+s2_eff1,How much effort do you put into getting involved in discussions for this course?
+s2_int2,How many other classes do you want to take in this subject?  
+s2_exp1,How often does this professor make you explain your answers?
+s2_eff2,How much effort do you put into the assigned work for this course?
+s2_exp2,"When you feel like giving up on a difficult task, how likely is it that this pro"
+s2_int3,How often do you find yourself thinking about this class when you are in another
+s2_timer3a_3,S2 - Timer: Part 3A
+s2_eff3,"When your professor is speaking, how much effort do you put into trying to pay a"
+s2_exp3,How much does this professor encourage you to do your best?
+s2_int4,How likely are you to go into a career related to this class?
+s2_eff4,How much effort do you put into learning all the material for this class?
+s2_int5,How often do you talk about topics from this class when you are not in class?
+s2_exp4,How often does this professor take time to make sure you understand the material
+s2_eff5,"Overall, how much effort do you put forth during your class? "
+s2_exp5,"Overall, how high are this professor's expectations of you?"
+s2_timer3b_3,S2 - Timer: Part 3B
+s2_know,"Overall, how well do you feel like you know Professor X?"
+s2_communicate,How often do you communicate with Professor X outside of class?
+s2_meet,How many times did you meet with Professor X outside of class?
+s2_participate,How frequently do you participate in this class?
+s2_like,"Compared to the average student in your class, how much does Professor X like yo"
+s2_dept,How many more courses do you plan to take in Professor X's department?
+s2_favor,"As a favor to Professor X, are you willing to spend a few minutes at the end of "
+s2_timer3c_3,S2 - Timer: Part 3C
+s2_section4,NULL
+s2_tspt1,How hard does Professor X try to understand your point of view?
+s2_tspt2,How much does Professor X try to understand how motivated you are during differe
+s2_tspt3,"During class, how hard does Professor X try to understand what you are feeling?"
+s2_tspt4,How much effort has Professor X put into figuring out what your goals are?
+s2_tspt5,"When you are in a worse mood than usual, how hard does Professor X try to unders"
+s2_tspt6,"During class, how much effort does Professor X put into figuring out what you ar"
+s2_timer4_3,S2 - Timer: Part 4
+s2_section5,NULL
+s2_mancheck,S2 - Manipulation Check
+s2_female,S2 - Gender
+s2_female_text,S2 - Gender Text
+s2_birthyear,S2 - Birth Year
+s2_grade_guess,S2 - Grade for course guess
+s2_gpa,S2 - Overall GPA Guess
+s2_mergeid,Merged S1 & S2 on ID
+s2_mergeemail,Merged S1 & S2 on name
+s2_mergename,Merged S1 & S2 on email
+s2_matched,NULL
+s2_complete,S2 - Completed
+t2_n,T2 - Number of Students in Intervention
+t2_v1,T2 - Response ID
+t2_v8,T2 - Start Time
+t2_v9,T2 - End Time
+t2_v10,T2 - Finished
+t2_donotteach,T2 - Teacher no longer reports teaching student
+t2_tsr1,How much did you enjoy helping STUDENTNAME learn?
+t2_spt3,How hard did you try to understand STUDENTNAME's point of view?
+t2_tsr6,How caring was STUDENTNAME towards you?
+t2_tsr3,How often did you say something encouraging to STUDENTNAME?
+t2_eff5,"Overall, how much effort did STUDENTNAME put forth during your class? "
+t2_tsr2,How friendly was STUDENTNAME towards you?
+t2_tsr4,"If this student came back to visit you three years from now, how excited would y"
+t2_tsr5,How motivating did STUDENTNAME find the activities that you plan for class?
+t2_enj5,"Overall, how much do you think STUDENTNAME enjoyed this course?"
+t2_spt1,How hard did STUDENTNAME try to understand your point of view?
+t2_int1,How interested was STUDENTNAME in your class?
+t2_sim1,"Overall, how similar do you think you and STUDENTNAME are?"
+t2_tsr7,"Overall, how much did STUDENTNAME learn from you?"
+t2_expectations,"If STUDENT decided s/he wanted to pursue graduate study in your field, how much "
+t2_communicate,How often did you communicate with STUDENTNAME outside of class?
+t2_finalexam,"What grade did STUDENT NAME receive on his/her final exam, paper, or project?"
+t2_timer,NULL
+t2_top4,Top 3 Students in Growth
+t2_push,"In this class, how often do you make students explain their answers?"
+t2_exam_objective,Which best describes how your final exam/paper/project is graded?
+t2_useful,How useful were the activities in this study (the get-to-know-you survey feedbac
+t2_future,How likely would you use this survey in your courses (with getting paid)?
+t2_mergeprof,Merge Student Surveys with Final Prof Survey
+ir_numenro,IR - Number of Enrolled Students
+ir_grade,IR - Grade
+ir_coursestatus,IR - Course Status
+ir_parent,IR - Parent Education
+ir_actscore,IR - ACT Score
+ir_mathsat,IR - Math SAT
+ir_verbsat,IR - Verbal SAT
+ir_mathrsat,MathR SAT
+ir_verbrsat,VerbR SAT
+ir_pell,IR - PELL Grant
+ir_sex,IR - Sex
+ir_ethnicity,IR - Ethnicity
+ir_right_class,NULL
+ir_teacherid,NULL
+ir_f16_gpa,IR - Fall 16 GPA
+ir_f16_termgpa,IR - Fall 16 Term GPA
+ir_f16_standing,IR - Fall 16 Academic Standing
+ir_s17_level,Level
+ir_s17_enrollstatus,IR - Enrollment Status
+ir_s17_termunitsenrolled,IR - Spring 17 Units Enrolled
+ir_s17_gpa1,IR - Spring 17 GPA (OLD - Original IR Pull)
+ir_s17_termgpa1,IR - Spring 17 Term GPA (OLD - Original IR Pull)
+ir_s17_academicstanding,Probationary Status
+ir_s17_gpa,IR - Spring 17 GPA
+ir_s17_termgpa,IR - Spring 17 Term GPA
+ir_s17_standing,IR - Spring 17 Academic Standing
+ir_f17_gpa,IR - Fall 17 GPA
+ir_f17_termgpa,IR - Fall 17 Term GPA
+ir_f17_standing,IR - Fall 17 Academic Standing
+ir_s18_gpa,IR - Spring 18 GPA
+ir_s18_termgpa,IR - Spring 18 Term GPA
+ir_s18_standing,IR - Spring 18 Academic Standing
+ir_merge_ir1,Merge IR Student Data files
+ir_t_facsts,IR - Spring 17 Faculty Status
+ir_t_sex,IR - Teacher Gender
+ir_t_ethdesc,IR - Teacher Ethnicity
+ir_t_semestertaught,IR - Number of Semesters Taught (Spring 17)
+ir_t_orighiredt,IR - Original Hire Date
+ir_t_enddate,IR - Date Employment Ended
+ir_t_s17enrltot,IR - Spring 17 Total Students Enrolled (All Courses)
+ir_t_f17enrltot,IR - Fall 17 Total Students Enrolled (All Courses)
+ir_t_s18enrltot,IR - Spring 18 Total Students Enrolled (All Courses)
+merge_ir2,NULL
+merge_ir,NULL
+ir_match,Survey & IR Match Status
+ir2_match_priority,match_priority
+ir2_period,Period
+ir2_acadcareer,Acad Career
+ir2_aid,Aid
+ir2_lastperiod,Last Period
+ir2_lastgpa,Last IR GPA
+ir2_lastperiodtotalunitsearned,Last Period Total Units Earned
+ir2_perioddeg,PeriodDEG
+ir2_spg18acadstanding,Spg18 Acad Standing
+ir2_lastsummer18period,Last Summer 18 Period
+ir2_summertotalunitsearned,Summer Total Units Earned
+ir2_clearinghouse,Clearinghouse
+sid,Unique Student Identifier (By Teacher)
+append,NULL
+t_drop_reasons,Reasons Instructor Not In Experimental Sample
+s_multi_race,Student - Multi-Race Selected
+attrit,Student Attrition
+merge_ir3,NULL
+use3,NULL
+year,Student Year/Level
+t_female,Teacher Gender
+t_race,Teacher Race
+t_multi_race,Teacher - Multi-Race Selected
+t_hisp,Teacher - Hispanic
+t_white,Teacher - White
+t_white_asian,Teacher - White/Asian
+t_hisp_black,Teacher - Hispanic/Black
+t_level,Teacher Level
+s_female,Student Gender
+ir_race,NULL
+s_race,Student Race
+s_hisp,Student - Hispanic
+s_white,Student - White
+s_white_asian,Student - White/Asian
+s_hisp_black,Student - Hispanic/Black
+s_race2,NULL
+t_race2,NULL
+race_match,Race Match
+race_match_det,Instructor/Student Race
+same_race,NULL
+diff_race,NULL
+s_urm,NULL
+pc_s,NULL
+t_urm,NULL
+pc_t,NULL
+gend_match,Gender Match
+language_match,NULL
+n_prof,Teacher Tag
+tag,tag(teacherid)
+n_stud,Number of Participating Students Per Teacher
+pass,Pass Course
+f16_probation,NULL
+s17_probation,Student on Probation - Spring 17
+f17_probation,Student on Probation - Fall 17
+s18_probation,Student on Probation - Spring 18
+f17_persist,Enrolled in Fall 2017
+f17_enrolled,Enrolled Fall 2017
+s18_enrolled,Enrolled Spring 2018
+f18_enrolled,Enrolled Fall 2018
+transfer,Transfered to Another University
+grad,Graduated
+transfer_student,Transfer Student
+final_gpa,Final GPA
+n_course,Enrolled Students in Target Course
+grade,Course Grade
+grade_mean,NULL
+grade_sd,NULL
+std_grade,Standardize Grade
+grade_mean2,NULL
+grade_sd2,NULL
+std_grade2,NULL
+grade_mean3,NULL
+grade_sd3,NULL
+std_grade3,NULL
+no_final,NULL
+obj_exam,Final Exam Type
+no_exam_grade,Final Exam Blank
+parent_ed,NULL
+s_firstgen,Student: First Generation College Student
+t_firstgen,Instructor: First Generation College Student
+firstgen_match,NULL
+demo_sim,NULL
+pell,PELL Status
+mc_correct,Manipulation Check Correct
+major,NULL
+LA,NULL
+stem,NULL
+nsims,Number of Actual Similarities
+s1_tsr,Anticipated Student TSR Scale
+s1_tsr_factor,Anticipated Student TSR Scale - Factor Score
+s1_exp,Anticipated Student Expectations Scale
+s1_sim,Anticipated Student Similarity Scale
+s1_sim_factor,Anticipated Student Similarity Scale - Factor Score
+s1_enj,Anticipated Student Enjoyment Scale
+s2_tsr,Post Student TSR Scale
+s2_tsr_factor,Post Student TSR Scale - Factor Score
+s2_exp,Post Student Expectations Scale
+s2_sim,Post Student Similarity Scale
+s2_sim_factor,Post Student Similarity Scale - Factor Score
+s2_enj,Post Student Enjoyment Scale
+s2_int,Post Student Interest Scale
+s2_eff,Post Student Effort Scale
+s2_se,Post Student Self-Efficacy Scale
+t2_tsr,Post Teacher TSR Scale
+t2_tsr_factor,Post Teacher TSR Scale - Factor Score
+s1_sharedinfo,Student Answered Open-Ended Response
+t2_complete,NULL
+SL1a,Identifying straight line responders for Section 1A
+SL1b,Identifying straight line responders for Section 1B
+SL1,Identifying straight line responders for Section 1
+SL3,Identifying straight line responders for Section 3
+SL_t,Identifying straight line responders for Teachers
