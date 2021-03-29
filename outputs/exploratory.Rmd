@@ -1,0 +1,71 @@
+---
+title: "data exploration"
+author: "Amy"
+date: "29/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+```
+
+```{r}
+isrdata <- read.dta13("inputs/data/Instructor-Student Relationships Experiment Data_Anonymous.dta")
+```
+
+```{r}
+expdata <- isrdata %>%
+  filter(use == 1)
+```
+
+```{r}
+colSums(is.na(expdata))
+```
+
+
+```{r}
+expdata %>%
+  select(teacherid,
+         t1_race_1, t1_race_2, t1_race_3, t1_race_4, t1_race_5, t1_race_6, t1_race_7) %>%
+  unique() %>%
+  summarize(white = sum(t1_race_1, na.rm = TRUE)/n(),
+            black = sum(t1_race_2, na.rm = TRUE)/n(),
+            hispanic = sum(t1_race_3, na.rm = TRUE)/n(),
+            asian = sum(t1_race_4, na.rm = TRUE)/n(),
+            americanindian = sum(t1_race_5, na.rm = TRUE)/n(),
+            middleeastern = sum(t1_race_6, na.rm = TRUE)/n(),
+            other = sum(t1_race_7, na.rm = TRUE)/n(),
+            total = n())
+```
+
+```{r}
+expdata %>%
+  group_by(treatment) %>%
+  summarize(white = sum(s1_race_1, na.rm = TRUE)/n(),
+            black = sum(s1_race_2, na.rm = TRUE)/n(),
+            hispanic = sum(s1_race_3, na.rm = TRUE)/n(),
+            asian = sum(s1_race_4, na.rm = TRUE)/n(),
+            americanindian = sum(s1_race_5, na.rm = TRUE)/n(),
+            middleeastern = sum(s1_race_6, na.rm = TRUE)/n(),
+            other = sum(s1_race_7, na.rm = TRUE)/n(),
+            total = n())
+```
+```{r}
+expdata %>%
+  group_by(treatment) %>%
+  summarize(meanage = mean(s1_age, na.rm = TRUE))
+```
+```{r}
+expdata %>%
+  group_by(treatment) %>%
+  summarise(prestudentsimilarity = mean(s1_sim, na.rm = TRUE),
+            prestudentISR = mean(s1_tsr),
+            poststudentsimilarity = mean(s2_sim, na.rm = TRUE),
+            poststudentISR = mean(s2_tsr, na.rm = TRUE),
+            postinstructorsimilarity = mean(t2_sim1, na.rm = TRUE),
+            postinstructorISR = mean(t2_tsr, na.rm = TRUE),
+            standardgrade = mean(grade_sd, na.rm = TRUE))
+```
+

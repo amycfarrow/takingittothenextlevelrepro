@@ -18,9 +18,6 @@ library(labelled)
 # this import shows the codes for answers, not just numbers
 isrdata <- read.dta13("inputs/data/Instructor-Student Relationships Experiment Data_Anonymous.dta")
 
-# save as a csv
-write_csv(isrdata, "inputs/data/isrdata.csv")
-
 ### Make the codebook ###
 
 # this import shows the variable labels, but the answers are numerical
