@@ -9,16 +9,45 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(here)
+library(readstata13)
+library(arsenal)
+library(Hmisc)
+library(MASS)
+library(kableExtra)
+library(apaTables)
 ```
 
 ```{r}
-isrdata <- read.dta13("inputs/data/Instructor-Student Relationships Experiment Data_Anonymous.dta")
+codebook <- read_csv(here("inputs/data/codebook.csv"))
+```
+
+
+
+```{r, warning=FALSE}
+isrdata <- read.dta13(here("inputs/data/Instructor-Student Relationships Experiment Data_Anonymous.dta"))
 ```
 
 ```{r}
 expdata <- isrdata %>%
   filter(use == 1)
 ```
+
+```{r}
+summary(tableby(treatment ~  s1_sim + s1_tsr + s2_sim + s2_tsr + t2_sim1 + t2_tsr + grade + std_grade + t2_finalexam + f17_enrolled + ir_f16_gpa + s_female,
+                data = isrdata)) %>%
+  kable()
+```
+
+```{r}
+rcorr(as.matrix(isrdata %>% 
+                  dplyr::select(s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa)))
+```
+
+```{r}
+apa.cor.table(isrdata %>% 
+                  dplyr::select(s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa))
+```
+
 
 ```{r}
 colSums(is.na(expdata))
@@ -67,5 +96,34 @@ expdata %>%
             postinstructorsimilarity = mean(t2_sim1, na.rm = TRUE),
             postinstructorISR = mean(t2_tsr, na.rm = TRUE),
             standardgrade = mean(grade_sd, na.rm = TRUE))
+```
+
+```{r}
+summary(lm(data = isrdata, s1_sim ~ treatment))
+```
+```{r}
+summary(lm(data = isrdata, s2_sim ~ treatment))
+```
+```{r}
+summary(lm(data = isrdata, s2_tsr ~ treatment + s1_tsr))
+```
+```{r}
+summary(polr(formula = as.factor(t2_sim1) ~ treatment, data = isrdata, Hess = TRUE))
+```
+
+```{r}
+summary(lm(data = isrdata, s2_tsr ~ treatment))
+```
+
+```{r}
+summary(lm(data = isrdata, grade ~ treatment + s1_female + ir_f16_gpa))
+```
+
+```{r}
+summary(lm(data = isrdata %>% filter(obj_exam == 1), t2_finalexam ~ treatment + s1_female + ir_f16_gpa))
+```
+
+```{r}
+summary(glm(data = isrdata, f17_enrolled ~ treatment + s1_female + ir_f16_gpa, family = "binomial"))
 ```
 

@@ -1,0 +1,308 @@
+---
+title: "TODO TITLE"
+author: "Amy Farrow"
+date: "April 9th, 2021"
+output:
+  bookdown::pdf_document2:
+    toc: yes
+subtitle: "Reproducing ‘Taking It to the Next Level’"
+abstract: "TODO ABSTRACT"
+thanks: 'Code and data are available at: [github.com/amycfarrow/takingittothenextlevelrepro](https://github.com/amycfarrow/takingittothenextlevelrepro).'
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(bookdown)    # for cross referencing figures and graphs; referencing
+library(kableExtra)  # for nicer tables
+library(here) # for working in an RProject
+library(Hmisc) # for correlation matrix
+library(readstata13) # for stata files
+library(finalfit) # for summary table
+
+# NOTE: script 01_ must have been run already
+
+# functions from https://stefaneng.github.io/apa_correlation_table/
+
+apply_if <- function(mat, p, f) {
+  # Fill NA with FALSE
+  p[is.na(p)] <- FALSE
+  mat[p] <- f(mat[p])
+  mat
+}
+
+apaCorr <- function(mat, corrtype = "pearson") {
+  matCorr <- mat
+  if (class(matCorr) != "rcorr") {
+    matCorr <- rcorr(mat, type = corrtype)
+  }
+
+  # Add one star for each p < 0.05, 0.01, 0.001
+  stars <- apply_if(round(matCorr$r, 2), matCorr$P < 0.05, function(x) paste0(x, "*"))
+  stars <- apply_if(stars, matCorr$P < 0.01, function(x) paste0(x, "*"))
+  stars <- apply_if(stars, matCorr$P < 0.001, function(x) paste0(x, "*"))
+  # Put - on diagonal and blank on upper diagonal
+  stars[upper.tri(stars, diag = T)] <- "-"
+  stars[upper.tri(stars, diag = F)] <- ""
+  n <- length(stars[1,])
+  #colnames(stars) <- 1:n
+  # Remove _ and convert to title case
+  #row.names(stars) <- tools::toTitleCase(sapply(row.names(stars), gsub, pattern="_", replacement = " "))
+  # Add index number to row names
+  #row.names(stars) <- paste(paste0(1:n,"."), row.names(stars))
+  stars
+}
+```
+
+# Introduction
+
+TODO intro
+
+# Data
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+isrdata <- read.dta13(here("inputs/data/Instructor-Student Relationships Experiment Data_Anonymous.dta"))
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+expdata <- isrdata %>%
+  filter(use == 1) %>%
+  mutate(across(where(is.numeric), ~na_if(., -99)))
+```
+
+Table \@ref(tab:summarytable) shows summary statistics for key variables identified by Robinson et al., including missing values. The variables are as follows:
+
+* s1_sim: Immediately after the treatment or placebo, students answered six questions about their perceived similarity to the instructor, on scales of 1 to 5. These responses were averaged to create a similarity scale. 
+  - Overall, how similar to your instructor's values do you think your values are?
+  - How similar are your goals for the course and your instructor's goals?
+  - In general, how similar do you think your views about the course content and your instructor's are?
+  - How much do you think you have in common with your instructor?
+  - How similar do you think your personality is compared to your instructor's?
+  - Overall, how similar do you think you and your instructor are?
+* s1_tsr: Immediately after the treatment or placebo, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
+  - How much do you think you will enjoy learning from this instructor?
+  - How friendly do you think this instructor will be towards you?
+  - How encouraging do you think this instructor will be towards you?
+  - If you came back to visit this instructor three years from now, how excited do you think they would be?
+  - How motivating do you think you will find this instructor's class?
+  - How caring do you think this instructor will be towards you?
+  - Overall, how much do you think you will learn from this instructor?
+* s2_sim: At the end of the semester, students answered the above six similarity scale questions again.
+* s2_tsr: At the end of the semester, students answered the above seven ISR scale questions again.
+* t2_sim1: At the end of the semester, instructors answered only one quesiton about similarity with the student, on a scale of 1 to 5.
+  - Overall, how similar do you think you and STUDENTNAME are?
+* t2_tsr: At the end of the semester, instructors answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
+  - How much did you enjoy helping STUDENTNAME learn?
+  - How caring was STUDENTNAME towards you?
+  - How often did you say something encouraging to STUDENTNAME?
+  - How friendly was STUDENTNAME towards you?
+  - If this student came back to visit you three years from now, how excited would you be?
+  - How motivating did STUDENTNAME find the activities that you plan for class?
+  - Overall, how much did STUDENTNAME learn from you?
+* grade: The final grade that the student received in the course. These were not reported by the student.
+* std_grade: The student's final grade, standardized against other grades in the course.
+* t2_finalexam: Instructors were asked to report the student's grade on their final exam, paper, or project.
+* ir_f16_gpa: The student's cumulative GPA after the Fall 2016 term.
+* f17_enrolled: The student's status as of Fall term 2017: not enrolled or enrolled.
+* s1_female: The student's gender.
+
+```{r summarytable, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>% 
+  dplyr::select(treatment, s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa, f17_enrolled, s1_female) %>%
+  summary_factorlist("treatment", c("s1_sim", "s1_tsr", "s2_sim", "s2_tsr", "t2_sim1", "t2_tsr", "grade", "std_grade", "t2_finalexam", "ir_f16_gpa", "f17_enrolled", "s1_female"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = TRUE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N(%) = ") %>%
+  rename(N = "Total N", Missing = "Missing N") %>%
+  knitr::kable(caption = "Descriptive statistics for treatment and control groups",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+
+# Models
+
+
+## Reproduction models
+
+$treatment_{i}$ is the indicator that treatment was given.
+
+$X_{1i}$ is a vector of student-level covariates (pre-intervention measures included).
+
+$X_{2j}$ is a vector of instructor-level covariates.
+
+$\epsilon_{ij}$ is a clustered residual.
+
+$\beta_{0}$, $beta_{1}$, $\Gamma_{1}$, $\Gamma_{2}$, and $a_{k}$ are coefficients on the resulting models.
+
+### Linear models
+
+Equation \@ref(eq:linmodel) is Robinson et al.'s linear model, used for continuous outcomes, which include immediate student similarity rating (s1_sim), end of semester student similarity rating (s2_sim), end of semester student ISR rating (s2_tsr), end of semester instructor ISR rating (t2_tsr), course grade (grade), and objectively graded exam grade (t2_finalexam).
+
+\begin{equation}
+(\#eq:linmodel)
+Outcome_{ij} = \beta_{0} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Gamma_{2} + \epsilon_{ij}
+\end{equation}
+
+### Ordinal logistic models
+
+Equation \@ref(eq:ordlogmodel) is Robinson et al.'s ordinal logistic model, used for ordinal outcomes, which include end of semester instructor similarity rating (t2_sim1).
+
+\begin{equation}
+(\#eq:ordlogmodel)
+prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Gamma_{2} + \epsilon_{ij} > k
+\end{equation}
+
+### Logistic models
+
+Equation \@ref(eq:logmodel) is Robinson et al.'s logistic model, used for binary outcomes, which include enrollment in Fall term 2017 (f17_enrolled).
+
+\begin{equation}
+(\#eq:logmodel)
+prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Gamma_{2} + \epsilon_{ij} > k
+\end{equation}
+
+## Additional models
+
+
+# Results
+
+
+## Reproduction results
+
+Table \@ref(tab:correlationtable)
+
+```{r correlationtable, echo=FALSE, warning=FALSE, message=FALSE}
+summary <- expdata %>% 
+  dplyr::select(treatment, s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa, f17_enrolled, s1_female) %>%
+  summary_factorlist("treatment", c("s1_sim", "s1_tsr", "s2_sim", "s2_tsr", "t2_sim1", "t2_tsr", "grade", "std_grade", "t2_finalexam", "ir_f16_gpa"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = FALSE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N (%) = ") %>%
+  select("Total N", "Missing N", "Total")
+
+matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
+                  dplyr::select(s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa)))) 
+summary %>%
+  bind_cols(matrix) %>%
+  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N") %>%
+  kable(caption = "Descriptive statistics and correlation matrix for key continuous variables",
+               booktabs = TRUE, linesep = "") %>%
+  kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+### Linear models
+
+Table \@ref(tab:studentfirstsimilarity)
+
+```{r studentfirstsimilarity, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(s1_sim)) %>%
+  finalfit("s1_sim", "treatment") %>%
+  knitr::kable(caption = "Effect of treatment on immediate student similarity rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+Table \@ref(tab:studentsecondsimilarity)
+
+```{r studentsecondsimilarity, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(s2_sim)) %>%
+  finalfit("s2_sim", "treatment") %>%
+  knitr::kable(caption = "Effect of treatment on end of semester student similarity rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+Table \@ref(tab:studentsecondrelationship)
+
+```{r studentsecondrelationship, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(s2_tsr) & !is.na(s1_tsr)) %>%
+  finalfit("s2_tsr", c("treatment", "s1_tsr")) %>%
+  knitr::kable(caption = "Effect of treatment on immediate student ISR rating, controlling for anticipated ISR",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+Table \@ref(tab:teachersecondrelationship)
+
+```{r teachersecondrelationship, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(t2_tsr)) %>%
+  finalfit("t2_tsr", c("treatment")) %>%
+  knitr::kable(caption = "Effect of treatment on end of semester instructor ISR rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+Table \@ref(tab:grade)
+
+```{r grade, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(ir_f16_gpa) & !is.na(grade) & s1_female > -99) %>%
+  finalfit("grade", c("treatment",  "s1_female", "ir_f16_gpa")) %>%
+  knitr::kable(caption = "Effect of treatment on course grade, controlling for student gender and prior GPA",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+Table \@ref(tab:examgrade)
+
+```{r examgrade, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(obj_exam == 1) %>%
+  filter(!is.na(ir_f16_gpa) & !is.na(t2_finalexam) & s1_female > -99) %>%
+  finalfit("t2_finalexam", c("treatment",  "s1_female", "ir_f16_gpa")) %>%
+  knitr::kable(caption = "Effect of treatment on objectively graded exam grade, controlling for student gender and prior GPA",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+### Ordinal logistic models
+
+Table \@ref(tab:teachersecondsimilarity)
+
+```{r teachersecondsimilarity, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(t2_sim1)) %>%
+  mutate(t2_sim1 = as.factor(t2_sim1)) %>%
+  finalfit("t2_sim1", "treatment") %>%
+  knitr::kable(caption = "Effect of treatment on end of semester instructor similarity rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+### Logistic models
+
+Table \@ref(tab:enrollmentfall)
+
+```{r enrollmentfall, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  mutate(f17_enrolled = as.factor(f17_enrolled)) %>%
+  filter(!is.na(ir_f16_gpa) & !is.na(f17_enrolled) & s1_female > -99) %>%
+  finalfit("f17_enrolled", c("treatment",  "s1_female", "ir_f16_gpa")) %>%
+  knitr::kable(caption = "Effect of treatment on enrollment in next Fall 2017, controlling for student gender and prior GPA",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+## Additional results
+
+
+# Discussion
