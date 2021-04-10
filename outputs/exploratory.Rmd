@@ -127,3 +127,129 @@ summary(lm(data = isrdata %>% filter(obj_exam == 1), t2_finalexam ~ treatment + 
 summary(glm(data = isrdata, f17_enrolled ~ treatment + s1_female + ir_f16_gpa, family = "binomial"))
 ```
 
+```{r studentfirstsimilarity, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(s1_sim)) %>%
+  finalfit("s1_sim", "treatment") %>%
+  knitr::kable(caption = "Effect of treatment on immediate student similarity rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+```{r studentsecondsimilarity, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(s2_sim)) %>%
+  finalfit("s2_sim", "treatment") %>%
+  knitr::kable(caption = "Effect of treatment on end of semester student similarity rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+```{r studentsecondrelationship, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(s2_tsr) & !is.na(s1_tsr)) %>%
+  finalfit("s2_tsr", c("treatment", "s1_tsr")) %>%
+  knitr::kable(caption = "Effect of treatment on end of semester student ISR rating, controlling for anticipated ISR",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+```{r teachersecondrelationship, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(t2_tsr)) %>%
+  finalfit("t2_tsr", c("treatment")) %>%
+  knitr::kable(caption = "Effect of treatment on end of semester instructor ISR rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+```{r grade, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(grade) & s1_female > -99) %>%
+  dplyr::select(s1_female, ir_f16_gpa, grade, s1_female, treatment) %>%
+  finalfit("grade", c("treatment",  "s1_female", "ir_f16_gpa")) %>%
+  knitr::kable(caption = "Effect of treatment on course grade, controlling for student gender and prior GPA",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+```{r examgrade, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(obj_exam == 1) %>%
+  filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(t2_finalexam) & s1_female > -99) %>%
+  finalfit("t2_finalexam", c("treatment",  "s1_female", "ir_f16_gpa")) %>%
+  knitr::kable(caption = "Effect of treatment on objectively graded exam grade, controlling for student gender and prior GPA",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+
+```{r teachersecondsimilarity, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  filter(!is.na(t2_sim1)) %>%
+  mutate(t2_sim1 = as.factor(t2_sim1)) %>%
+  finalfit("t2_sim1", "treatment") %>%
+  knitr::kable(caption = "Effect of treatment on end of semester instructor similarity rating",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+```{r enrollmentfall, echo=FALSE, warning=FALSE, message=FALSE}
+expdata %>%
+  mutate(f17_enrolled = as.factor(f17_enrolled)) %>%
+  filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(f17_enrolled) & s1_female > -99) %>%
+  finalfit("f17_enrolled", c("treatment",  "s1_female", "ir_f16_gpa")) %>%
+  knitr::kable(caption = "Effect of treatment on enrollment in next Fall 2017, controlling for student gender and prior GPA",
+               booktabs = TRUE, linesep = "") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+```{r}
+expdata %>% filter(!is.na(s1_sim)) %>%
+  ggplot(aes(x = s1_sim, fill = treatment)) +
+  geom_histogram(position = "dodge")
+```
+
+```{r}
+expdata %>% filter(!is.na(s2_sim)) %>%
+  ggplot(aes(x = s2_sim, fill = treatment)) +
+  geom_histogram(position = "dodge")
+```
+
+```{r}
+expdata %>% filter(!is.na(s2_tsr) & !is.na(s1_tsr)) %>%
+  ggplot(aes(x = s2_tsr, fill = treatment)) +
+  geom_histogram(position = "dodge")
+```
+
+```{r}
+expdata %>% filter(!is.na(t2_tsr)) %>%
+  ggplot(aes(x = t2_tsr, fill = treatment)) +
+  geom_histogram(position = "dodge")
+```
+
+```{r}
+expdata %>% filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(grade) & s1_female > -99) %>%
+  ggplot(aes(x = grade, fill = treatment)) +
+  geom_histogram(position = "dodge")
+```
+
+```{r}
+expdata %>% filter(obj_exam == 1) %>% filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(t2_finalexam) & s1_female > -99) %>%
+  ggplot(aes(x = t2_finalexam, fill = treatment)) +
+  geom_histogram(position = "dodge")
+```
+
+```{r}
+expdata %>% filter(!is.na(t2_sim1)) %>%
+  ggplot(aes(x = t2_sim1, fill = treatment)) +
+  geom_bar(position = "dodge")
+```
+
+```{r}
+expdata %>% 
+  mutate(f17_enrolled = as.factor(f17_enrolled)) %>% 
+  filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(f17_enrolled) & s1_female > -99) %>%
+  ggplot(aes(x = f17_enrolled, fill = treatment)) +
+  geom_bar(position = "dodge")
+```
