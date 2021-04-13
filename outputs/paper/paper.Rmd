@@ -1,15 +1,15 @@
 ---
-title: "The inefficacy of superficial similarities for establishing instructor-student relationships"
+title: "The inefficacy of superficial similarities for improving instructor-student relationships"
 author: "Amy Farrow"
-date: "April 9th, 2021"
+date: "April 13th, 2021"
 header-includes:
   \usepackage{dcolumn}
   \usepackage{rotating}
 output:
   bookdown::pdf_document2:
     toc: yes
-subtitle: "Reproducing ‘Taking It to the Next Level’"
-abstract: "This paper reproduces the 2019 paper 'Taking It to the Next Level', which evaluates an intervention to improve instructor-student relationship. The modeling results indicate that the intervention, consisting of informing instructors and students about commonalities, has a weak positive effect on student perceptions of instructor-student similarity, but no effect on student perceptions of instructor-student relationship, instructor perception of similarity or instructor-student relationship, grades, or re-enrollment. While the scalability and affordability of the intervention are desirable, there are no results in any of the targeted measures: those that affect and reflect college retention. These results are consistent with the original paper. \\par \\textbf{Keywords:} instructor-student relationship, college, reproduction study"
+subtitle: "Replicating ‘Taking It to the Next Level’"
+abstract: "This paper replicates the 2019 article 'Taking It to the Next Level' [@citeoriginal], which evaluates an intervention to improve college instructor-student relationship. The modeling results indicate that the intervention, consisting of informing instructors and students about commonalities, has a weak positive effect on student perceptions of instructor-student similarity, but no effect on student perceptions of instructor-student relationship, instructor perception of similarity or instructor-student relationship, grades, or re-enrollment. While the scalability and affordability of the intervention are desirable, there are no results in any of the targeted measures: those that affect and reflect college retention. These results are consistent with the original paper. TODO: revise to clearliy indicate my own findings \\par \\textbf{Keywords:} instructor-student relationship, college, replication study"
 thanks: 'Code and data are available at: [github.com/amycfarrow/takingittothenextlevelrepro](https://github.com/amycfarrow/takingittothenextlevelrepro).'
 bibliography: references.bib
 ---
@@ -29,7 +29,7 @@ library(MASS) # for ordinal logistic model
 
 # NOTE: script 01_ must have been run already
 
-# functions from https://stefaneng.github.io/apa_correlation_table/
+# functions to create a correlation matrix from https://stefaneng.github.io/apa_correlation_table/ TODO cite
 
 apply_if <- function(mat, p, f) {
   # Fill NA with FALSE
@@ -65,19 +65,35 @@ apaCorr <- function(mat, corrtype = "pearson") {
 
 College is perceived to be a meritocratic tool for social mobility and career success [@college]. Unfortunately, retention is a large problem in contemporary American colleges, and many students begin degrees without completing them; six-year completion rates for full-time first-time students range from 51% to 86%, depending on school [@finishline]. Even when controlling for pre-college test scores and initial enrollments, completion rate disparities exist based on parental education, socio-economic status, and race/ethnicity [@finishline]. Disparities in college completion lead to further entrenchment of long-standing inequalities [@finishline]. Thus, measures to help students persist in college completion are desirable to reduce wasted resources, and to increase societal equity.
 
+@citeoriginal's paper, "Taking It to the Next Level: A Field Experiment to Improve Instructor-Student Relationships in College", tests an intervention to improve college retention and performance. In this field experiment, they tested the effect of instructor-student similarity on instructor-student relationships (ISRs) and measures of student success. Based on extensive K-12 research about the importance of instructor-student relationship for student success, @citeoriginal aimed to establish how instructor-student relationships could be improved at the college level, and to test if this improvement had a positive result.
+
+TODO: add a bit more about the original experiment.
+
+This paper replicates @citeoriginal's original analysis, using anonymized data provided by the authors. Linear, logistic, and ordinal logistic models are used to predict outcomes including perceived ISR, grade, and re-enrollment. These models show that treatment slightly improves student perception of instructor-student similarity, but does not significantly affect student or instructor ISR perception, grade, exam grade, or future enrollment. In addition to the models in the original paper, this paper explores models using different controls and models that consider specific subgroups of the study participants.
+
+TODO: expand on my own findings.
+
+TODO: clearly outline the structure of the whole paper.
+
+## Literature review
+
+TODO: expand this paragraph about interventions, preferably targeting similar ideas to the @citeoriginal paper. What has worked? Draw attention to results. Make sure to refer to any studies that @citeoriginal say are especially influential for their work.
+
 Many interventions to increase completion rates have been suggested and tested. For example, @citecasemanagement studied case managment techniques; @citerecruiting investigated the effect of high school recruitment; @citenearbies identify the importance of interpersonal relationships; @citecertificate argue that certificates awarded prior to degrees can ameliorate the 'college-completion crisis'. These are only a small sample of the interventions suggested. Implementing an effective program is difficult due to complicated causes of attrition, embedded social inequalities, and expenses.
 
-@citeoriginal's paper, "Taking It to the Next Level: A Field Experiment to Improve Instructor-Student Relationships in College", tests one intervention. In this field experiment, they tested the effect of instructor-student similarity on instructor-student relationships and measures of student success. Based on extensive K-12 research about the importance of instructor-student relationship for student success, @citeoriginal aimed to establish how instructor-student relationships could be improved at the college level, and to test if this improvement had a positive result.
+TODO: write a paragraph about research on why similarity builds relationships (similarity -> relationships)
 
-This paper reproduces @citeoriginal's original study, using anonymized data provided by the authors. Linear, logistic, and ordinal logistic models are used to predict outcomes including perceived ISR, grade, and re-enrollment. These models show that treatment slightly improves student perception of instructor-student similarity, but does not significantly affect student or instructor ISR perception, grade, exam grade, or future enrollment. In addition to the models in the original paper, this paper explores models using different controls and models that consider specific subgroups of the study participants.
+TODO: write a paragraph about research on why relationships matter for scholastic performance (relationships -> grades)
 
-# Methods
+TODO: write a paragraph about research on why relationships matter for persistence (relationships -> persistence)
+
+# Methodology
 
 @citeoriginal conducted a randomized controlled trial to assess the impact of awareness of instructor-student similarities on perceived similarity, instructor-student relationship, course grade, and re-enrollment.
 
 ## Participants
 
-The study took place in the 2017 spring semester at a large Californian University. The study included 120 instructors and their 2,749 students. The instructors participated in the study based on interest and a gift-card incentive, and their students were invited to participate unincentivized.Students were only enrolled in the study for one class, in the event that they were taking classes with multiple participating instructors.
+The study took place in the 2017 spring semester at a large Californian University. The study included 120 instructors and their 2,749 students. The instructors participated in the study based on interest and a gift-card incentive, and their students were invited to participate unincentivized.Students were only enrolled in the study for one class, in the event that they were taking classes with multiple participating instructors. TODO: what kind of sampling is this? What are the implications?
 
 ## Treatment and control
 
@@ -89,16 +105,18 @@ All students participated in a survey immediately following the treatment or the
 
 ## Measures
 
+TODO: figure out which parts of this list can go to the appendix
+
 @citeoriginal identify key measures. Some are extracted from the student survey at the beginning of the term:
 
-* s1_sim: Immediately after the treatment or placebo, students answered six questions about their perceived similarity to the instructor, on scales of 1 to 5. These responses were averaged to create a similarity scale. 
+* Student similarity perception scale (s1_sim): Immediately after the treatment or placebo, students answered six questions about their perceived similarity to the instructor, on scales of 1 to 5. These responses were averaged to create a similarity scale. 
   - Overall, how similar to your instructor's values do you think your values are?
   - How similar are your goals for the course and your instructor's goals?
   - In general, how similar do you think your views about the course content and your instructor's are?
   - How much do you think you have in common with your instructor?
   - How similar do you think your personality is compared to your instructor's?
   - Overall, how similar do you think you and your instructor are?
-* s1_tsr: Immediately after the treatment or placebo, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
+* Student ISR perception scale (s1_tsr): Immediately after the treatment or placebo, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
   - How much do you think you will enjoy learning from this instructor?
   - How friendly do you think this instructor will be towards you?
   - How encouraging do you think this instructor will be towards you?
@@ -106,18 +124,18 @@ All students participated in a survey immediately following the treatment or the
   - How motivating do you think you will find this instructor's class?
   - How caring do you think this instructor will be towards you?
   - Overall, how much do you think you will learn from this instructor?
-* s1_female: The student's gender.
+* Student gender (s1_female): The student's gender.
 
 Others are extracted from the student survey at the end of the term:
 
-* s2_sim: At the end of the semester, students answered the above six similarity scale questions again.
-* s2_tsr: At the end of the semester, students answered the above seven ISR scale questions again.
+* Student similarity perception scale (s2_sim): At the end of the semester, students answered the above six similarity scale questions again.
+* Student ISR perception scale (s2_tsr): At the end of the semester, students answered the above seven ISR scale questions again.
 
 Others come from the instructor survey at the end of the term:
 
-* t2_sim1: At the end of the semester, instructors answered only one quesiton about similarity with the student, on a scale of 1 to 5.
+* Instructor similarity perception (t2_sim1): At the end of the semester, instructors answered only one quesiton about similarity with the student, on a scale of 1 to 5.
   - Overall, how similar do you think you and STUDENTNAME are?
-* t2_tsr: At the end of the semester, instructors answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
+* Instructor ISR perception scale (t2_tsr): At the end of the semester, instructors answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
   - How much did you enjoy helping STUDENTNAME learn?
   - How caring was STUDENTNAME towards you?
   - How often did you say something encouraging to STUDENTNAME?
@@ -125,20 +143,22 @@ Others come from the instructor survey at the end of the term:
   - If this student came back to visit you three years from now, how excited would you be?
   - How motivating did STUDENTNAME find the activities that you plan for class?
   - Overall, how much did STUDENTNAME learn from you?
-* t2_finalexam: Instructors were asked to report the student's grade on their final exam, paper, or project.
+* Final grade (t2_finalexam): Instructors were asked to report the student's grade on their final exam, paper, or project.
 
 Finally, some are extracted from the university's internal records:
 
-* grade: The final grade that the student received in the course.
-* std_grade: The student's final grade, standardized against other grades in the course.
-* ir_f16_gpa: The student's cumulative GPA after the Fall 2016 term.
-* f17_enrolled: The student's status as of Fall term 2017: not enrolled or enrolled.
+* Course grade (grade): The final grade that the student received in the course.
+* Standardized course grade (std_grade): The student's final grade, standardized against other grades in the course.
+* CGPA (ir_f16_gpa): The student's cumulative GPA after the Fall 2016 term.
+* Persistence (f17_enrolled): The student's status as of Fall term 2017: not enrolled or enrolled.
 
-TODO: evaluate scales' validity
+TODO: evaluate scales' validity?
 
 # Data
 
-TODO: add all citations for R packages
+TODO: add all citations for R packages, R, and R markdown
+
+TODO: note where the data is available and describe the dataset basics (cases, variables). Cite the dataset correctly, add to .bib
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 isrdata <- read.dta13(here("inputs/data/Instructor-Student Relationships Experiment Data_Anonymous.dta"))
@@ -146,19 +166,41 @@ isrdata <- read.dta13(here("inputs/data/Instructor-Student Relationships Experim
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 expdata <- isrdata %>%
-  filter(use == 1) %>%
-  mutate(across(where(is.numeric), ~na_if(., -99)))
+  filter(use == 1) %>% # Select only the cases the original study used.
+  mutate(across(where(is.numeric), ~na_if(., -99))) %>% # Some NAs are shown as -99. Replace with NA.
+  mutate(s_race = as.factor(s_race), # make nominal variables into factors.
+         t_race = as.factor(t_race),
+         teacherid = as.factor(teacherid),
+         f17_enrolled = as.factor(f17_enrolled))
 ```
 
-Table \@ref(tab:demotable) shows the demographics for the treatment and control samples. There are no significant differences between the treatment and control groups.
+## Demographics
+
+Table \@ref(tab:demotable1) shows the nominal covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
 
 However, there are differences between the students and instructors. Notably, the student sample is 60.3% female, while the instructor sample is 78.7% female. The student sample is 21.5% White/Caucasian and 51.5% Hispanic American or Latino/a, while the instructor sample is 67.0% White/Caucasian and 6.0% Hispanic American or Latino/a. 43.1% of the students are first generation university attendees, while only 23.3% of the instructors are.
 
-```{r demotable, echo=FALSE, warning=FALSE, message=FALSE}
-expdata %>% 
-  dplyr::select(treatment, s1_sim, s_female, t_female, s_race, t_race, s1_age, t_age, s_firstgen, t_firstgen, ir_f16_gpa, ir_t_s17enrltot) %>%
-  mutate(s_race = as.factor(s_race), t_race = as.factor(t_race)) %>%
-  summary_factorlist("treatment", c("s_female", "t_female", "s_race", "t_race", "s1_age", "t_age", "s_firstgen", "t_firstgen", "ir_f16_gpa", "ir_t_s17enrltot"),
+Table \@ref(tab:demotable2) shows the continuous covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
+
+```{r demotable1, echo=FALSE, warning=FALSE, message=FALSE}
+# Make a summary table of nominal variables, by treatment group.
+demotab <- expdata %>% 
+  dplyr::select(treatment, 
+                s_female, 
+                t_female, 
+                s_race, 
+                t_race, 
+                s_firstgen, 
+                t_firstgen) %>%
+  mutate(treatment = ff_label(treatment, "Group"),
+         s_female = ff_label(s_female, "Student gender"), 
+         t_female = ff_label(t_female, "Instructor gender"), 
+         s_race = ff_label(s_race, "Student race"), 
+         t_race = ff_label(t_race, "Instructor race"), 
+         s_firstgen = ff_label(s_firstgen, "Student first-gen status"), 
+         t_firstgen = ff_label(t_firstgen, "Instructor first-gen status")) %>%
+  summary_factorlist("treatment", 
+                     c("s_female", "t_female", "s_race", "t_race", "s_firstgen", "t_firstgen"),
                      p = TRUE, 
                      add_dependent_label = TRUE, 
                      dependent_label_prefix = "",
@@ -166,22 +208,96 @@ expdata %>%
                      add_row_totals = TRUE,
                      include_row_missing_col = TRUE,
                      col_totals_rowname = "",
-                     total_col = TRUE,
-                     col_totals_prefix = "N(%) = ") %>%
-  rename(N = "Total N", Missing = "Missing N") %>%
-  knitr::kable(caption = "Demographics for treatment and control groups",
-               booktabs = TRUE, linesep = "") %>%
-  kableExtra::kable_styling(latex_options = c("scale_down", "striped"), stripe_index =c(2:3,6:13,20,22:23,26))
+                     total_col = TRUE) %>%
+  rename(N = "Total N", Missing = "Missing N") 
+
+# Replace variables that are encoded with their true meanings
+demotab[,4] <- c("","Male", "Female", "Male", "Female",
+                 "White/Caucasian", "Black or African American", "Hispanic American or Latino/a",
+                 "Asian or Pacific Islander", "American Indian or Alaskan", "Middle Eastern",
+                 "Other", "Multi", "White/Caucasian", "Black or African American",
+                 "Hispanic American or Latino/a", "Asian or Pacific Islander",
+                 "Middle Eastern", "Multi", "No", "Yes", "No", "Yes")
+
+# Put it all in a nice table.
+demotab %>%
+  knitr::kable(caption = "Demographic statistics for treatment and control groups, nominal variables",
+               booktabs = TRUE, linesep = "",
+               col.names = c("", "N", "Missing", "", "Control N(%)", "Treatment N(%)", "Total  N(%)", "p")) %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  kableExtra::kable_styling(latex_options = c("scale_down", "striped"),
+                            stripe_index =c(2:3, 6:13, 20:21, 26))
+
+
+```
+
+```{r demotable2, echo=FALSE, warning=FALSE, message=FALSE}
+# make a summary table of continuous variables
+demotab2 <- expdata %>% 
+  dplyr::select(treatment, s1_age, t_age, ir_f16_gpa, n_course) %>%
+  mutate(treatment = ff_label(treatment, "Group"),
+         s1_age = ff_label(s1_age, "Student age"), 
+         t_age = ff_label(t_age, "Instructor age"),  
+         ir_f16_gpa = ff_label(ir_f16_gpa, "CPGA"),
+         n_course = ff_label(n_course, "Course size")) %>%
+  summary_factorlist("treatment",
+                     c("s1_age", "t_age", "ir_f16_gpa", "n_course"),
+                     p = TRUE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE) %>%
+  rename(N = "Total N", Missing = "Missing N") 
+
+# put in nice table
+demotab2 %>%
+  knitr::kable(caption = "Demographic statistics for treatment and control groups, continuous variables",
+               booktabs = TRUE, linesep = "",
+               col.names = c("", "N", "Missing", "", "Control", "Treatment", "Total", "p")) %>%
+  kableExtra::kable_styling(latex_options = c("striped"), 
+                            stripe_index =c(2, 4))
 ```
 
 TODO: graphs showing instructor vs. student demographics. Implications.
 
+TODO: graphs showing class size. Implications.
+
+## Outcomes of interest
+
 Table \@ref(tab:summarytable) shows summary statistics for key variables identified by @citeoriginal, including missing values.
 
 ```{r summarytable, echo=FALSE, warning=FALSE, message=FALSE}
-expdata %>% 
-  dplyr::select(treatment, s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, f17_enrolled, s1_female) %>%
-  summary_factorlist("treatment", c("s1_sim", "s1_tsr", "s2_sim", "s2_tsr", "t2_sim1", "t2_tsr", "grade", "std_grade", "t2_finalexam", "f17_enrolled", "s1_female"),
+# Summarize key outcome variables by treatment group
+sumtable <- expdata %>% 
+  dplyr::select(treatment, 
+                s1_sim,
+                s1_tsr,
+                s2_sim,
+                s2_tsr,
+                t2_sim1,
+                t2_tsr, grade,
+                std_grade,
+                t2_finalexam,
+                f17_enrolled) %>%
+  mutate(t2_sim1 = as.factor(t2_sim1)) %>%
+  mutate(treatment = ff_label(treatment, "Group"), 
+         s1_sim = ff_label(s1_sim, "Initial student similarity perception scale"), 
+         s1_tsr = ff_label(s1_tsr, "Initial student ISR perception scale"), 
+         s2_sim = ff_label(s2_sim, "End-of-term student similarity perception scale"), 
+         s2_tsr = ff_label(s2_tsr, "End-of-term student ISR perception scale"), 
+         t2_sim1 = ff_label(t2_sim1, "End-of-term instructor similarity perception"), 
+         t2_tsr = ff_label(t2_tsr, "End-of-term instructor ISR perception scale"), 
+         grade = ff_label(grade, "Course grade"), 
+         std_grade = ff_label(std_grade, "Standardized course grade"), 
+         t2_finalexam = ff_label(t2_finalexam, "Final grade"), 
+         f17_enrolled = ff_label(f17_enrolled, "Persistence")) %>%
+  summary_factorlist("treatment",
+                     c("s1_sim", "s1_tsr", "s2_sim", "s2_tsr", "t2_sim1", "t2_tsr",
+                       "grade", "std_grade", "t2_finalexam", "f17_enrolled"),
                      p = FALSE, 
                      add_dependent_label = TRUE, 
                      dependent_label_prefix = "",
@@ -191,15 +307,122 @@ expdata %>%
                      col_totals_rowname = "",
                      total_col = TRUE,
                      col_totals_prefix = "N(%) = ") %>%
-  rename(N = "Total N", Missing = "Missing N") %>%
-  knitr::kable(caption = "Descriptive statistics for treatment and control groups",
-               booktabs = TRUE, linesep = "") %>%
-  kableExtra::kable_styling(latex_options = c("scale_down", "striped"), stripe_index =c(2,4,6,8,10,13:14))
+  rename(N = "Total N", Missing = "Missing N") 
+
+# Rename variables for readability
+sumtable[,1] <- c("", "Similarity", "ISR", " Similarity", " ISR", "Similarity ", "", "", "", "", "ISR ", "Course grade", "Stand. grade", "Final grade", "Peristence", "")
+# replace nominal encodings with true values
+sumtable[15,4] <- "No"
+sumtable[16,4] <- "Yes"
+
+# put in table.
+sumtable %>%
+  knitr::kable(caption = "Outcomes of interest for treatment and control groups",
+               booktabs = TRUE, linesep = "",
+               col.names = c("", "N", "Missing", "", "Control", "Treatment", "Total")) %>%
+  pack_rows("Initial student perception", 2, 3) %>%
+  pack_rows("End-of-term student perception", 4, 5) %>%
+  pack_rows("End-of-term instructor perception", 6, 11) %>%
+  pack_rows("Student outcomes", 12, 15) %>%
+  kableExtra::kable_styling(latex_options = c("scale_down", "striped"),
+                            stripe_index =c(2,4,6,8,10,13:14))
 ```
+
+Replicating @citeoriginal's study, Table \@ref(tab:correlationtable) displays a correlation matrix for the measures that @citeoriginal identified as significant. Some measures, unsurprisingly, are highly correlated: grade and standardized grade, and grade and final exam grade. Others are moderately correlated: student initial perceptions of similarity and instructor-student relationship, student end-of-term perceptions of similarity and instructor-student relationship, and instructor end-of-term perceptions of similarity and instructor-student relationship. These last three pairs could indicate that the similarity perception scales and instructor-student relationship perception scales may not be measuring distinct concepts, or that feelings of similarity and positivity in relationships are strongly associated in the classroom.
+
+```{r correlationtable, echo=FALSE, warning=FALSE, message=FALSE}
+# Make the summary stats part of the table
+summary <- expdata %>% 
+  dplyr::select(treatment, 
+                s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, 
+                grade, std_grade, t2_finalexam, ir_f16_gpa, f17_enrolled, 
+                s1_female, n_course) %>%
+  mutate(treatment = ff_label(treatment, "Group"), 
+         s1_sim = ff_label(s1_sim, "Initial student similarity perception scale"), 
+         s1_tsr = ff_label(s1_tsr, "Initial student ISR perception scale"), 
+         s2_sim = ff_label(s2_sim, "End-of-term student similarity perception scale"), 
+         s2_tsr = ff_label(s2_tsr, "End-of-term student ISR perception scale"), 
+         t2_sim1 = ff_label(t2_sim1, "End-of-term instructor similarity perception"), 
+         t2_tsr = ff_label(t2_tsr, "End-of-term instructor ISR perception scale"), 
+         grade = ff_label(grade, "Course grade"), 
+         std_grade = ff_label(std_grade, "Standardized course grade"), 
+         t2_finalexam = ff_label(t2_finalexam, "Final grade"),
+         ir_f16_gpa = ff_label(ir_f16_gpa, "CPGA"),
+         f17_enrolled = ff_label(f17_enrolled, "Persistence"),
+         ir_f16_gpa = ff_label(ir_f16_gpa, "CPGA"),
+         n_course = ff_label(n_course, "Course size")) %>%
+  summary_factorlist("treatment", 
+                     c("s1_sim", "s1_tsr", "s2_sim", "s2_tsr", "t2_sim1", "t2_tsr", "grade",
+                       "std_grade", "t2_finalexam", "ir_f16_gpa", "n_course"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = FALSE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N (%) = ") %>%
+  dplyr::select("Total N", "Missing N", "Total")
+
+# Make the correlation matrix part of the table
+matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
+                  dplyr::select(s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa, n_course)))) 
+
+# Combine the summary and correlation tables
+table <- summary %>%
+  bind_cols(matrix) %>%
+  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N")
+
+# rename the variables for table readability
+rownames(table) <- c("Similarity", "ISR", " Similarity", " ISR", "Similarity ", "ISR ", "Course", "Stand. course", "Final", "CGPA", "Size")
+
+# Put in a table.
+table %>%
+  kable(caption = "Correlation matrix for continuous and ordinal key variables and outcomes",
+        booktabs = TRUE,
+        col.names = c("N", "Missing", "Mean (SD)", "Similarity", "ISR", "Similarity","ISR",
+                      "Similarity", "ISR", "Course", "Stand. course", "Final", "CGPA", "Size")) %>%
+  column_spec(1, width = "8em") %>%
+  column_spec(4, width = "4em") %>%
+  column_spec(5, width = "4em") %>%
+  column_spec(6, width = "4em") %>%
+  column_spec(7, width = "4em") %>%
+  column_spec(8, width = "4em") %>%
+  column_spec(9, width = "4em") %>%
+  column_spec(10, width = "4em") %>%
+  column_spec(11, width = "4em") %>%
+  column_spec(12, width = "4em") %>%
+  column_spec(13, width = "2.5em") %>%
+  column_spec(14, width = "2.5em") %>%
+  pack_rows("Initial student perception", 1, 2) %>%
+  pack_rows("End-of-term student perception", 3, 4) %>%
+  pack_rows("End-of-term instructor perception", 5, 6) %>%
+  pack_rows("Grades", 7, 10) %>%
+  pack_rows("Course", 11, 11) %>%
+  add_header_above(c(" " = 4, "Initial student" = 2, "End-of-term student" = 2,
+                     "End-of-term instructor" = 2, "Grades" = 4, "Course" = 1), 
+                   align = "l") %>%
+  kable_styling(latex_options = c("scale_down"))
+```
+
+TODO: graphs that show distributions of key scales (s1_sim, s2_sim, t2_sim1, s1_tsr, s2_tsr, t2_tsr, grade, t2_finalexam) between treatment and control. These will be boring and should be very small. Maybe set up at 2x3 grid for the sims and tsrs. Maybe push to appendix.
+
+## Missing data
+
+TODO: any patterns in missing data.
+
+TODO: did attrition follow any particular pattern? Did some types of students stop responding in between the first and second surveys? Non-response.
+
+## Data selection
+
+TODO: what data was excluded and why?
 
 # Models
 
-## Reproduction models
+## Replication models
+
+TODO: why did @citeoriginal pick these? What do I think about the selection?
 
 $treatment_{i}$ is the indicator that treatment was given.
 
@@ -240,76 +463,45 @@ prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\
 
 ## Additional models
 
-TODO: additional models
-Consider:
-More covariates: race, class size, first generation
-New covariates: instructor-student commonalities (gender, race)
-Models looking at subgroups of the sample: Only those with matching traits, only small classes
-Focus on grade as the outcome.
+TODO: additional models. Consider: More covariates (race, first generation, matching gender and race); Models looking at subgroups of the sample (Only those with matching traits, only small classes). Focus on grade as the outcome.
 
 # Results
 
-## Reproduction results
-
-Table \@ref(tab:correlationtable) displays a correlation matrix for the measures that @citeoriginal identified as significant. Some measures, unsurprisingly, are highly correlated: grade and standardized grade, and grade and final exam grade. Others are moderately correlated: student initial perceptions of similarity and instructor-student relationship, student end-of-term perceptions of similarity and instructor-student relationship, and instructor end-of-term perceptions of similarity and instructor-student relationship. These last three pairs could indicate that the similarity perception scales and instructor-student relationship perception scales may not be measuring distinct concepts, or that feelings of similarity and positivity in relationships are strongly associated in the classroom.
-
-```{r correlationtable, echo=FALSE, warning=FALSE, message=FALSE}
-summary <- expdata %>% 
-  dplyr::select(treatment, s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa, f17_enrolled, s1_female) %>%
-  summary_factorlist("treatment", c("s1_sim", "s1_tsr", "s2_sim", "s2_tsr", "t2_sim1", "t2_tsr", "grade", "std_grade", "t2_finalexam", "ir_f16_gpa"),
-                     p = FALSE, 
-                     add_dependent_label = TRUE, 
-                     dependent_label_prefix = "",
-                     add_col_totals = FALSE,
-                     add_row_totals = TRUE,
-                     include_row_missing_col = TRUE,
-                     col_totals_rowname = "",
-                     total_col = TRUE,
-                     col_totals_prefix = "N (%) = ") %>%
-  dplyr::select("Total N", "Missing N", "Total")
-
-matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
-                  dplyr::select(s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, grade, std_grade, t2_finalexam, ir_f16_gpa)))) 
-summary %>%
-  bind_cols(matrix) %>%
-  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N") %>%
-  kable(caption = "Descriptive statistics and correlation matrix for key continuous variables",
-               booktabs = TRUE, linesep = "") %>%
-  kable_styling(latex_options = c("scale_down"))
-```
+## Replication results
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Make all replication models
 studentfirstsimilaritymodel <- lm(data = expdata %>%
                                     filter(!is.na(s1_sim)),
-                                  s1_sim ~ treatment)
+                                  s1_sim ~ treatment + n_course + teacherid)
 studentsecondsimilaritymodel <- lm(data = expdata %>% 
                                      filter(!is.na(s2_sim)),
-                                   s2_sim ~ treatment)
+                                   s2_sim ~ treatment + n_course + teacherid)
 studentsecondrelationshipmodel <- lm(data = expdata %>%
                                        filter(!is.na(s2_tsr) & !is.na(s1_tsr)),
-                                     s2_tsr ~ treatment + s1_tsr)
+                                     s2_tsr ~ treatment + s1_tsr + n_course + teacherid)
 teachersecondrelationshipmodel <- lm(data = expdata %>%
                                        filter(!is.na(t2_tsr)),
-                                     t2_tsr ~ treatment)
+                                     t2_tsr ~ treatment + n_course + teacherid)
 grademodel <- lm(data = expdata %>%
                    filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(grade) & s1_female > -99),
-                 grade ~ treatment + s1_female + ir_f16_gpa)
+                 grade ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid)
 examgrademodel <- lm(data = expdata %>%
                        filter(obj_exam == 1) %>%
                        filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(t2_finalexam) & s1_female > -99),
-                     t2_finalexam ~ treatment + s1_female + ir_f16_gpa)
-teachersecondsimilarity <- polr(formula = as.factor(t2_sim1) ~ treatment,
+                     t2_finalexam ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid)
+teachersecondsimilarity <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + teacherid,
                                 data = expdata %>%
                                   filter(!is.na(t2_sim1)),
                                 Hess = TRUE)
 enrollmentfallmodel <- glm(data = expdata %>%
-                             mutate(f17_enrolled = as.factor(f17_enrolled)) %>%
                              filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(f17_enrolled) & s1_female > -99),
-                           f17_enrolled ~ treatment + s1_female + ir_f16_gpa,
+                           f17_enrolled ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid,
                            family = "binomial")
 ```
 
 ```{r modeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+# Make table to display model results
 stargazer(studentfirstsimilaritymodel,
           studentsecondsimilaritymodel,
           studentsecondrelationshipmodel,
@@ -326,27 +518,47 @@ stargazer(studentfirstsimilaritymodel,
           column.sep.width = "-10pt",
           label = "tab:modeltable",
           type = "latex",
-          header = FALSE)
+          header = FALSE,
+          omit = c("teacherid"),
+          omit.labels = c("Teacher fixed effect"),
+          dep.var.labels = c("Student sim. 1",
+                             "Student sim. 2",
+                             "Student ISR 2",
+                             "Instructor ISR 2",
+                             "Course grade",
+                             "Final grade",
+                             "Instructor sim. 2",
+                             "Persistence"),
+          covariate.labels = c("Treatment", "Student ISR 1", "Student female", "CGPA", "Course size"))
 ```
 
-In Table \@ref(tab:modeltable), Model 1 shows a statistically significant relationship between treatment and student initial similarity perception. However, the expected increase is only 0.155 on a scale of 1 to 5. Model 2 shows a statistically significant relationship between treatment and student end-of-semester similarity perception. However, the expected increase is only 0.095 on a scale of 1 to 5.
+TODO: reread paper & Stata code and ensure I caught all models that they report.
+
+In Table \@ref(tab:modeltable), Model 1 shows a statistically significant relationship between treatment and student initial similarity perception. However, the expected increase is only 0.158 on a scale of 1 to 5. Model 2 shows a statistically significant relationship between treatment and student end-of-semester similarity perception. However, the expected increase is only 0.101 on a scale of 1 to 5.
 
 Model 3 shows no significant relationship between treatment and student end-of-semester ISR perception. However, it does show a significant correlation between anticipated student ISR and student end-of-semester ISR. For every 1 point increase in anticipated ISR on a 1 to 5 scale, the expected increase in end-of-semester ISR is 0.674.
 
 Models 4, 5, 6, 7, and 8 show no significant relationship between treatment and instructor end-of-semester ISR perception, course grade, objectively graded exam grade, instructor perception of similarity at the end of the term, and enrollment in the subsequent semester.
 
-TODO: clustered residuals
+TODO: any problems with the models. General performance.
+
+TODO: clustered residuals (low priority)
 
 ## Additional results
 
 TODO: additional results
 
+TODO: Shiny.
+
 # Discussion
 
-TODO: discussion
-Inefficacy of weak measures in the face of divergent student/instructor demographics and massive class sizes.
-Who perceives similarity
-What does it mean for relationships and therefore academic success to be built on similarity.
+TODO: does this study have external validity?
+
+TODO: Inefficacy of weak measures in the face of divergent student/instructor demographics and massive class sizes.
+
+TODO: Who perceives similarity
+
+TODO: What does it mean for relationships and therefore academic success to be built on similarity.
 
 \newpage
 
