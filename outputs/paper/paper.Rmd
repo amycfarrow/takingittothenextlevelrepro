@@ -26,10 +26,9 @@ library(readstata13) # for stata files
 library(finalfit) # for summary table
 library(stargazer) # for model table
 library(MASS) # for ordinal logistic model
+library(cowplot) # for putting plots side by side
 
 # NOTE: script 01_ must have been run already
-
-# functions to create a correlation matrix from https://stefaneng.github.io/apa_correlation_table/ TODO cite
 
 apply_if <- function(mat, p, f) {
   # Fill NA with FALSE
@@ -84,6 +83,7 @@ Many interventions to increase completion rates have been suggested and tested. 
 TODO: write a paragraph about research on why similarity builds relationships (similarity -> relationships)
 
 TODO: write a paragraph about research on why relationships matter for scholastic performance (relationships -> grades)
+@Abrami_Mizener_1985's study of college students found a . One study of Taiwanese high school students explored the link between shared education and life values and student performance [@Lai_2015]. While they found a significant, but small, positive relationship between life values and student performance on analytic tests, education values gave mixed results depending on the natures of the education value and the analytic test in question [@Lai_2015].
 
 TODO: write a paragraph about research on why relationships matter for persistence (relationships -> persistence)
 
@@ -105,58 +105,39 @@ All students participated in a survey immediately following the treatment or the
 
 ## Measures
 
-TODO: figure out which parts of this list can go to the appendix
+@citeoriginal identify key measures. Full descriptions of all measures are available in [Appendix A].
 
-@citeoriginal identify key measures. Some are extracted from the student survey at the beginning of the term:
+Some are extracted from the student survey at the beginning of the term:
 
-* Student similarity perception scale (s1_sim): Immediately after the treatment or placebo, students answered six questions about their perceived similarity to the instructor, on scales of 1 to 5. These responses were averaged to create a similarity scale. 
-  - Overall, how similar to your instructor's values do you think your values are?
-  - How similar are your goals for the course and your instructor's goals?
-  - In general, how similar do you think your views about the course content and your instructor's are?
-  - How much do you think you have in common with your instructor?
-  - How similar do you think your personality is compared to your instructor's?
-  - Overall, how similar do you think you and your instructor are?
-* Student ISR perception scale (s1_tsr): Immediately after the treatment or placebo, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
-  - How much do you think you will enjoy learning from this instructor?
-  - How friendly do you think this instructor will be towards you?
-  - How encouraging do you think this instructor will be towards you?
-  - If you came back to visit this instructor three years from now, how excited do you think they would be?
-  - How motivating do you think you will find this instructor's class?
-  - How caring do you think this instructor will be towards you?
-  - Overall, how much do you think you will learn from this instructor?
-* Student gender (s1_female): The student's gender.
+  1. Immediately after the treatment or placebo, students answered six questions about their perceived similarity to the instructor, on scales of 1 to 5. These responses were averaged to create a student similarity perception scale. 
+  2. Immediately after the treatment or placebo, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create a student ISR perception scale.
+  3. Student gender
 
 Others are extracted from the student survey at the end of the term:
 
-* Student similarity perception scale (s2_sim): At the end of the semester, students answered the above six similarity scale questions again.
-* Student ISR perception scale (s2_tsr): At the end of the semester, students answered the above seven ISR scale questions again.
+  4. At the end of the semester, students answered the student similarity perception scale questions again.
+  5. At the end of the semester, students answered the student ISR perception scale questions again.
 
 Others come from the instructor survey at the end of the term:
 
-* Instructor similarity perception (t2_sim1): At the end of the semester, instructors answered only one quesiton about similarity with the student, on a scale of 1 to 5.
-  - Overall, how similar do you think you and STUDENTNAME are?
-* Instructor ISR perception scale (t2_tsr): At the end of the semester, instructors answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
-  - How much did you enjoy helping STUDENTNAME learn?
-  - How caring was STUDENTNAME towards you?
-  - How often did you say something encouraging to STUDENTNAME?
-  - How friendly was STUDENTNAME towards you?
-  - If this student came back to visit you three years from now, how excited would you be?
-  - How motivating did STUDENTNAME find the activities that you plan for class?
-  - Overall, how much did STUDENTNAME learn from you?
-* Final grade (t2_finalexam): Instructors were asked to report the student's grade on their final exam, paper, or project.
+  6. Instructor similarity perception: At the end of the semester, instructors answered only one question about similarity with the student, on a scale of 1 to 5.
+      - Overall, how similar do you think you and STUDENTNAME are?
+  7. Instructor ISR perception scale: At the end of the semester, instructors answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
+  8. Final grade: Instructors were asked to report the student's grade on their final exam, paper, or project.
 
 Finally, some are extracted from the university's internal records:
 
-* Course grade (grade): The final grade that the student received in the course.
-* Standardized course grade (std_grade): The student's final grade, standardized against other grades in the course.
-* CGPA (ir_f16_gpa): The student's cumulative GPA after the Fall 2016 term.
-* Persistence (f17_enrolled): The student's status as of Fall term 2017: not enrolled or enrolled.
+  9. The final grade that the student received in the course.
+  10. The student's final grade, standardized against other grades in the course.
+  11. The student's cumulative GPA (CGPA) after the Fall 2016 term.
+  12. Persistence: The student's status as of Fall term 2017: not enrolled or enrolled.
 
 TODO: evaluate scales' validity?
 
 # Data
 
 TODO: add all citations for R packages, R, and R markdown
+The correlation matrix was made using functions by @apacorrcode.
 
 TODO: note where the data is available and describe the dataset basics (cases, variables). Cite the dataset correctly, add to .bib
 
@@ -166,7 +147,47 @@ isrdata <- read.dta13(here("inputs/data/Instructor-Student Relationships Experim
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 expdata <- isrdata %>%
-  filter(use == 1) %>% # Select only the cases the original study used.
+  filter(t1_consent == 1 # Only include if instructor consented to first survey
+         & t1_complete == 1 # Only included if instructor completed first survey
+         & t1_timer_consent_3 > 1 # Only include if instructor read consent
+         & s1_consent == 1 # Only include if student consented to first survey
+         & s1_timer_consent_3 > 1 # Only include if student read consent
+         & s1_fullsurvey == 1 # Only include if the student completed the whole first survey
+         & t2_complete == 1 # Only include if the instructor completed the whole second survey
+         # The rest of the lines make sure that the survey taker looked at each page for more than three seconds
+         & t1_timer_gtky1_3 > 10
+         & t1_timer_gtky2_3 > 10
+         & t1_timer_gtky3_3 > 10
+         & t1_timer_demos1_3 > 10
+         & t1_timer_demos2_3 > 10
+         & s1_timer_gtky1_3 > 10
+         & s1_timer_gtky2_3 > 10
+         & s1_timer_gtky3_3 > 10
+         & s1_timerpre1_3 > 10
+         & s1_timerpre2_3 > 10
+         & (s1_timercontrolfeedback_3 > 10 | is.na(s1_timercontrolfeedback_3))
+         & (s1_timercontrolresponse_3 > 10 | is.na(s1_timercontrolresponse_3))
+         & (s1_timertreatmentfeedba_3 > 10 | is.na(s1_timertreatmentfeedba_3))
+         & (s1_timertreatmentrespon_3 > 10 | is.na(s1_timertreatmentrespon_3))
+         & s1_timerpost1_3 > 10
+         & s1_timerpost2_3 > 10
+         & s1_timerdemo1_3 > 10
+         & (s2_timer1a_3 > 10 | is.na(s2_timer1a_3))
+         & (s2_timer1b_3 > 10 | is.na(s2_timer1b_3))
+         & (s2_timer2a_3 > 10 | is.na(s2_timer2a_3))
+         & (s2_timer3a_3 > 10 | is.na(s2_timer3a_3))
+         & (s2_timer3b_3 > 10 | is.na(s2_timer3b_3))
+         & (s2_timer3c_3 > 10 | is.na(s2_timer3c_3))
+         & (s2_timer4_3 > 10 | is.na(s2_timer4_3))
+         & t2_timer > 10
+         & t_drop_reasons != "Teacher administered GTKY survey mistakenly at end of semester"
+         & t_drop_reasons != "Taught online course"
+         & t_drop_reasons != "Administered to only graduate students"
+         )
+
+# Alternatively: expdata <- isrdata %>% filter(use == 1) %>% # Select only the cases the original study used.
+  
+expdata <- expdata %>%
   mutate(across(where(is.numeric), ~na_if(., -99))) %>% # Some NAs are shown as -99. Replace with NA.
   mutate(s_race = as.factor(s_race), # make nominal variables into factors.
          t_race = as.factor(t_race),
@@ -174,11 +195,65 @@ expdata <- isrdata %>%
          f17_enrolled = as.factor(f17_enrolled))
 ```
 
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+# The original coding of race contained errors -- ex. a professor who selected White and Asian in the survey,
+# and was marked as Asian for most cases, but white for one random case.
+# This remakes the variable t_race, for consistency
+expdata <- expdata %>%
+  mutate(t1_race_1 = replace_na(as.numeric(t1_race_1), 0),
+         t1_race_2 = replace_na(as.numeric(t1_race_2), 0),
+         t1_race_3 = replace_na(as.numeric(t1_race_3), 0),
+         t1_race_4 = replace_na(as.numeric(t1_race_4), 0),
+         t1_race_5 = replace_na(as.numeric(t1_race_5), 0),
+         t1_race_6 = replace_na(as.numeric(t1_race_6), 0),
+         t1_race_7 = replace_na(as.numeric(t1_race_7), 0)) %>%
+  mutate(t_race = ifelse(t1_race_1 + t1_race_2 + t1_race_3 + t1_race_4 + t1_race_5 + t1_race_6 + t1_race_7 > 1, 
+                         ifelse(t1_race_1 == 1, ifelse(t1_race_2 == 1 & t1_race_3 != 1 & t1_race_4 != 1 & t1_race_5 != 1 & t1_race_6 != 1,
+                                                       "Black and White",
+                                                       ifelse(t1_race_2 != 1 & t1_race_3 == 1 & t1_race_4 != 1 & t1_race_5 != 1 & t1_race_6 != 1,
+                                                              "White Hispanic", "Other multi")), 
+                                ifelse(t1_race_2 == 1 & t1_race_3 == 1, "Black Hispanic", "Other multi")), 
+                         ifelse(t1_race_1 + t1_race_2 + t1_race_3 + t1_race_4 + t1_race_5 + t1_race_6 + t1_race_7 < 1, "Unknown",
+                                ifelse(t1_race_1 == 1, "White",
+                                       ifelse(t1_race_2 == 1, "Black",
+                                              ifelse(t1_race_3 == 1, "Hispanic",
+                                                     ifelse(t1_race_4, "Asian",
+                                                            ifelse(t1_race_5, "American Indian",
+                                                                   ifelse(t1_race_6, "Middle Eastern",
+                                                                          "Other")))))))))
+
+expdata <- expdata %>%
+  mutate(s1_race_1 = replace_na(as.numeric(s1_race_1), 0),
+         s1_race_2 = replace_na(as.numeric(s1_race_2), 0),
+         s1_race_3 = replace_na(as.numeric(s1_race_3), 0),
+         s1_race_4 = replace_na(as.numeric(s1_race_4), 0),
+         s1_race_5 = replace_na(as.numeric(s1_race_5), 0),
+         s1_race_6 = replace_na(as.numeric(s1_race_6), 0),
+         s1_race_7 = replace_na(as.numeric(s1_race_7), 0)) %>%
+  mutate(s_race = ifelse(s1_race_1 + s1_race_2 + s1_race_3 + s1_race_4 + s1_race_5 + s1_race_6 + s1_race_7 > 1,
+                         ifelse(s1_race_1 == 1, ifelse(s1_race_2 == 1 & s1_race_3 != 1 & s1_race_4 != 1 & s1_race_5 != 1 & s1_race_6 != 1,
+                                                       "Black and White",
+                                                       ifelse(s1_race_2 != 1 & s1_race_3 == 1 & s1_race_4 != 1 & s1_race_5 != 1 & s1_race_6 != 1,
+                                                              "White Hispanic", "Other multi")), 
+                                ifelse(s1_race_2 == 1 & s1_race_3 == 1, "Black Hispanic", "Other multi")), 
+                         ifelse(s1_race_1 + s1_race_2 + s1_race_3 + s1_race_4 + s1_race_5 + s1_race_6 + s1_race_7 < 1, "Unknown",
+                                ifelse(s1_race_1 == 1, "White",
+                                       ifelse(s1_race_2 == 1, "Black",
+                                              ifelse(s1_race_3 == 1, "Hispanic",
+                                                     ifelse(s1_race_4, "Asian",
+                                                            ifelse(s1_race_5, "American Indian",
+                                                                   ifelse(s1_race_6, "Middle Eastern",
+                                                                          "Other")))))))))
+```
+
 ## Demographics
 
-Table \@ref(tab:demotable1) shows the nominal covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
+Table \@ref(tab:demotable1) shows the student covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
 
-However, there are differences between the students and instructors. Notably, the student sample is 60.3% female, while the instructor sample is 78.7% female. The student sample is 21.5% White/Caucasian and 51.5% Hispanic American or Latino/a, while the instructor sample is 67.0% White/Caucasian and 6.0% Hispanic American or Latino/a. 43.1% of the students are first generation university attendees, while only 23.3% of the instructors are.
+Table \@ref(tab:demotable2) shows the instructor covariates. Because instructors are counted multiple times, for each student in the treatment and control groups that is in their course, only the totals are shown. The same covariates, presented by treatment and control groups, are shown in [Appendix B].
+
+There are differences between the students and instructors. Notably, the student sample is 60.3% female, while the instructor sample is 77.5% female. The student sample is 18.6% White, while the instructor sample is 39.2% White. The student sample is 43.5% Hispanic, while the instructor sample is only 3.3%. Finally, the student sample is 9.1% multiracial, but the instructor sample is 51.7% multiracial. Some of these differences may be due to self-identification: while one person who is Hispanic may select only Hispanic, another may select, for example, Hispanic as well as White, and be classed as multiracial. For this reason, it is very difficult to draw conclusions.
 
 Table \@ref(tab:demotable2) shows the continuous covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
 
@@ -187,20 +262,21 @@ Table \@ref(tab:demotable2) shows the continuous covariates for the treatment an
 demotab <- expdata %>% 
   dplyr::select(treatment, 
                 s_female, 
-                t_female, 
                 s_race, 
-                t_race, 
-                s_firstgen, 
-                t_firstgen) %>%
+                s_firstgen,
+                s1_age,
+                ir_f16_gpa,
+                year) %>%
+  mutate(year = as.factor(year)) %>%
   mutate(treatment = ff_label(treatment, "Group"),
          s_female = ff_label(s_female, "Student gender"), 
-         t_female = ff_label(t_female, "Instructor gender"), 
+         s1_age = ff_label(s1_age, "Student age"),
          s_race = ff_label(s_race, "Student race"), 
-         t_race = ff_label(t_race, "Instructor race"), 
+         ir_f16_gpa = ff_label(ir_f16_gpa, "CPGA"),
          s_firstgen = ff_label(s_firstgen, "Student first-gen status"), 
-         t_firstgen = ff_label(t_firstgen, "Instructor first-gen status")) %>%
+         year = ff_label(year, "Year")) %>%
   summary_factorlist("treatment", 
-                     c("s_female", "t_female", "s_race", "t_race", "s_firstgen", "t_firstgen"),
+                     c("s_female", "s_race", "s_firstgen", "year", "s1_age", "ir_f16_gpa"),
                      p = TRUE, 
                      add_dependent_label = TRUE, 
                      dependent_label_prefix = "",
@@ -208,27 +284,24 @@ demotab <- expdata %>%
                      add_row_totals = TRUE,
                      include_row_missing_col = TRUE,
                      col_totals_rowname = "",
-                     total_col = TRUE) %>%
+                     total_col = TRUE,
+                     col_totals_prefix = "N(%) = ") %>%
   rename(N = "Total N", Missing = "Missing N") 
 
 # Replace variables that are encoded with their true meanings
-demotab[,4] <- c("","Male", "Female", "Male", "Female",
-                 "White/Caucasian", "Black or African American", "Hispanic American or Latino/a",
-                 "Asian or Pacific Islander", "American Indian or Alaskan", "Middle Eastern",
-                 "Other", "Multi", "White/Caucasian", "Black or African American",
-                 "Hispanic American or Latino/a", "Asian or Pacific Islander",
-                 "Middle Eastern", "Multi", "No", "Yes", "No", "Yes")
+demotab[2:3,4] <- c("Male", "Female")
+demotab[16:17,4] <- c("No", "Yes")
 
 # Put it all in a nice table.
 demotab %>%
-  knitr::kable(caption = "Demographic statistics for treatment and control groups, nominal variables",
+  knitr::kable(caption = "Student covariates for treatment and control groups",
                booktabs = TRUE, linesep = "",
-               col.names = c("", "N", "Missing", "", "Control N(%)", "Treatment N(%)", "Total  N(%)", "p")) %>%
+               ) %>%
   column_spec(5, width = "5em") %>%
   column_spec(6, width = "5em") %>%
   column_spec(7, width = "5em") %>%
   kableExtra::kable_styling(latex_options = c("scale_down", "striped"),
-                            stripe_index =c(2:3, 6:13, 20:21, 26))
+                            stripe_index =c(2:3, 16:17, 22))
 
 
 ```
@@ -236,35 +309,91 @@ demotab %>%
 ```{r demotable2, echo=FALSE, warning=FALSE, message=FALSE}
 # make a summary table of continuous variables
 demotab2 <- expdata %>% 
-  dplyr::select(treatment, s1_age, t_age, ir_f16_gpa, n_course) %>%
-  mutate(treatment = ff_label(treatment, "Group"),
-         s1_age = ff_label(s1_age, "Student age"), 
-         t_age = ff_label(t_age, "Instructor age"),  
-         ir_f16_gpa = ff_label(ir_f16_gpa, "CPGA"),
+  mutate(teacherid = ifelse(as.numeric(teacherid) > 50, "0", "1")) %>%
+  dplyr::select(teacherid, t_age, t_firstgen, t_race, t_female, n_course) %>%
+  unique() %>%
+  mutate(t_age = ff_label(t_age, "Instructor age"), 
+         t_female = ff_label(t_female, "Instructor gender"),
+         t_race = ff_label(t_race, "Instructor race"),
+         t_firstgen = ff_label(t_firstgen, "Instructor first-gen status"),
          n_course = ff_label(n_course, "Course size")) %>%
-  summary_factorlist("treatment",
-                     c("s1_age", "t_age", "ir_f16_gpa", "n_course"),
+  summary_factorlist("teacherid",
+                     c("t_female", "t_race", "t_firstgen", "t_age", "n_course"),
                      p = TRUE, 
                      add_dependent_label = TRUE, 
                      dependent_label_prefix = "",
                      add_row_totals = TRUE,
                      include_row_missing_col = TRUE,
                      col_totals_rowname = "",
-                     total_col = TRUE) %>%
-  rename(N = "Total N", Missing = "Missing N") 
+                     total_col = TRUE,
+                     add_col_totals = TRUE,
+                     col_totals_prefix = "N = ") %>%
+  rename(N = "Total N", Missing = "Missing N")
+
+demotab2[2:3,4] <- c("Male", "Female")
+demotab2[13:14,4] <- c("No", "Yes")
 
 # put in nice table
 demotab2 %>%
-  knitr::kable(caption = "Demographic statistics for treatment and control groups, continuous variables",
+  dplyr::select(-"0", -"1", -"p") %>%
+  knitr::kable(caption = "Teacher covariates",
                booktabs = TRUE, linesep = "",
-               col.names = c("", "N", "Missing", "", "Control", "Treatment", "Total", "p")) %>%
+               col.names = c("", "N", "Missing", "", "")) %>%
   kableExtra::kable_styling(latex_options = c("striped"), 
-                            stripe_index =c(2, 4))
+                            stripe_index =c(2:3, 13:14, 16))
 ```
 
-TODO: graphs showing instructor vs. student demographics. Implications.
+In Figure \@ref(fig:racegraph), we can see that more students identified as Hispanic, while more instructors identified as White and multi-racial.
 
-TODO: graphs showing class size. Implications.
+```{r racegraph, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.cap="Bar chart illustrating racial identification proprtions of participants"}
+instructorrace <- expdata %>%
+  dplyr::select(teacherid,
+         t1_race_1, t1_race_2, t1_race_3, t1_race_4, t1_race_5, t1_race_6, t1_race_7, t_multi_race) %>%
+  unique() %>%
+  dplyr::summarize(white = sum(t1_race_1, na.rm = TRUE)/n(),
+            black = sum(t1_race_2, na.rm = TRUE)/n(),
+            hispanic = sum(t1_race_3, na.rm = TRUE)/n(),
+            asian = sum(t1_race_4, na.rm = TRUE)/n(),
+            americanindian = sum(t1_race_5, na.rm = TRUE)/n(),
+            middleeastern = sum(t1_race_6, na.rm = TRUE)/n(),
+            other = sum(t1_race_7, na.rm = TRUE)/n(),
+            mixed = sum(t_multi_race > 1, na.rm = TRUE)/n())
+studentrace <- expdata %>%
+  dplyr::select(id,
+         s1_race_1, s1_race_2, s1_race_3, s1_race_4, s1_race_5, s1_race_6, s1_race_7, s_multi_race) %>%
+  unique() %>%
+  dplyr::summarize(white = sum(s1_race_1, na.rm = TRUE)/n(),
+            black = sum(s1_race_2, na.rm = TRUE)/n(),
+            hispanic = sum(s1_race_3, na.rm = TRUE)/n(),
+            asian = sum(s1_race_4, na.rm = TRUE)/n(),
+            americanindian = sum(s1_race_5, na.rm = TRUE)/n(),
+            middleeastern = sum(s1_race_6, na.rm = TRUE)/n(),
+            other = sum(s1_race_7, na.rm = TRUE)/n(),
+            mixed = sum(s_multi_race > 1, na.rm = TRUE)/n())
+
+bind_cols(as_tibble(cbind(nms = names(instructorrace), t(instructorrace))),
+          as_tibble(cbind(nms = names(studentrace), t(studentrace))))%>%
+  dplyr::select(-nms...3) %>%
+  pivot_longer(!nms...1, names_to = "group", values_to = "portion") %>%
+  ggplot() +
+  geom_col(aes(x = nms...1, y = as.numeric(portion), fill = group), position = "dodge") +
+  scale_x_discrete(labels = c("American Indian", "Asian", "Black", "Hispanic", "Middle Eastern", "Multiple", "Other", "White")) +
+  scale_fill_discrete(labels = c("Instructors", "Students")) +
+  labs(x = "Self-identified race", y = "Proportion of sample", fill = "Group", title = "Self-identified racial proportions different for instructors and students") +
+  theme_minimal()
+```
+
+In Figure \@ref(fig:classsizegraph), we can see that most class sizes are between 25 and 50 students, but there are some that are much larger.
+
+```{r classsizegraph, echo=FALSE, warning=FALSE, message=FALSE, fig.width=5, fig.height = 3, fig.cap="Histogram illustrating class sizes"}
+expdata %>%
+  dplyr::select(teacherid, n_course) %>%
+  unique() %>%
+  ggplot(aes(x = n_course)) +
+  geom_histogram(binwidth = 5) +
+  labs(x = "Class size", y = "Frequency", title = "Some class sizes are very large") +
+  theme_minimal()
+```
 
 ## Outcomes of interest
 
@@ -326,6 +455,90 @@ sumtable %>%
   pack_rows("Student outcomes", 12, 15) %>%
   kableExtra::kable_styling(latex_options = c("scale_down", "striped"),
                             stripe_index =c(2,4,6,8,10,13:14))
+```
+
+Figure \@ref(fig:continuousoutcomes) shows key continuous outcome distributions for both treatment and control. The only visible differences are in the initial student similarity perception and end-of-term student similarity perception.
+
+```{r continuousoutcomes, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height= 10, fig.cap="Histograms illustrating continous and ordinal key outcomes"}
+s1_simplot <- expdata %>% 
+  ggplot(aes(x = s1_sim, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "Initial student similarity", y = "Frequency", fill = "Group") +
+  theme_minimal()
+
+s1_tsrplot <- expdata %>% 
+  ggplot(aes(x = s1_tsr, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "Initial student ISR", y = "Frequency") +
+  theme_minimal()
+
+s2_simplot <- expdata %>% 
+  ggplot(aes(x = s2_sim, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "End-of-term student similarity", y = "Frequency") +
+  theme_minimal()
+
+s2_tsrplot <- expdata %>% 
+  ggplot(aes(x = s2_tsr, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "End-of-term student ISR", y = "Frequency") +
+  theme_minimal()
+
+t2_sim1plot <- expdata %>% 
+  ggplot(aes(x = t2_sim1, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "End-of-term instructor similarity", y = "Frequency") +
+  theme_minimal()
+
+t2_tsrplot <- expdata %>% 
+  ggplot(aes(x = t2_tsr, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "End-of-term instructor ISR", y = "Frequency") +
+  theme_minimal()
+
+gradeplot <- expdata %>% 
+  ggplot(aes(x = grade, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "Course grade", y = "Frequency") +
+  theme_minimal()
+
+std_gradeplot <- expdata %>% 
+  ggplot(aes(x = std_grade, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "Standardized course grade", y = "Frequency") +
+  theme_minimal()
+
+t2_finalexamplot <- expdata %>% 
+  ggplot(aes(x = t2_finalexam, fill = treatment)) +
+  geom_histogram(position = "dodge") +
+  labs(x = "Final grade", y = "Frequency") +
+  theme_minimal()
+
+combined <- plot_grid(s1_simplot + theme(legend.position = "none"), s1_tsrplot + theme(legend.position = "none"),
+          s2_simplot + theme(legend.position = "none"), s2_tsrplot + theme(legend.position = "none"),
+          t2_sim1plot + theme(legend.position = "none"), t2_tsrplot + theme(legend.position = "none"),
+          std_gradeplot + theme(legend.position = "none"), t2_finalexamplot + theme(legend.position = "none"),
+          ncol = 2)
+
+legend <- get_legend(s1_simplot + 
+                       guides(color = guide_legend(nrow = 1)) +
+                       theme(legend.position = "bottom"))
+
+title <- ggdraw() + 
+  draw_label(
+    "Most key outcomes unaffected by treatment",
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+plot_grid(title,
+          combined,
+          legend,
+          ncol = 1,
+          rel_heights = c(.1, 2, .1))
 ```
 
 Replicating @citeoriginal's study, Table \@ref(tab:correlationtable) displays a correlation matrix for the measures that @citeoriginal identified as significant. Some measures, unsurprisingly, are highly correlated: grade and standardized grade, and grade and final exam grade. Others are moderately correlated: student initial perceptions of similarity and instructor-student relationship, student end-of-term perceptions of similarity and instructor-student relationship, and instructor end-of-term perceptions of similarity and instructor-student relationship. These last three pairs could indicate that the similarity perception scales and instructor-student relationship perception scales may not be measuring distinct concepts, or that feelings of similarity and positivity in relationships are strongly associated in the classroom.
@@ -406,7 +619,6 @@ table %>%
   kable_styling(latex_options = c("scale_down"))
 ```
 
-TODO: graphs that show distributions of key scales (s1_sim, s2_sim, t2_sim1, s1_tsr, s2_tsr, t2_tsr, grade, t2_finalexam) between treatment and control. These will be boring and should be very small. Maybe set up at 2x3 grid for the sims and tsrs. Maybe push to appendix.
 
 ## Missing data
 
@@ -559,6 +771,100 @@ TODO: Inefficacy of weak measures in the face of divergent student/instructor de
 TODO: Who perceives similarity
 
 TODO: What does it mean for relationships and therefore academic success to be built on similarity.
+
+\newpage
+
+# (APPENDIX) Appendix {-} 
+
+# Appendix A
+
+Complete list of key measures
+
+* Initial student survey:
+  1. Student similarity perception scale (s1_sim)
+      - Overall, how similar to your instructor's values do you think your values are?
+      - How similar are your goals for the course and your instructor's goals?
+      - In general, how similar do you think your views about the course content and your instructor's are?
+      - How much do you think you have in common with your instructor?
+      - How similar do you think your personality is compared to your instructor's?
+      - Overall, how similar do you think you and your instructor are?
+  2. Student ISR perception scale (s1_tsr)
+      - How much do you think you will enjoy learning from this instructor?
+      - How friendly do you think this instructor will be towards you?
+      - How encouraging do you think this instructor will be towards you?
+      - If you came back to visit this instructor three years from now, how excited do you think they would be?
+      - How motivating do you think you will find this instructor's class?
+      - How caring do you think this instructor will be towards you?
+      - Overall, how much do you think you will learn from this instructor?
+  3. Student gender (s1_female)
+* End of term student survey:
+  4. Student similarity perception scale (s2_sim)
+  5. Student ISR perception scale (s2_tsr)
+* End of term instructor survey:
+  6. Instructor similarity perception (t2_sim1):
+      - Overall, how similar do you think you and STUDENTNAME are?
+  7. Instructor ISR perception scale (t2_tsr):
+      - How much did you enjoy helping STUDENTNAME learn?
+      - How caring was STUDENTNAME towards you?
+      - How often did you say something encouraging to STUDENTNAME?
+      - How friendly was STUDENTNAME towards you?
+      - If this student came back to visit you three years from now, how excited would you be?
+      - How motivating did STUDENTNAME find the activities that you plan for class?
+      - Overall, how much did STUDENTNAME learn from you?
+  8. Final grade (t2_finalexam): Instructors were asked to report the student's grade on their final exam, paper, or project.
+* University internal records:
+  9. Course grade (grade): The final grade that the student received in the course.
+  10. Standardized course grade (std_grade): The student's final grade, standardized against other grades in the course.
+  11. CGPA (ir_f16_gpa): The student's cumulative GPA after the Fall 2016 term.
+  12. Persistence (f17_enrolled): The student's status as of Fall term 2017: not enrolled or enrolled.
+
+# Appendix B
+
+```{r demotable3, echo=FALSE, warning=FALSE, message=FALSE}
+# Make a summary table of nominal variables, by treatment group.
+demotab3 <- expdata %>% 
+  dplyr::select(treatment, 
+                t_female, 
+                t_race, 
+                t_firstgen,
+                t_age,
+                n_course) %>%
+  mutate(treatment = ff_label(treatment, "Group"),
+         t_female = ff_label(t_female, "Teacher gender"), 
+         t_age = ff_label(t_age, "Teacher age"),
+         t_race = ff_label(t_race, "Teacher race"), 
+         t_firstgen = ff_label(t_firstgen, "Teacher first-gen status"), 
+         n_course = ff_label(n_course, "Course size")) %>%
+  summary_factorlist("treatment", 
+                     c("t_female", "t_race", "t_firstgen", "t_age", "n_course"),
+                     p = TRUE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = TRUE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N(%) = ") %>%
+  rename(N = "Total N", Missing = "Missing N") 
+
+# Replace variables that are encoded with their true meanings
+demotab3[2:3,4] <- c("Male", "Female")
+demotab3[13:14,4] <- c("No", "Yes")
+
+# Put it all in a nice table.
+demotab3 %>%
+  knitr::kable(caption = "Teacher covariates for treatment and control groups",
+               booktabs = TRUE, linesep = "",
+               ) %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  kableExtra::kable_styling(latex_options = c("scale_down", "striped"),
+                            stripe_index =c(2:3, 13:14, 16))
+
+
+```
 
 \newpage
 

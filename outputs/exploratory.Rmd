@@ -55,19 +55,37 @@ colSums(is.na(expdata))
 
 
 ```{r}
-expdata %>%
-  select(teacherid,
-         t1_race_1, t1_race_2, t1_race_3, t1_race_4, t1_race_5, t1_race_6, t1_race_7) %>%
+instructorrace <- expdata %>%
+  dplyr::select(teacherid,
+         t1_race_1, t1_race_2, t1_race_3, t1_race_4, t1_race_5, t1_race_6, t1_race_7, t_multi_race) %>%
   unique() %>%
-  summarize(white = sum(t1_race_1, na.rm = TRUE)/n(),
+  dplyr::summarize(white = sum(t1_race_1, na.rm = TRUE)/n(),
             black = sum(t1_race_2, na.rm = TRUE)/n(),
             hispanic = sum(t1_race_3, na.rm = TRUE)/n(),
             asian = sum(t1_race_4, na.rm = TRUE)/n(),
             americanindian = sum(t1_race_5, na.rm = TRUE)/n(),
             middleeastern = sum(t1_race_6, na.rm = TRUE)/n(),
             other = sum(t1_race_7, na.rm = TRUE)/n(),
+            mixed = sum(t_multi_race > 1, na.rm = TRUE)/n(),
             total = n())
 ```
+```{r}
+studentrace <- expdata %>%
+  dplyr::select(id,
+         s1_race_1, s1_race_2, s1_race_3, s1_race_4, s1_race_5, s1_race_6, s1_race_7, s_multi_race) %>%
+  unique() %>%
+  dplyr::summarize(white = sum(s1_race_1, na.rm = TRUE)/n(),
+            black = sum(s1_race_2, na.rm = TRUE)/n(),
+            hispanic = sum(s1_race_3, na.rm = TRUE)/n(),
+            asian = sum(s1_race_4, na.rm = TRUE)/n(),
+            americanindian = sum(s1_race_5, na.rm = TRUE)/n(),
+            middleeastern = sum(s1_race_6, na.rm = TRUE)/n(),
+            other = sum(s1_race_7, na.rm = TRUE)/n(),
+            mixed = sum(s_multi_race > 1, na.rm = TRUE)/n(),
+            total = n())
+```
+
+
 
 ```{r}
 expdata %>%
@@ -208,6 +226,15 @@ expdata %>%
 expdata %>% filter(!is.na(s1_sim)) %>%
   ggplot(aes(x = s1_sim, fill = treatment)) +
   geom_histogram(position = "dodge")
+
+theirs <- isrdata %>%
+  filter(use == 1) %>%
+  dplyr::select(teacherid) %>%
+  unique()
+
+mine <- expdata %>%
+  dplyr::select(teacherid) %>%
+  unique()
 ```
 
 ```{r}
@@ -253,3 +280,6 @@ expdata %>%
   ggplot(aes(x = f17_enrolled, fill = treatment)) +
   geom_bar(position = "dodge")
 ```
+
+
+
