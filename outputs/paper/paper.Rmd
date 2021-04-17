@@ -27,6 +27,7 @@ library(finalfit) # for summary table
 library(stargazer) # for model table
 library(MASS) # for ordinal logistic model
 library(cowplot) # for putting plots side by side
+library(ltm) # for checking scale validity
 
 # NOTE: script 01_ must have been run already
 
@@ -62,17 +63,11 @@ apaCorr <- function(mat, corrtype = "pearson") {
 
 # Introduction
 
-College is perceived to be a meritocratic tool for social mobility and career success [@college]. Unfortunately, retention is a large problem in contemporary American colleges, and many students begin degrees without completing them; six-year completion rates for full-time first-time students range from 51% to 86%, depending on school [@finishline]. Even when controlling for pre-college test scores and initial enrollments, completion rate disparities exist based on parental education, socio-economic status, and race/ethnicity [@finishline]. Disparities in college completion lead to further entrenchment of long-standing inequalities [@finishline]. Thus, measures to help students persist in college completion are desirable to reduce wasted resources, and to increase societal equity.
+College is perceived to be a meritocratic tool for social mobility and career success [@college]. Unfortunately, retention is a large problem in contemporary American colleges, and many students begin degrees without completing them; six-year completion rates for full-time first-time students range from 51% to 86%, depending on school [@finishline]. Even when controlling for pre-college test scores and initial enrollments, completion rate disparities exist based on parental education, socio-economic status, and race/ethnicity [@finishline]. Disparities in college completion lead to further entrenchment of long-standing inequalities [@finishline]. Thus, measures to help students persist in college completion are desirable to reduce wasted resources and to increase societal equity.
 
-@citeoriginal's paper, "Taking It to the Next Level: A Field Experiment to Improve Instructor-Student Relationships in College", tests an intervention to improve college retention and performance. In this field experiment, they tested the effect of instructor-student similarity on instructor-student relationships (ISRs) and measures of student success. Based on extensive K-12 research about the importance of instructor-student relationship for student success, @citeoriginal aimed to establish how instructor-student relationships could be improved at the college level, and to test if this improvement had a positive result.
+@citeoriginal's paper, "Taking It to the Next Level: A Field Experiment to Improve Instructor-Student Relationships in College", tests an intervention to improve college retention and performance. In this field experiment, they tested the effect of instructor-student similarity on instructor-student relationships (ISRs) and measures of student success. Based on extensive K-12 research about the importance of instructor-student relationship for student success, @citeoriginal aimed to establish how instructor-student relationships could be improved at the college level, and to test if this improvement had a positive result. The experiment consisted of a randomized controlled trial where some undergraduate students were informed of similarities they shared with their instructor, while others were not. Student and instructor perceptions of similarity and the instructor-student relationship were measured through surveys, and student performance measures were collected from school records.
 
-TODO: add a bit more about the original experiment.
-
-This paper replicates @citeoriginal's original analysis, using anonymized data provided by the authors. Linear, logistic, and ordinal logistic models are used to predict outcomes including perceived ISR, grade, and re-enrollment. These models show that treatment slightly improves student perception of instructor-student similarity, but does not significantly affect student or instructor ISR perception, grade, exam grade, or future enrollment. In addition to the models in the original paper, this paper explores models using different controls and models that consider specific subgroups of the study participants.
-
-TODO: expand on my own findings.
-
-TODO: clearly outline the structure of the whole paper.
+This paper replicates @citeoriginal's original analysis, using anonymized data provided by the authors. First, methods are discussed, and the measures and scales created by @citeoriginal are evaluated. Second, different demographics of instructor and student populations are explored, similarity of treatment and control groups is established, outcomes of interest are compared for treatment and control groups, and missing data is evaluated. Third, @citeoriginal's models are replicated, and additional models are explored. Linear, logistic, and ordinal logistic models are replicated to predict outcomes including perceived ISR, grade, and persistence. These models show that treatment slightly improves student perception of instructor-student similarity, but does not significantly affect student or instructor ISR perception, grade, exam grade, or future enrollment. Replicating exploratory models, the relationship between similarity and relationship, as well as between relationship and student outcomes, are modeled. Additional models use different controls; specifically, variables indicating shared racial and gender self-identification. As with the replication models, treatment has no significant impact on ISR perception or student outcomes.
 
 ## Literature review
 
@@ -88,58 +83,6 @@ TODO: write a paragraph about research on why relationships matter for scholasti
 TODO: write a paragraph about research on why relationships matter for persistence (relationships -> persistence)
 
 # Methodology
-
-@citeoriginal conducted a randomized controlled trial to assess the impact of awareness of instructor-student similarities on perceived similarity, instructor-student relationship, course grade, and re-enrollment.
-
-## Participants
-
-The study took place in the 2017 spring semester at a large Californian University. The study included 120 instructors and their 2,749 students. The instructors participated in the study based on interest and a gift-card incentive, and their students were invited to participate unincentivized.Students were only enrolled in the study for one class, in the event that they were taking classes with multiple participating instructors. TODO: what kind of sampling is this? What are the implications?
-
-## Treatment and control
-
-Participating students were randomly assigned to either treatment or control. At the beginning of the term, all participating students and instructors were given "get to know you" surveys. Using those responses, for each student in the treatment group, seven commonalities were identified between student and instructor (for example, perhaps both student and instructor binge-watch TV to relieve stress, or appreciate loyalty as the most important friend quality), and both student and instructor were informed of these commonalities. They completed a few questions about the similarities and were reminded of them through the semester to ensure they were internalized. Students in the control group were informed about similarities they shared with students in another part of the country, and instructors were told nothing about these students.
-
-## Procedures
-
-All students participated in a survey immediately following the treatment or the placebo. They were surveyed again at the end of the course. Instructors were surveyed only at the end of the course.
-
-## Measures
-
-@citeoriginal identify key measures. Full descriptions of all measures are available in [Appendix A].
-
-Some are extracted from the student survey at the beginning of the term:
-
-  1. Immediately after the treatment or placebo, students answered six questions about their perceived similarity to the instructor, on scales of 1 to 5. These responses were averaged to create a student similarity perception scale. 
-  2. Immediately after the treatment or placebo, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create a student ISR perception scale.
-  3. Student gender
-
-Others are extracted from the student survey at the end of the term:
-
-  4. At the end of the semester, students answered the student similarity perception scale questions again.
-  5. At the end of the semester, students answered the student ISR perception scale questions again.
-
-Others come from the instructor survey at the end of the term:
-
-  6. Instructor similarity perception: At the end of the semester, instructors answered only one question about similarity with the student, on a scale of 1 to 5.
-      - Overall, how similar do you think you and STUDENTNAME are?
-  7. Instructor ISR perception scale: At the end of the semester, instructors answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
-  8. Final grade: Instructors were asked to report the student's grade on their final exam, paper, or project.
-
-Finally, some are extracted from the university's internal records:
-
-  9. The final grade that the student received in the course.
-  10. The student's final grade, standardized against other grades in the course.
-  11. The student's cumulative GPA (CGPA) after the Fall 2016 term.
-  12. Persistence: The student's status as of Fall term 2017: not enrolled or enrolled.
-
-TODO: evaluate scales' validity?
-
-# Data
-
-TODO: add all citations for R packages, R, and R markdown
-The correlation matrix was made using functions by @apacorrcode.
-
-TODO: note where the data is available and describe the dataset basics (cases, variables). Cite the dataset correctly, add to .bib
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 isrdata <- read.dta13(here("inputs/data/Instructor-Student Relationships Experiment Data_Anonymous.dta"))
@@ -247,15 +190,114 @@ expdata <- expdata %>%
                                                                           "Other")))))))))
 ```
 
+@citeoriginal conducted a randomized controlled trial to assess the impact of awareness of instructor-student similarities on perceived similarity, instructor-student relationship, course grade, and re-enrollment.
+
+## Participants
+
+The study took place in the 2017 spring semester at a large Californian University. The study included 120 instructors and their 2,749 students. The instructors participated in the study based on interest and a gift-card incentive, and their students were invited to participate unincentivized. Students were only enrolled in the study for one class, in the event that they were taking classes with multiple participating instructors. The initial sample of 147 instructors was a convenience sample: the study was advertised, interested instructors signed up and were enrolled if their course met the study requirements. 145 instructors consented and took the initial survey, resulting in an corresponding sample of 3,352 students. Once errors of administration, missing responses, and inadequate time spent on surveys were considered, the sample consisted of only 119 instructors and 2,273 students.
+
+## Treatment and control
+
+Participating students were randomly assigned to either treatment or control. At the beginning of the term, all participating students and instructors were given "get to know you" surveys. Using those responses, for each student in the treatment group, seven commonalities were identified between student and instructor (for example, perhaps both student and instructor binge-watch TV to relieve stress, or appreciate loyalty as the most important friend quality), and both student and instructor were informed of these commonalities. They completed a few questions about the similarities and were reminded of them through the semester to ensure they were internalized. Students in the control group were informed about similarities they shared with students in another part of the country, and instructors were told nothing about these students.
+
+## Procedures
+
+All students participated in a survey immediately following the treatment or the placebo. They were surveyed again at the end of the course. Instructors were surveyed only at the end of the course.
+
+## Measures
+
+@citeoriginal identify key measures. Full descriptions of all measures are available in [Appendix A].
+
+Some are extracted from the student survey at the beginning of the term:
+
+  1. Immediately after the treatment or placebo, students answered six questions about their perceived similarity to the instructor, on scales of 1 to 5. These responses were averaged to create a student similarity perception scale.
+  2. Immediately after the treatment or placebo, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create a student ISR perception scale.
+  3. Student gender
+
+Others are extracted from the student survey at the end of the term:
+
+  4. At the end of the semester, students answered the student similarity perception scale questions again.
+  5. At the end of the semester, students answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create a student ISR perception scale.
+
+Others come from the instructor survey at the end of the term:
+
+  6. Instructor similarity perception: At the end of the semester, instructors answered only one question about similarity with the student, on a scale of 1 to 5.
+      - Overall, how similar do you think you and STUDENTNAME are?
+  7. Instructor ISR perception scale: At the end of the semester, instructors answered seven questions about their perception of the instructor-student relationship, on scales of 1 to 5. These responses were averaged to create an ISR scale.
+  8. Final grade: Instructors were asked to report the student's grade on their final exam, paper, or project.
+
+Finally, some are extracted from the university's internal records:
+
+  9. The final grade that the student received in the course.
+  10. The student's final grade, standardized against other grades in the course.
+  11. The student's cumulative GPA (CGPA) after the Fall 2016 term.
+  12. Persistence: The student's status as of Fall term 2017: not enrolled or enrolled.
+
+### Scale Reliability
+
+A scale is externally reliable if it gives the same results across different testings [@Coolican_2014]. Test-retest reliability, where a scale is given to a group at different times, is a common way to assess this [@Coolican_2014]. In our data, there is a retest, but interactions between instructors and students may reasonably be expected to affect the second testing, rendering the data unuseful for assessing test-retest reliability. 
+
+A scale is internally reliable if it is consistent within itself [@Coolican_2014]. Cronbach's alpha was used to assess the reliability of the similarity and ISR scales. This statistic evaluates how much participants vary on individual items, compared to how they vary overall [@Coolican_2014]. Good reliability is indicatedby an alpha between .75 and 1 [@Coolican_2014]. For the initial student similarity scale, initial student ISR scale, end-of-term student similarity scale, end-of-term student ISR scale, and end-of-term student ISR scale, the alpha values were 0.892, 0.872, 0.91, 0.905, and 0.926, respectively, indicating that the scales are reliable.
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+s1_sim_scale <- expdata %>%
+  dplyr::select(s1_sim1, s1_sim2, s1_sim3, s1_sim4, s1_sim5, s1_sim6) %>%
+  drop_na()
+cronbach.alpha(s1_sim_scale)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+s1_tsr_scale <- expdata %>%
+  dplyr::select(s1_tsr1, s1_tsr2, s1_tsr3, s1_tsr4, s1_tsr5, s1_tsr6, s1_tsr7) %>%
+  drop_na()
+cronbach.alpha(s1_tsr_scale)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+s2_sim_scale <- expdata %>%
+  dplyr::select(s2_sim1, s2_sim2, s2_sim3, s2_sim4, s2_sim5, s2_sim6) %>%
+  drop_na()
+cronbach.alpha(s2_sim_scale)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+s2_tsr_scale <- expdata %>%
+  dplyr::select(s2_tsr1, s2_tsr2, s2_tsr3, s2_tsr4, s2_tsr5, s2_tsr6, s2_tsr7) %>%
+  drop_na()
+cronbach.alpha(s2_tsr_scale)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+t2_tsr_scale <- expdata %>%
+  dplyr::select(t2_tsr1, t2_tsr2, t2_tsr3, t2_tsr4, t2_tsr5, t2_tsr6, t2_tsr7) %>%
+  drop_na()
+cronbach.alpha(t2_tsr_scale)
+```
+
+### Scale Validity
+
+A scale is valid if it measures what it is supposed to measure [@Coolican_2014]. In this case, the scales should measure perceived similarity and perceived instructor-student relationship (ISR). @citeoriginal used modified versions of the scales from @Gehlbach_Brinkworth_King_Hsu_McIntyre_Rogers_2015, where they were used with ninth-grade American students and their teachers; the scales were originally were presented in @Gehlbach_Brinkworth_Harris_2012, where they were developed for use with sixth-, seventh-, and eight-grade American students and their teachers. Given the fact that these scales were developed for children, it is worth considering what the scales actually measure. To do this, we can look at the specific questions in the three distinct scales.
+
+To assess similarity, students were asked about values, course goals, views on course content, general commonalities, personality, and overall similarity. By this standard, high similarity is when a student shares values, course goals, and views on course content, and the student and instructor have similar personalities, high commonality, and high general similarity. Questions ask about course-specific measures (content and goals), personal traits (values and personality), and non-specific traits (commonalities and general similarity), but do not ask about life experience, abilities, approaches, amoungst other ways that two people can theoretically be similar.
+
+TODO: ^ link to any other definitions/studies of similarity
+
+To assess ISR, students were asked about enjoyment of learning, friendliness, encouragement, excitement, motivation, caring, and overall learning. By this standard, a high-quality ISR is one where a student enjoys learning from, is motivated by, and learns a great deal from a friendly, encouraging, caring instructor, who would be excited to see them in three years time. Questions do not ask about respect, reliability, admiration, challenge, personal growth, frequency of contact, or many other aspects of how a student perceives an instructor-student relationship, especially at the college level.
+
+To assess ISR, instructors were asked about enjoyment of aiding learning, caring, frequency of encouragement, friendliness, excitement, motivation, and overall learning. By this standard, a high-quality ISR is one where an instructor enjoys helping and frequently encourages a friendly, caring student who is motivated and learns a great deal from this instructor, and the instructor would be excited to see the student in three years. Questions do not ask about respectfulness, interest, potential, frequency of contact, tone of that contact, or other aspects of instructor perception of an instructor-student relationship.
+
+TODO: ^^ link to any other definitions of ISR
+
+# Data
+
+TODO: add all citations for R packages, R, and R markdown
+The correlation matrix was made using functions by @apacorrcode.
+
+The data, in a .dta format, and Stata code for the @citeoriginal paper are available on the Inter-University Consortium for Political and Social Research [@Robinson_Scott_Gottfried_2020]. The dataset contains 36838 observations of 653 variables.
+
 ## Demographics
 
 Table \@ref(tab:demotable1) shows the student covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
-
-Table \@ref(tab:demotable2) shows the instructor covariates. Because instructors are counted multiple times, for each student in the treatment and control groups that is in their course, only the totals are shown. The same covariates, presented by treatment and control groups, are shown in [Appendix B].
-
-There are differences between the students and instructors. Notably, the student sample is 60.3% female, while the instructor sample is 77.5% female. The student sample is 18.6% White, while the instructor sample is 39.2% White. The student sample is 43.5% Hispanic, while the instructor sample is only 3.3%. Finally, the student sample is 9.1% multiracial, but the instructor sample is 51.7% multiracial. Some of these differences may be due to self-identification: while one person who is Hispanic may select only Hispanic, another may select, for example, Hispanic as well as White, and be classed as multiracial. For this reason, it is very difficult to draw conclusions.
-
-Table \@ref(tab:demotable2) shows the continuous covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
 
 ```{r demotable1, echo=FALSE, warning=FALSE, message=FALSE}
 # Make a summary table of nominal variables, by treatment group.
@@ -306,6 +348,8 @@ demotab %>%
 
 ```
 
+Table \@ref(tab:demotable2) shows the instructor covariates. Because instructors are counted multiple times, for each student in the treatment and control groups that is in their course, only the totals are shown. The same covariates, presented by treatment and control groups, are shown in [Appendix B].
+
 ```{r demotable2, echo=FALSE, warning=FALSE, message=FALSE}
 # make a summary table of continuous variables
 demotab2 <- expdata %>% 
@@ -342,6 +386,8 @@ demotab2 %>%
   kableExtra::kable_styling(latex_options = c("striped"), 
                             stripe_index =c(2:3, 13:14, 16))
 ```
+
+There are differences between the students and instructors. Notably, the student sample is 62.7% female, while the instructor sample is 78.2% female. The student sample is 19.8% White, while the instructor sample is 38.7% White. The student sample is 47% Hispanic, while the instructor sample is only 3.4%. Finally, the student sample is 9.8% multiracial, but the instructor sample is 52.1% multiracial. Some of these differences may be due to self-identification: while one person who is Hispanic may select only Hispanic, another may select, for example, Hispanic as well as White, and be classed differently as a result. For this reason, it is very difficult to draw conclusions. Additionally, students are 43.5% first-generation college students, while only 25.2% of instructors are.
 
 In Figure \@ref(fig:racegraph), we can see that more students identified as Hispanic, while more instructors identified as White and multi-racial.
 
@@ -619,28 +665,27 @@ table %>%
   kable_styling(latex_options = c("scale_down"))
 ```
 
-
 ## Missing data
 
-TODO: any patterns in missing data.
+There are no significant patterns in missing data. [Appendix C] shows the distributions of key variables relative to missing data in other key variables.
 
-TODO: did attrition follow any particular pattern? Did some types of students stop responding in between the first and second surveys? Non-response.
+## Attrition
+
+129 eligible instructors completed the first survey, but 6 of those instructors did not complete the second survey. Corresponding to the remaining 123 instructors, 2,801 students completed the first survey (1,392 in the treatment group, 1,409 in the control group), but 682 of those students did not complete the second survey (328 in the treatment group, 354 in the control group). The attrition in the treatment and control groups was comparable (24% in the treatment group, 25% in the control group).
 
 ## Data selection
 
-TODO: what data was excluded and why?
+From the 36,838 observations, or potential units of study (corresponding to all undergraduate student records of the university), only 2,273 were used in analysis. Units of study were excluded because the instructor did not participate in the study (33,486); the student did not consent (123); the student did not spend more than a second reading the consent page (1); the initial student survey, initial instructor survey, or end-of-term instructor survey was not complete (428); the instructor mistakenly administered the wrong survey (30); the course was online (20); the course was for graduate students (50); or a participant did not spend more than ten seconds reading and answering a page with five or more questions (427). The ten-second time limit is somewhat arbitrary, and a different choice could lead to different study results.
 
 # Models
 
 ## Replication models
 
-TODO: why did @citeoriginal pick these? What do I think about the selection?
-
 $treatment_{i}$ is the indicator that treatment was given.
 
-$X_{1i}$ is a vector of student-level covariates (pre-intervention measures included).
+$X_{1i}$ is a vector of student-level covariates (anticipated student ISR, gender, CGPA). Anticipated ISR is used as a control for end-of-term student ISR perception, while gender and CGPA are used as controls for grade based outcomes. @citeoriginal state this is because females earn higher grades generally.
 
-$X_{2j}$ is a vector of instructor-level covariates.
+$X_{2j}$ is a vector of instructor-level covariates (course size, teacher ID).
 
 $\epsilon_{ij}$ is a clustered residual.
 
@@ -648,7 +693,7 @@ $\beta_{0}$, $beta_{1}$, $\Gamma_{1}$, $\Gamma_{2}$, and $a_{k}$ are coefficient
 
 ### Linear models
 
-Equation \@ref(eq:linmodel) is @citeoriginal's linear model, used for continuous outcomes, which include complete scale outcomes (immediate student similarity rating (s1_sim), end of semester student similarity rating (s2_sim), end of semester student ISR rating (s2_tsr), and end of semester instructor ISR rating (t2_tsr)) and grade-based outcomes, measured in GPA (course grade (grade) and objectively graded exam grade (t2_finalexam)).
+Equation \@ref(eq:linmodel) is @citeoriginal's linear model, used for continuous outcomes. This include complete scale outcomes: immediate student similarity rating (s1_sim), end of semester student similarity rating (s2_sim), end of semester student ISR rating (s2_tsr), and end of semester instructor ISR rating (t2_tsr). Because these scales are created using 6-7 questions answered on a scale of 1 to 5, they have a total of 25 or 30 possible values, they can be treated as continuous variables and modeled using linear functions. It also includes grade-based outcomes: course grade (grade) and objectively graded exam grade (t2_finalexam), both of which are shown on a 4.0 GPA scale.
 
 \begin{equation}
 (\#eq:linmodel)
@@ -675,7 +720,14 @@ prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\
 
 ## Additional models
 
-TODO: additional models. Consider: More covariates (race, first generation, matching gender and race); Models looking at subgroups of the sample (Only those with matching traits, only small classes). Focus on grade as the outcome.
+When creating additional models, I focused on three key outcomes: end-of-term student similarity perception scale, end-of-term student ISR perception scale, and standardized course grade. I selected these because interventions like @citeoriginal's are aimed at improving student outcomes (like course performance) and perceptions that could improve student outcomes (like student ISR perception), and this particular intervention tries to accomplish these goals by improving perceived similarity.
+
+\begin{equation}
+(\#eq:mylinmodel)
+Outcome_{ij} = \beta_{0} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Gamma_{2} + X_{3jk}\Gamma_{3} + \epsilon_{ij}
+\end{equation}
+
+Equation \@ref(eq:mylinmodel) shows the linear model used. $X_{3jk}$ represents student-instructor commonality covariates (matching racial self-ID, matching gender self-ID, age difference).
 
 # Results
 
@@ -683,33 +735,32 @@ TODO: additional models. Consider: More covariates (race, first generation, matc
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Make all replication models
-studentfirstsimilaritymodel <- lm(data = expdata %>%
-                                    filter(!is.na(s1_sim)),
-                                  s1_sim ~ treatment + n_course + teacherid)
-studentsecondsimilaritymodel <- lm(data = expdata %>% 
-                                     filter(!is.na(s2_sim)),
-                                   s2_sim ~ treatment + n_course + teacherid)
-studentsecondrelationshipmodel <- lm(data = expdata %>%
-                                       filter(!is.na(s2_tsr) & !is.na(s1_tsr)),
-                                     s2_tsr ~ treatment + s1_tsr + n_course + teacherid)
-teachersecondrelationshipmodel <- lm(data = expdata %>%
-                                       filter(!is.na(t2_tsr)),
-                                     t2_tsr ~ treatment + n_course + teacherid)
-grademodel <- lm(data = expdata %>%
-                   filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(grade) & s1_female > -99),
-                 grade ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid)
-examgrademodel <- lm(data = expdata %>%
-                       filter(obj_exam == 1) %>%
-                       filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(t2_finalexam) & s1_female > -99),
-                     t2_finalexam ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid)
+studentfirstsimilaritymodel <- lm(data = expdata,
+                                  formula = s1_sim ~ treatment + n_course + teacherid,
+                                     na.action = na.omit)
+studentsecondsimilaritymodel <- lm(data = expdata,
+                                   formula = s2_sim ~ treatment + n_course + teacherid,
+                                     na.action = na.omit)
+studentsecondrelationshipmodel <- lm(data = expdata,
+                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + teacherid,
+                                     na.action = na.omit)
+teachersecondrelationshipmodel <- lm(data = expdata,
+                                     formula = t2_tsr ~ treatment + n_course + teacherid,
+                                     na.action = na.omit)
+grademodel <- lm(data = expdata,
+                 formula = grade ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid,
+                                     na.action = na.omit)
+examgrademodel <- lm(data = expdata %>% filter(obj_exam == 1),
+                     formula = t2_finalexam ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid,
+                                     na.action = na.omit)
 teachersecondsimilarity <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + teacherid,
-                                data = expdata %>%
-                                  filter(!is.na(t2_sim1)),
-                                Hess = TRUE)
-enrollmentfallmodel <- glm(data = expdata %>%
-                             filter(!is.na(s1_female) & !is.na(ir_f16_gpa) & !is.na(f17_enrolled) & s1_female > -99),
-                           f17_enrolled ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid,
-                           family = "binomial")
+                                data = expdata,
+                                Hess = TRUE,
+                                     na.action = na.omit)
+enrollmentfallmodel <- glm(data = expdata,
+                           formula = f17_enrolled ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid,
+                           family = "binomial",
+                                     na.action = na.omit)
 ```
 
 ```{r modeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
@@ -722,7 +773,7 @@ stargazer(studentfirstsimilaritymodel,
           examgrademodel,
           teachersecondsimilarity,
           enrollmentfallmodel,
-          title = "Model results",
+          title = "Replication model results",
           align = TRUE,
           float.env = "sidewaystable",
           no.space = TRUE,
@@ -744,25 +795,136 @@ stargazer(studentfirstsimilaritymodel,
           covariate.labels = c("Treatment", "Student ISR 1", "Student female", "CGPA", "Course size"))
 ```
 
-TODO: reread paper & Stata code and ensure I caught all models that they report.
-
 In Table \@ref(tab:modeltable), Model 1 shows a statistically significant relationship between treatment and student initial similarity perception. However, the expected increase is only 0.158 on a scale of 1 to 5. Model 2 shows a statistically significant relationship between treatment and student end-of-semester similarity perception. However, the expected increase is only 0.101 on a scale of 1 to 5.
 
 Model 3 shows no significant relationship between treatment and student end-of-semester ISR perception. However, it does show a significant correlation between anticipated student ISR and student end-of-semester ISR. For every 1 point increase in anticipated ISR on a 1 to 5 scale, the expected increase in end-of-semester ISR is 0.674.
 
 Models 4, 5, 6, 7, and 8 show no significant relationship between treatment and instructor end-of-semester ISR perception, course grade, objectively graded exam grade, instructor perception of similarity at the end of the term, and enrollment in the subsequent semester.
 
-TODO: any problems with the models. General performance.
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Make all replication models
+studentsecondrelationshipmodel_ <- lm(data = expdata,
+                                     formula = s2_tsr ~ treatment + s2_sim + t2_sim1 + n_course + teacherid,
+                                     na.action = na.omit)
+teachersecondrelationshipmodel_ <- lm(data = expdata,
+                                     formula = t2_tsr ~ treatment + s2_sim + t2_sim1 + n_course + teacherid,
+                                     na.action = na.omit)
+grademodel_ <- lm(data = expdata,
+                 formula = grade ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa + teacherid,
+                                     na.action = na.omit)
+examgrademodel_ <- lm(data = expdata %>% filter(obj_exam == 1),
+                     formula = t2_finalexam ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa + teacherid,
+                                     na.action = na.omit)
+enrollmentfallmodel_ <- glm(data = expdata,
+                           formula = f17_enrolled ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa + teacherid,
+                           family = "binomial",
+                                     na.action = na.omit)
+```
+
+```{r noncausaltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+# Make table to display model results
+stargazer(studentsecondrelationshipmodel_,
+          teachersecondrelationshipmodel_,
+          grademodel_,
+          examgrademodel_,
+          enrollmentfallmodel_,
+          title = "Replication model results 2",
+          align = TRUE,
+          #float.env = "sidewaystable",
+          no.space = TRUE,
+          omit.stat=c("ser","f"),
+          column.sep.width = "-10pt",
+          label = "tab:noncausaltable",
+          type = "latex",
+          header = FALSE,
+          omit = c("teacherid"),
+          omit.labels = c("Teacher fixed effect"),
+          dep.var.labels = c("Student ISR 2",
+                             "Instructor ISR 2",
+                             "Course grade",
+                             "Final grade",
+                             "Persistence"),
+          covariate.labels = c("Treatment",
+                             "Student sim. 2",
+                             "Instructor sim. 2",
+                             "Course size",
+                             "Student ISR 2",
+                             "Instructor ISR 2",
+                             "Student female",
+                             "CGPA"))
+```
+
+Table \@ref(tab:noncausaltable) considers the relationship between perceived similarity and perceived ISR and the relationship between perceived ISR and student outcomes. Because only the treatment was randomized, we cannot make causal inferences.
+
+In Models 1 and 2, we can see that student and instructor perceived similarity are both significantly related to student and instructor perceived ISR. Unsurprisingly, student perceived similarity is a better predictor of student perceived ISR, and instructor perceived similarity is a better predictor of instructor perceived ISR. Additionally, course size is negatively related to student ISR perception.
+
+Models 3 and 4 show that student ISR perception and instructor ISR perception are both significantly related to course grade and final grade. Instructor perception is a stronger predictor than student perception.
+
+Model 5 indicates that ISR perception is not significantly related to persistence.
 
 TODO: clustered residuals (low priority)
 
 ## Additional results
 
-TODO: additional results
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+expdata <- expdata %>%
+  mutate(race_match = ifelse(t1_race_1 == s1_race_1
+                             & t1_race_2 == s1_race_2 
+                             & t1_race_3 == s1_race_3 
+                             & t1_race_4 == s1_race_4 
+                             & t1_race_5 == s1_race_5 
+                             & t1_race_6 == s1_race_6 
+                             & t1_race_7 == s1_race_7,
+                             1,
+                             0)) %>%
+  mutate(gend_match = ifelse(t_female == s_female,
+                             1,
+                             0)) %>%
+  mutate(age_dif = t_age - s1_age)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+mystudentsecondsimilaritymodel <- lm(data = expdata,
+                                     formula = s2_sim ~ treatment + n_course + race_match + gend_match + age_dif,
+                                     na.action = na.omit)
+mystudentsecondrelationshipmodel <- lm(data = expdata,
+                                     formula = s2_tsr ~ treatment + n_course + race_match + gend_match + age_dif,
+                                     na.action = na.omit)
+mystdgrademodel <- lm(data = expdata,
+                      formula = grade ~ treatment + ir_f16_gpa + n_course + race_match + gend_match + age_dif,
+                                     na.action = na.omit)
+```
+
+```{r mymodeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+# Make table to display model results
+stargazer(mystudentsecondsimilaritymodel,
+          mystudentsecondrelationshipmodel,
+          mystdgrademodel,
+          title = "Additional model results",
+          align = TRUE,
+          no.space = TRUE,
+          omit.stat=c("ser","f"),
+          column.sep.width = "-10pt",
+          label = "tab:mymodeltable",
+          type = "latex",
+          header = FALSE,
+          dep.var.labels = c("Student sim. 2",
+                             "Student ISR 2",
+                             "Std. course grade"),
+          covariate.labels = c("Treatment",
+                               "CGPA", 
+                               "Course size",
+                               "Matching racial self-ID", "Matching gender self-ID", "Age difference")
+          )
+```
+
+Table \@ref(tab:mymodeltable) shows the results of models that consider matching student-instructor traits. As with the replication results, there is a statistically significant relationship between treatment and student initial similarity perception. However, the expected increase is only 0.108 on a scale of 1 to 5, which is even lower than in the replication models. There is still no significant relationship between treatment and student end-of-semester ISR perception. Additionally, there is no significant relationship between treatment and standardized course grade.
 
 TODO: Shiny.
 
 # Discussion
+
+TODO: why did @citeoriginal pick their models? What do I think about the selection?
 
 TODO: does this study have external validity?
 
@@ -800,6 +962,13 @@ Complete list of key measures
 * End of term student survey:
   4. Student similarity perception scale (s2_sim)
   5. Student ISR perception scale (s2_tsr)
+      - How much do you enjoy learning from this professor?
+      - How friendly do you think this professor is towards you?
+      - If you came back to visit this professor three years from now, how excited do you think they would be?
+      - How motivating do you find this professor's class?
+      - How caring do you think this professor is towards you?
+      - How encouraging do you think this professor is towards you?
+      - Overall, how much do you think you have learned from this professor?
 * End of term instructor survey:
   6. Instructor similarity perception (t2_sim1):
       - Overall, how similar do you think you and STUDENTNAME are?
@@ -817,7 +986,7 @@ Complete list of key measures
   10. Standardized course grade (std_grade): The student's final grade, standardized against other grades in the course.
   11. CGPA (ir_f16_gpa): The student's cumulative GPA after the Fall 2016 term.
   12. Persistence (f17_enrolled): The student's status as of Fall term 2017: not enrolled or enrolled.
-
+  
 # Appendix B
 
 ```{r demotable3, echo=FALSE, warning=FALSE, message=FALSE}
@@ -860,10 +1029,24 @@ demotab3 %>%
   column_spec(5, width = "5em") %>%
   column_spec(6, width = "5em") %>%
   column_spec(7, width = "5em") %>%
-  kableExtra::kable_styling(latex_options = c("scale_down", "striped"),
+  kableExtra::kable_styling(latex_options = c("scale_down", "striped", "hold_position"),
                             stripe_index =c(2:3, 13:14, 16))
 
 
+```
+
+# Appendix C
+
+```{r missingdata, echo=FALSE, warning=FALSE, message=FALSE, fig.height=9, fig.width=9}
+explanatory = c("s2_tsr", "s1_tsr", "ir_f16_gpa", "n_course", "s1_female")
+dependent = "treatment"
+
+expdata %>%
+  dplyr::select(treatment, 
+                s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, 
+                grade, std_grade, t2_finalexam, ir_f16_gpa, f17_enrolled, 
+                s1_female, n_course) %>%
+  missing_pairs(dependent, explanatory)
 ```
 
 \newpage
