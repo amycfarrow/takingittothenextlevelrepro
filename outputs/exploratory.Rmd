@@ -281,5 +281,219 @@ expdata %>%
   geom_bar(position = "dodge")
 ```
 
+```{r s1simcorrelation, echo=FALSE, warning=FALSE, message=FALSE}
+# Make the summary stats part of the table
+summary <- expdata %>% 
+  dplyr::select(treatment, 
+                s1_sim1, s1_sim2, s1_sim3, s1_sim4, s1_sim5, s1_sim6) %>%
+  summary_factorlist("treatment", 
+                     c("s1_sim1", "s1_sim2", "s1_sim3", "s1_sim4", "s1_sim5", "s1_sim6"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = FALSE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N (%) = ") %>%
+  dplyr::select("Total N", "Missing N", "Total")
+
+# Make the correlation matrix part of the table
+matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
+                  dplyr::select(s1_sim1, s1_sim2, s1_sim3, s1_sim4, s1_sim5, s1_sim6)))) 
+
+# Combine the summary and correlation tables
+table <- summary %>%
+  bind_cols(matrix) %>%
+  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N")
+
+# Put in a table.
+table %>%
+  kable(caption = "Correlation matrix for initial student similarity scale",
+        booktabs = TRUE) %>%
+  kable_styling(latex_options = c("scale_down"))
+```
+
+```{r s1tsrcorrelation, echo=FALSE, warning=FALSE, message=FALSE}
+# Make the summary stats part of the table
+summary <- expdata %>% 
+  dplyr::select(treatment, 
+                s1_tsr1, s1_tsr2, s1_tsr3, s1_tsr4, s1_tsr5, s1_tsr6, s1_tsr7) %>%
+  summary_factorlist("treatment", 
+                     c("s1_tsr1", "s1_tsr2", "s1_tsr3", "s1_tsr4", "s1_tsr5", "s1_tsr6", "s1_tsr7"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = FALSE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N (%) = ") %>%
+  dplyr::select("Total N", "Missing N", "Total")
+
+# Make the correlation matrix part of the table
+matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
+                  dplyr::select(s1_tsr1, s1_tsr2, s1_tsr3, s1_tsr4, s1_tsr5, s1_tsr6, s1_tsr7)))) 
+
+# Combine the summary and correlation tables
+table <- summary %>%
+  bind_cols(matrix) %>%
+  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N")
+
+# Put in a table.
+table %>%
+  kable(caption = "Correlation matrix for initial student similarity scale",
+        booktabs = TRUE) %>%
+  kable_styling(latex_options = c("scale_down"))
+```
+
+```{r s2simcorrelation, echo=FALSE, warning=FALSE, message=FALSE}
+# Make the summary stats part of the table
+summary <- expdata %>% 
+  dplyr::select(treatment, 
+                s2_sim1, s2_sim2, s2_sim3, s2_sim4, s2_sim5, s2_sim6) %>%
+  summary_factorlist("treatment", 
+                     c("s2_sim1", "s2_sim2", "s2_sim3", "s2_sim4", "s2_sim5", "s2_sim6"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = FALSE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N (%) = ") %>%
+  dplyr::select("Total N", "Missing N", "Total")
+
+# Make the correlation matrix part of the table
+matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
+                  dplyr::select(s2_sim1, s2_sim2, s2_sim3, s2_sim4, s2_sim5, s2_sim6)))) 
+
+# Combine the summary and correlation tables
+table <- summary %>%
+  bind_cols(matrix) %>%
+  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N")
+
+# Put in a table.
+table %>%
+  kable(caption = "Correlation matrix for initial student similarity scale",
+        booktabs = TRUE) %>%
+  kable_styling(latex_options = c("scale_down"))
+```
+
+```{r s2tsrcorrelation, echo=FALSE, warning=FALSE, message=FALSE}
+# Make the summary stats part of the table
+summary <- expdata %>% 
+  dplyr::select(treatment, 
+                s2_tsr1, s2_tsr2, s2_tsr3, s2_tsr4, s2_tsr5, s2_tsr6, s2_tsr7) %>%
+  summary_factorlist("treatment", 
+                     c("s2_tsr1", "s2_tsr2", "s2_tsr3", "s2_tsr4", "s2_tsr5", "s2_tsr6", "s2_tsr7"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = FALSE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N (%) = ") %>%
+  dplyr::select("Total N", "Missing N", "Total")
+
+# Make the correlation matrix part of the table
+matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
+                  dplyr::select(s2_tsr1, s2_tsr2, s2_tsr3, s2_tsr4, s2_tsr5, s2_tsr6, s2_tsr7)))) 
+
+# Combine the summary and correlation tables
+table <- summary %>%
+  bind_cols(matrix) %>%
+  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N")
+
+# Put in a table.
+table %>%
+  kable(caption = "Correlation matrix for initial student similarity scale",
+        booktabs = TRUE) %>%
+  kable_styling(latex_options = c("scale_down"))
+```
+
+```{r t2tsrcorrelation, echo=FALSE, warning=FALSE, message=FALSE}
+# Make the summary stats part of the table
+summary <- expdata %>% 
+  dplyr::select(treatment, 
+                t2_tsr1, t2_tsr2, t2_tsr3, t2_tsr4, t2_tsr5, t2_tsr6, t2_tsr7) %>%
+  summary_factorlist("treatment", 
+                     c("t2_tsr1", "t2_tsr2", "t2_tsr3", "t2_tsr4", "t2_tsr5", "t2_tsr6", "t2_tsr7"),
+                     p = FALSE, 
+                     add_dependent_label = TRUE, 
+                     dependent_label_prefix = "",
+                     add_col_totals = FALSE,
+                     add_row_totals = TRUE,
+                     include_row_missing_col = TRUE,
+                     col_totals_rowname = "",
+                     total_col = TRUE,
+                     col_totals_prefix = "N (%) = ") %>%
+  dplyr::select("Total N", "Missing N", "Total")
+
+# Make the correlation matrix part of the table
+matrix <- data.frame(apaCorr(as.matrix(expdata %>% 
+                  dplyr::select(t2_tsr1, t2_tsr2, t2_tsr3, t2_tsr4, t2_tsr5, t2_tsr6, t2_tsr7)))) 
+
+# Combine the summary and correlation tables
+table <- summary %>%
+  bind_cols(matrix) %>%
+  rename("Mean (SD)" = Total, N = "Total N", Missing = "Missing N")
+
+# Put in a table.
+table %>%
+  kable(caption = "Correlation matrix for initial student similarity scale",
+        booktabs = TRUE) %>%
+  kable_styling(latex_options = c("scale_down"))
+```
+
+```{r}
+expdata %>%
+  dplyr::select(treatment, 
+                s1_sim, s1_tsr, s2_sim, s2_tsr, t2_sim1, t2_tsr, 
+                grade, std_grade, t2_finalexam, ir_f16_gpa, f17_enrolled, 
+                s1_female, n_course) %>%
+  missing_pattern()
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+substudentsecondsimilaritymodel <- lm(data = expdata %>% filter(s_firstgen == 1),
+                                     formula = s2_sim ~ treatment + n_course + race_match + gend_match + age_dif,
+                                     na.action = na.omit)
+substudentsecondrelationshipmodel <- lm(data = expdata %>% filter(s_firstgen == 1),
+                                     formula = s2_tsr ~ treatment + n_course + race_match + gend_match + age_dif,
+                                     na.action = na.omit)
+substdgrademodel <- lm(data = expdata %>% filter(s_firstgen == 1),
+                      formula = grade ~ treatment + ir_f16_gpa + n_course + race_match + gend_match + age_dif,
+                                     na.action = na.omit)
+```
+
+```{r submodeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+# Make table to display model results
+stargazer(substudentsecondsimilaritymodel,
+          substudentsecondrelationshipmodel,
+          substdgrademodel,
+          title = "Additional model results",
+          align = TRUE,
+          no.space = TRUE,
+          omit.stat=c("ser","f"),
+          column.sep.width = "-10pt",
+          label = "tab:modeltable",
+          type = "latex",
+          header = FALSE,
+          dep.var.labels = c("Student Similarity 2",
+                             "Student ISR 2",
+                             "Standardized course grade"),
+          covariate.labels = c("Treatment",
+                               "CGPA", 
+                               "Course size",
+                               "Matching racial self-ID", "Matching gender self-ID", "Age difference")
+          )
+```
+
 
 
