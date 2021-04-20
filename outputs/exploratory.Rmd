@@ -495,5 +495,53 @@ stargazer(substudentsecondsimilaritymodel,
           )
 ```
 
+```{r causaldiagram2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Diagram of desired causal sequence"}
+mermaid("
+graph LR
+A{intervention}-->|1|B[student similarity perception]
+A-->|2|C[instructor similarity perception]
+B-->|3|D[ISR]
+C-->|4|D[ISR]
+D-->|5|E(grades)
+D-->|6|F(persistence)
+E-->|7|F
+")
+```
 
+
+```{r}
+studentfirstsimilaritymodel <- lm(data = expdata,
+                                  formula = s1_sim ~ treatment + n_course + teacherid,
+                                     na.action = na.omit)
+studentsecondsimilaritymodel <- lm(data = expdata,
+                                   formula = s2_sim ~ treatment + n_course + teacherid,
+                                     na.action = na.omit)
+studentsecondrelationshipmodel <- lm(data = expdata,
+                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + teacherid,
+                                     na.action = na.omit)
+teachersecondrelationshipmodel <- lm(data = expdata,
+                                     formula = t2_tsr ~ treatment + n_course + teacherid,
+                                     na.action = na.omit)
+grademodel <- lm(data = expdata,
+                 formula = grade ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid,
+                                     na.action = na.omit)
+examgrademodel <- lm(data = expdata %>% filter(obj_exam == 1),
+                     formula = t2_finalexam ~ treatment + s1_female + ir_f16_gpa + n_course + teacherid,
+                                     na.action = na.omit)
+teachersecondsimilarity <- polr(formula = as.factor(t2_sim1) ~ treatment + teacherid,
+                                data = expdata,
+                                Hess = TRUE,
+                                     na.action = na.omit)
+
+
+stargazer(studentfirstsimilaritymodel,
+          studentsecondsimilaritymodel,
+          studentsecondrelationshipmodel,
+          teachersecondrelationshipmodel,
+          grademodel,
+          examgrademodel,
+          teachersecondsimilarity,
+          omit = c("teacherid"),
+          omit.labels = c("Instructor fixed effect"))
+```
 
