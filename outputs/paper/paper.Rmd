@@ -1,7 +1,7 @@
 ---
 title: "The inefficacy of superficial similarities for improving instructor-student relationships"
 author: "Amy Farrow"
-date: "April 19th, 2021"
+date: "April 26th, 2021"
 header-includes:
   \usepackage{dcolumn}
   \usepackage{float}
@@ -32,8 +32,8 @@ library(MASS) # for ordinal logistic model
 library(cowplot) # for putting plots side by side
 library(ltm) # for checking scale validity
 library(DiagrammeR) # for causal diagram
-library(olsrr)
 library(tidymodels) # for train test
+library(performance) # for model performance evaluation
 
 # NOTE: script 01_ must have been run already
 
@@ -155,6 +155,7 @@ expdata <- expdata %>%
 # The original coding of race contained errors -- ex. a professor who selected White and Asian in the survey,
 # and was marked as Asian for most cases, but white for one random case.
 # This remakes the variable t_race, for consistency
+
 expdata <- expdata %>%
   mutate(t1_race_1 = replace_na(as.numeric(t1_race_1), 0),
          t1_race_2 = replace_na(as.numeric(t1_race_2), 0),
@@ -164,15 +165,15 @@ expdata <- expdata %>%
          t1_race_6 = replace_na(as.numeric(t1_race_6), 0),
          t1_race_7 = replace_na(as.numeric(t1_race_7), 0)) %>%
   mutate(t_race = ifelse(t1_race_1 + t1_race_2 + t1_race_3 + t1_race_4 + t1_race_5 + t1_race_6 + t1_race_7 > 1, 
-                         "Mixed race", 
+                         "Mixed race/ethnicity", 
                          ifelse(t1_race_1 + t1_race_2 + t1_race_3 + t1_race_4 + t1_race_5 + t1_race_6 + t1_race_7 < 1, "Unknown",
-                                ifelse(t1_race_1 == 1, "White",
-                                       ifelse(t1_race_2 == 1, "Black",
-                                              ifelse(t1_race_3 == 1, "Hispanic",
-                                                     ifelse(t1_race_4, "Asian",
-                                                            ifelse(t1_race_5, "American Indian",
+                                ifelse(t1_race_1 == 1, "White/Caucasian",
+                                       ifelse(t1_race_2 == 1, "Black or African American",
+                                              ifelse(t1_race_3 == 1, "Hispanic American or Latino/a",
+                                                     ifelse(t1_race_4, "Asian or Pacific Islander",
+                                                            ifelse(t1_race_5, "American Indian or Alaskan",
                                                                    ifelse(t1_race_6, "Middle Eastern",
-                                                                          "Other")))))))))
+                                                                          "Other Race")))))))))
 
 expdata <- expdata %>%
   mutate(s1_race_1 = replace_na(as.numeric(s1_race_1), 0),
@@ -183,15 +184,15 @@ expdata <- expdata %>%
          s1_race_6 = replace_na(as.numeric(s1_race_6), 0),
          s1_race_7 = replace_na(as.numeric(s1_race_7), 0)) %>%
   mutate(s_race = ifelse(s1_race_1 + s1_race_2 + s1_race_3 + s1_race_4 + s1_race_5 + s1_race_6 + s1_race_7 > 1,
-                         "Mixed race", 
+                         "Mixed race/ethnicity", 
                          ifelse(s1_race_1 + s1_race_2 + s1_race_3 + s1_race_4 + s1_race_5 + s1_race_6 + s1_race_7 < 1, "Unknown",
-                                ifelse(s1_race_1 == 1, "White",
-                                       ifelse(s1_race_2 == 1, "Black",
-                                              ifelse(s1_race_3 == 1, "Hispanic",
-                                                     ifelse(s1_race_4, "Asian",
-                                                            ifelse(s1_race_5, "American Indian",
+                                ifelse(s1_race_1 == 1, "White/Caucasian",
+                                       ifelse(s1_race_2 == 1, "Black or African American",
+                                              ifelse(s1_race_3 == 1, "Hispanic American or Latino/a",
+                                                     ifelse(s1_race_4, "Asian or Pacific Islander",
+                                                            ifelse(s1_race_5, "American Indian or Alaskan",
                                                                    ifelse(s1_race_6, "Middle Eastern",
-                                                                          "Other"))))))))) %>%
+                                                                          "Other Race"))))))))) %>%
   mutate(s_hisp_black = ifelse((s1_race_2 == 1 | s1_race_3 == 1), 1, 0))
 
 expdata <- expdata %>%
@@ -272,19 +273,21 @@ As @Brinkworth_McIntyre_Juraschek_Gehlbach_2018 argue, the instructor-student re
 
 # Data
 
-This paper uses the R statistical language [@citeR] and `tidyverse` packages [@citetidyverse]. `here` was used to manage the RProject [@citehere]. Stata files were handled using `readstata13` [@citereadstata13]. The report was made using RMarkdown [@citermarkdown] and `bookdown` [@citebookdown]. Tables were made using `kableExtra` [@citekableExtra], `finalfit` [@citefinalfit], and `stargazer` [@citestargazer]. The correlation matrix was made using functions by @apacorrcode using the `Hmisc` package [@citeHmisc]. `MASS` provided additional models [@citeMASS]. Plots used `cowplot` [@citecowplot]. `ltm` was used to check scale validity [@citeltm]. Finally, the diagram was made using `DiagrammeR` [@citeDiagrammeR].
+This paper uses the R statistical language [@citeR] and `tidyverse` packages [@citetidyverse]. `here` was used to manage the RProject [@citehere]. Stata files were handled using `readstata13` [@citereadstata13]. The report was made using RMarkdown [@citermarkdown] and `bookdown` [@citebookdown]. Tables were made using `kableExtra` [@citekableExtra], `finalfit` [@citefinalfit], and `stargazer` [@citestargazer]. The correlation matrix was made using functions by @apacorrcode using the `Hmisc` package [@citeHmisc]. `MASS` provided additional models [@citeMASS]. Plots used `cowplot` [@citecowplot]. `ltm` was used to check scale validity [@citeltm]. `tidymodels` [@citetidymodels] and `performance` [@citeperformance] were used in assessing model validity and performance. Finally, the diagram was made using `DiagrammeR` [@citeDiagrammeR].
 
 The data, in a .dta format, and Stata code for the @citeoriginal paper are available on the Inter-University Consortium for Political and Social Research [@Robinson_Scott_Gottfried_2020]. The dataset contains 36,838 observations of 653 variables.
 
 ## Demographics
 
-Table \@ref(tab:demotable1) shows the student covariates for the treatment and control samples. There are no significant differences between the treatment and control groups.
+Most key demographic traits come from the initial surveys given to students and instructors. For gender, they were asked to identify as male, female, or other, and given the option to enter text. For race/ethnicity, they were allowed to check any number of a range of options ('White/Caucasian', 'Black or African American', 'Hispanic American or Latino/a', 'Asian or Pacific Islander', 'American Indian or Alaskan', 'Middle Eastern', and 'Other Race'). They were also asked if they were the first generation in their family to attend college (no or yes). Finally, they were asked to enter their age in years. The student's year of study and cumulative CGPA as of the previous term and the class size came from the college's internal records.
+
+Table \@ref(tab:demotable1) shows the student covariates for the treatment and control samples. There are no significant differences between the treatment and control groups, as indicated by p-values which are all above 0.4.
 
 ```{r demotable1, echo=FALSE, warning=FALSE, message=FALSE}
 # Make a summary table of nominal variables, by treatment group.
 demotab <- expdata %>% 
   dplyr::select(treatment, 
-                s_female, 
+                s1_female, 
                 s_race, 
                 s_firstgen,
                 s1_age,
@@ -292,14 +295,14 @@ demotab <- expdata %>%
                 year) %>%
   mutate(year = as.factor(year)) %>%
   mutate(treatment = ff_label(treatment, "Group"),
-         s_female = ff_label(s_female, "Student gender"), 
+         s1_female = ff_label(s1_female, "Student gender"), 
          s1_age = ff_label(s1_age, "Student age"),
-         s_race = ff_label(s_race, "Student race"), 
+         s_race = ff_label(s_race, "Student race/ethnicity"), 
          ir_f16_gpa = ff_label(ir_f16_gpa, "CPGA"),
          s_firstgen = ff_label(s_firstgen, "Student first-gen status"), 
          year = ff_label(year, "Year")) %>%
   summary_factorlist("treatment", 
-                     c("s_female", "s_race", "s_firstgen", "year", "s1_age", "ir_f16_gpa"),
+                     c("s1_female", "s_race", "s_firstgen", "year", "s1_age", "ir_f16_gpa"),
                      p = TRUE, 
                      add_dependent_label = TRUE, 
                      dependent_label_prefix = "",
@@ -338,9 +341,9 @@ demotab2 <- expdata %>%
   mutate(teacherid = ifelse(as.numeric(teacherid) > 50, "0", "1")) %>%
   mutate(t_age = ff_label(t_age, "Instructor age"), 
          t_female = ff_label(t_female, "Instructor gender"),
-         t_race = ff_label(t_race, "Instructor race"),
+         t_race = ff_label(t_race, "Instructor race/ethnicity"),
          t_firstgen = ff_label(t_firstgen, "Instructor first-gen status"),
-         n_course = ff_label(n_course, "Course size")) %>%
+         n_course = ff_label(n_course, "Class size")) %>%
   summary_factorlist("teacherid",
                      c("t_female", "t_race", "t_firstgen", "t_age", "n_course"),
                      p = TRUE, 
@@ -373,50 +376,58 @@ There are differences between the students and instructors. Notably, the student
 In light of the different percentages in student and instructor racial self-identification, Figure \@ref(fig:racegraph) shows the percentages of each group that selected a given racial identity, as well as the percentage that selected more than one of these categories. More students identified as Hispanic, while more instructors identified as White and selected multiple options.
 
 ```{r racegraph, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(8,4), fig.cap="Bar chart illustrating racial identification proprtions of participants"}
+
 instructorrace <- expdata %>%
   dplyr::select(teacherid,
          t1_race_1, t1_race_2, t1_race_3, t1_race_4, t1_race_5, t1_race_6, t1_race_7, t_multi_race) %>%
   unique() %>%
-  dplyr::summarize(White = sum(t1_race_1, na.rm = TRUE)/n(),
-            Black = sum(t1_race_2, na.rm = TRUE)/n(),
-            Hispanic = sum(t1_race_3, na.rm = TRUE)/n(),
-            Asian = sum(t1_race_4, na.rm = TRUE)/n(),
-            "American Indian" = sum(t1_race_5, na.rm = TRUE)/n(),
-            "Middle Eastern" = sum(t1_race_6, na.rm = TRUE)/n(),
-            Other = sum(t1_race_7, na.rm = TRUE)/n(),
-            Multiple = sum(t_multi_race > 1, na.rm = TRUE)/n())
+  dplyr::summarize('White/Caucasian' = sum(t1_race_1, na.rm = TRUE)/n(),
+            'Black or African American' = sum(t1_race_2, na.rm = TRUE)/n(),
+            'Hispanic American or Latino/a' = sum(t1_race_3, na.rm = TRUE)/n(),
+            'Asian or Pacific Islander' = sum(t1_race_4, na.rm = TRUE)/n(),
+            'American Indian or Alaskan' = sum(t1_race_5, na.rm = TRUE)/n(),
+            'Middle Eastern' = sum(t1_race_6, na.rm = TRUE)/n(),
+            'Other Race' = sum(t1_race_7, na.rm = TRUE)/n(),
+            'Multiple' = sum(t_multi_race > 1, na.rm = TRUE)/n())
 studentrace <- expdata %>%
   dplyr::select(id,
          s1_race_1, s1_race_2, s1_race_3, s1_race_4, s1_race_5, s1_race_6, s1_race_7, s_multi_race) %>%
   unique() %>%
-  dplyr::summarize(White = sum(s1_race_1, na.rm = TRUE)/n(),
-            Black = sum(s1_race_2, na.rm = TRUE)/n(),
-            Hispanic = sum(s1_race_3, na.rm = TRUE)/n(),
-            Asian = sum(s1_race_4, na.rm = TRUE)/n(),
-            "American Indian" = sum(s1_race_5, na.rm = TRUE)/n(),
-            "Middle Eastern" = sum(s1_race_6, na.rm = TRUE)/n(),
-            Other = sum(s1_race_7, na.rm = TRUE)/n(),
-            Multiple = sum(s_multi_race > 1, na.rm = TRUE)/n())
+  dplyr::summarize('White/Caucasian' = sum(s1_race_1, na.rm = TRUE)/n(),
+            'Black or African American' = sum(s1_race_2, na.rm = TRUE)/n(),
+            'Hispanic American or Latino/a' = sum(s1_race_3, na.rm = TRUE)/n(),
+            'Asian or Pacific Islander' = sum(s1_race_4, na.rm = TRUE)/n(),
+            'American Indian or Alaskan' = sum(s1_race_5, na.rm = TRUE)/n(),
+            'Middle Eastern' = sum(s1_race_6, na.rm = TRUE)/n(),
+            'Other Race' = sum(s1_race_7, na.rm = TRUE)/n(),
+            'Multiple' = sum(s_multi_race > 1, na.rm = TRUE)/n())
 
 bind_cols(as_tibble(cbind(nms = names(instructorrace), t(instructorrace))),
           as_tibble(cbind(nms = names(studentrace), t(studentrace))))%>%
   dplyr::select(-nms...3) %>%
   pivot_longer(!nms...1, names_to = "group", values_to = "portion") %>%
   mutate(nms...1 = fct_relevel(nms...1, 
-                               c("Hispanic", "White", "Asian",  "Middle Eastern",
-                                 "Black", "American Indian", "Other", "Multiple")),
+                               c('Hispanic American or Latino/a',
+                                 'White/Caucasian',
+                                 'Asian or Pacific Islander',
+                                 'Middle Eastern',
+                                 'Black or African American', 
+                                 'American Indian or Alaskan',
+                                 'Other Race',
+                                 'Multiple')),
          group = fct_relevel(group, c("V2...4", "V2...2"))) %>%
   ggplot() +
   geom_col(aes(x = nms...1, y = as.numeric(portion), fill = group), position = "dodge") +
-  labs(x = "Self-identified race", y = "Proportion of sample", 
+  labs(x = "Self-identified race/ethnicity", y = "Proportion of sample", 
        fill = "Group", title = "Self-identified racial proportions differ for instructors and students") +
   scale_fill_manual(values = c("#c8b5f7", "#f9b5c9"), labels = c("Students", "Instructors")) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 11)) +
   theme_minimal()
 ```
 
 Given the potential significance of class size for instructor-student relationships, Figure \@ref(fig:classsizegraph) shows the distribution of class sizes of instructors that participated in the study. Most class sizes are between 25 and 50 students, but there are some that are much larger.
 
-```{r classsizegraph, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(9,3), fig.cap="Histogram illustrating class sizes", out.width="100%", fig.align="center"}
+```{r classsizegraph, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(8.5,3), fig.cap="Histogram illustrating class sizes", out.width="100%", fig.align="center"}
 n_instructor <- expdata %>%
   dplyr::select(teacherid, n_course) %>%
   unique()
@@ -448,7 +459,7 @@ combined <- plot_grid(n_by_instructor, n_by_student,
 
 title <- ggdraw() + 
   draw_label(
-    "Some classes are very large (means marked)",
+    "Some classes are very large (class size means marked)",
     x = 0,
     hjust = 0
   ) +
@@ -460,14 +471,14 @@ plot_grid(title,
           combined,
           legend,
           ncol = 1,
-          rel_heights = c(.1, 2))
+          rel_heights = c(.09, 2))
 ```
 
 ## Outcomes of interest [^1]
 
 [^1]: Interactive graphs and tables showing outcomes of interest are available [here](https://amycfarrow.shinyapps.io/takingittothenextlevel/).
 
-Table \@ref(tab:summarytable) shows summary statistics for key variables identified by @citeoriginal, including missing values. There do not appear to be significant differences between the treatment and control groups, other than in student similarity perception. Even in these two measures, the difference appears to be small (mean scores of 3.4 versus 3.6 and 3.5 versus 3.6).
+Table \@ref(tab:summarytable) shows summary statistics for key variables identified by @citeoriginal, including missing values. There do not appear to be significant differences between the treatment and control groups, other than in student similarity perception (p < 0.001 for initial perception, and p = 0.004 for end-of-term perception). Even in these two measures, the difference appears to be small (mean scores of 3.4 versus 3.6 for intial perception and 3.5 versus 3.6 for end-of-term perception).
 
 ```{r summarytable, echo=FALSE, warning=FALSE, message=FALSE}
 # Summarize key outcome variables by treatment group
@@ -1233,9 +1244,9 @@ instructor_complete - isrdata %>%
 
 $treatment_{i}$ is the indicator that treatment was given.
 
-$X_{1i}$ is a vector of student-level covariates (student ISR anticipation, gender, CGPA, year of study). ISR anticipation is used as a control for end-of-term student ISR perception, while gender and CGPA are used as controls for grade based outcomes. @citeoriginal state this is because females earn higher grades generally.
+$X_{1i}$ is a vector of student-level covariates (student ISR anticipation, gender, CGPA, year of study).  The original study used gender and CGPA are used as controls for grade based outcomes only. @citeoriginal state this is because females earn higher grades generally. This paper uses them as controls for the majority of outcomes. ISR anticipation is used as a control only for end-of-term student ISR perception.
 
-$X_{2j}$ is a vector of instructor-level covariates (class size).
+$X_{2j}$ is a vector of instructor-level covariates (class size). The original study consider instructor fixed effects instead. Because each participating instructor taught one class in the study, the class sizes correspond directly to the instructor IDs, so it was inadvisable to use both. This paper selected class size because of the larger potential for transferable insights.
 
 $\epsilon_{ij}$ is a standard error. As this paper does not use clustered standard errors like @citeoriginal, there are slight differences in standard error and p-values when compared with the original paper. This does not affect the regression coefficients.
 
@@ -1252,7 +1263,7 @@ Outcome_{ij} = \beta_{0} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Ga
 
 ### Ordinal logistic models
 
-Equation \@ref(eq:ordlogmodel) is @citeoriginal's ordinal logistic model, used for the ordinal outcome, which is end-of-term instructor similarity perception (t2_sim1).
+Equation \@ref(eq:ordlogmodel) is @citeoriginal's ordinal logistic model, used for the ordinal outcome, which is end-of-term instructor similarity perception. Because the instructors were only asked to answer one five-point scale question about similarity, this outcome cannot be treated the same way as the full-scale outcomes.
 
 \begin{equation}
 (\#eq:ordlogmodel)
@@ -1261,7 +1272,7 @@ prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\
 
 ### Logistic models
 
-Equation \@ref(eq:logmodel) is @citeoriginal's logistic model, used for the binary outcome, which is enrollment in Fall term 2017 (f17_enrolled).
+Equation \@ref(eq:logmodel) is @citeoriginal's logistic model, used for the binary outcome, which is enrollment in Fall term 2017. Students are either not enrolled (0), enrolled (1), or they have graduated and are excluded from the model.
 
 \begin{equation}
 (\#eq:logmodel)
@@ -1284,42 +1295,38 @@ Outcome_{ij} = \beta_{0} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Ga
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Make all replication models
 studentfirstsimilaritymodel <- lm(data = expdata,
-                                  formula = s1_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                  formula = s1_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 studentsecondsimilaritymodel <- lm(data = expdata,
-                                   formula = s2_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                   formula = s2_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 studentsecondrelationshipmodel <- lm(data = expdata,
-                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + s_female + ir_f16_gpa + year,
+                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 teachersecondrelationshipmodel <- lm(data = expdata,
-                                     formula = t2_tsr ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                     formula = t2_tsr ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 grademodel <- lm(data = expdata,
-                 formula = grade ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                 formula = grade ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 examgrademodel <- lm(data = expdata %>% filter(obj_exam == 1),
-                     formula = t2_finalexam ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                     formula = t2_finalexam ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
-teachersecondsimilarity <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + s_female + ir_f16_gpa + year,
+teachersecondsimilarity <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                 data = expdata,
                                 Hess = TRUE,
                                      na.action = na.omit)
 enrollmentfallmodel <- glm(data = expdata,
-                           formula = f17_enrolled ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                           formula = f17_enrolled ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                            family = "binomial",
                                      na.action = na.omit)
 ```
 
-In Table \@ref(tab:modeltable), Model 1 shows a statistically significant relationship between treatment and initial student similarity perception ($\beta$ = 0.194, 95% CI [0.136, 0.253]). Model 2 shows a statistically significant relationship between treatment and student end-of-term similarity perception ($\beta$ = 0.11, 95% CI [0.038, 0.183]). However, both coefficients are minimal on a scale of 1 to 5. 
+In Table \@ref(tab:modeltable), Model 1 shows that the treatment had a statistically significant effect on initial student similarity perception ($\beta$ = 0.194, 95% CI [0.136, 0.253]). Similarly, Model 2 that the treatment had a statistically significant effect on  student end-of-term similarity perception ($\beta$ = 0.11, 95% CI [0.038, 0.183]), though this effect size is smaller. Both coefficients are minimal on a scale of 1 to 5. The adjusted R-squared values, which indicate the proportion of variation in the outcome that can be explained by the treatment and covariates, are low (0.032 and 0.022). These models are helpful for analyzing treatment effect, but they do not aim to be and are not useful predictors of student similarity perception, not even within the sample.
 
-Model 3 shows no significant relationship between treatment and student end-of-term ISR perception. However, it does show a significant correlation between student ISR anticipation and student end-of-term ISR perception ($\beta$ = 0.671, 95% CI [0.624, 0.717]). For every 1 point increase in ISR anticipation on a 1 to 5 scale, the expected increase in end-of-term ISR perception is 0.671.
+Model 3 shows no evidence that treatment impacted student end-of-term ISR perception. However, it does show a significant association between student ISR anticipation and student end-of-term ISR perception ($\beta$ = 0.671, 95% CI [0.624, 0.717]). For every 1 point increase in ISR anticipation on a 1 to 5 scale, the expected increase in end-of-term ISR perception is 0.671. Models 4, 5, 6, 7, and 8 show no significant treatment effect on end-of-term instructor ISR perception, course grade, objectively graded exam grade, end-of-term instructor similarity perception, or enrollment in the subsequent term.
 
-Models 4, 5, 6, 7, and 8 show no significant relationship between treatment and instructor end-of-term ISR perception, course grade, objectively graded exam grade, instructor perception of similarity at the end of the term, and enrollment in the subsequent term. 
-
-Models 1 through 8 were also repeated with additional student covariates (gender, race, first-generation status, CGPA, and year), and the results still showed a treatment effect on student similarity perception but no other effect.
-
-Model validation for the two primary significant models, Models 1 and 2 from Table \@ref(tab:modeltable), can be found in [Appendix D].
+Model performance and validation for the two models with significant treatment effects, Models 1 and 2 from Table \@ref(tab:modeltable), can be found in [Appendix D].
 
 ```{r modeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1336,8 +1343,9 @@ stargazer(studentfirstsimilaritymodel,
           ci = TRUE,
           float.env = "sidewaystable",
           notes.label = "",
+          font.size = "small",
           no.space = TRUE,
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-10pt",
           label = "tab:modeltable",
           type = "latex",
@@ -1353,12 +1361,12 @@ stargazer(studentfirstsimilaritymodel,
                              "Final grade",
                              "Instructor sim. 2",
                              "Persistence"),
-          covariate.labels = c("Treatment", "Student ISR 1", "Course size", "Student female", "CGPA", "Year of study"))
+          covariate.labels = c("Treatment", "Student ISR 1", "Class size", "Student female", "CGPA", "Year of study"))
 ```
 
 Because some students are more commonly targeted by persistence interventions, the subset of Hispanic and/or Black college student participants is considered separately from the rest of the student population. While the effect of treatment on student similarity perception is larger than for the general student population ($\beta$ = 0.199, 95% CI [0.124, 0.274] for initial perception; $\beta$ = 0.116, 95% CI [0.021, 0.211] for end-of-term perception), there is still no effect on ISR perception, instructor perception, or student outcomes. Full results are in [Appendix E].
 
-Similarly, the subset of first-generation college student participants is considered. While the effect of treatment on student similarity perception is larger than for the general student population and the Black and/or Hispanic student participants ($\beta$ = 0.265, 95% CI [0.177, 0.353] for initial perception; $\beta$ = 0.15, 95% CI [0.039, 0.26] for end-of-term perception), there is still no effect on ISR perception, instructor perception, or student outcomes. Full results are in [Appendix F].
+Similarly, the subset of first-generation college student participants is considered. The effect of treatment on student similarity perception is larger than for the general student population and the Black and/or Hispanic student participants ($\beta$ = 0.265, 95% CI [0.177, 0.353] for initial perception; $\beta$ = 0.15, 95% CI [0.039, 0.26] for end-of-term perception), but there is still no effect on ISR perception, instructor perception, or student outcomes. Full results are in [Appendix F].
 
 ### Exploratory replication results
 
@@ -1366,17 +1374,17 @@ Similarly, the subset of first-generation college student participants is consid
 # Make all replication models
 
 studentfirstisrmodel1g <- lm(data = expdata,
-                                  formula = s1_tsr ~ s_firstgen + s_female + ir_f16_gpa + grade + year + n_course,
+                                  formula = s1_tsr ~ s_firstgen + s1_female + ir_f16_gpa + grade + year + n_course,
                                      na.action = na.omit)
 studentsecondrelationshipmodel1g <- lm(data = expdata,
-                                     formula = s2_tsr ~ s_firstgen + s_female + ir_f16_gpa + grade + year + n_course,
+                                     formula = s2_tsr ~ s_firstgen + s1_female + ir_f16_gpa + grade + year + n_course,
                                      na.action = na.omit)
 teachersecondrelationshipmodel1g <- lm(data = expdata,
-                                     formula = t2_tsr ~ s_firstgen + s_female + ir_f16_gpa + grade + year + n_course,
+                                     formula = t2_tsr ~ s_firstgen + s1_female + ir_f16_gpa + grade + year + n_course,
                                      na.action = na.omit)
 ```
 
-Table \@ref(tab:modeltablerel1) disregards the treatment condition, instead considering the relationship between student identity and similarity/ISR. While we cannot make causal inferences, we can explore relationships between the variables in this particular study. If a student identifies as first generation, can we anticipate a different student or instructor ISR perception? In this case, there is no significant relationship.
+Table \@ref(tab:modeltablerel1) disregards the treatment condition, instead considering the association between student identity and similarity/ISR. While we cannot make causal inferences, this is an exploratory analysis that could shape future intervention studies. If a student identifies as first generation, can we anticipate a different student or instructor ISR perception? In this case, there is no significant association.
 
 ```{r modeltablerel1, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1389,9 +1397,10 @@ stargazer(studentfirstisrmodel1g,
           no.space = TRUE,
           initial.zero = FALSE,
           notes.label = "",
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-10pt",
           label = "tab:modeltablerel1",
+          font.size = "small",
           type = "latex",
           header = FALSE,
           #omit = c("teacherid"),
@@ -1399,24 +1408,24 @@ stargazer(studentfirstisrmodel1g,
           dep.var.labels = c("Student ISR 1",
                              "Student ISR 2",
                              "Instructor ISR 2"),
-          covariate.labels = c("Student first gen.", "Student female", "CGPA", "Course grade", "Year of study", "Course size"))
+          covariate.labels = c("Student first gen.", "Student female", "CGPA", "Course grade", "Year of study", "Class size"))
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Make all replication models
 studentfirstisrmodelhb <- lm(data = expdata,
-                                  formula = s1_tsr ~ s_hisp_black + s_female + ir_f16_gpa + grade + year + n_course,
+                                  formula = s1_tsr ~ s_hisp_black + s1_female + ir_f16_gpa + grade + year + n_course,
                                      na.action = na.omit)
 studentsecondrelationshipmodelhb <- lm(data = expdata,
-                                     formula = s2_tsr ~ s_hisp_black + s_female + ir_f16_gpa + grade + year + n_course,
+                                     formula = s2_tsr ~ s_hisp_black + s1_female + ir_f16_gpa + grade + year + n_course,
                                      na.action = na.omit)
 teachersecondrelationshipmodelhb <- lm(data = expdata,
-                                     formula = t2_tsr ~ s_hisp_black + s_female + ir_f16_gpa + grade + year + n_course,
+                                     formula = t2_tsr ~ s_hisp_black + s1_female + ir_f16_gpa + grade + year + n_course,
                                      na.action = na.omit)
 
 ```
 
-Table \@ref(tab:modeltablerel2), however, shows that there is a significant negative relationship between student identification as Hispanic and/or Black and end-of-term instructor ISR perception ($\beta$ = -0.096, 95% CI [-0.166, -0.026]).
+Table \@ref(tab:modeltablerel2), however, shows that there is a significant negative association between student identification as Hispanic and/or Black and end-of-term instructor ISR perception ($\beta$ = -0.096, 95% CI [-0.166, -0.026]).
 
 ```{r modeltablerel2, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1429,9 +1438,10 @@ stargazer(studentfirstisrmodelhb,
           no.space = TRUE,
           initial.zero = FALSE,
           notes.label = "",
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-10pt",
           label = "tab:modeltablerel2",
+          font.size = "small",
           type = "latex",
           header = FALSE,
           #omit = c("teacherid"),
@@ -1439,7 +1449,7 @@ stargazer(studentfirstisrmodelhb,
           dep.var.labels = c("Student ISR 1",
                              "Student ISR 2",
                              "Instructor ISR 2"),
-          covariate.labels = c("Student Hispanic and/or Black", "Student female", "CGPA", "Course grade", "Year of study", "Course size"))
+          covariate.labels = c("Student Hispanic and/or Black", "Student female", "CGPA", "Course grade", "Year of study", "Class size"))
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -1451,26 +1461,24 @@ teachersecondrelationshipmodel_ <- lm(data = expdata,
                                      formula = t2_tsr ~ treatment + s2_sim + t2_sim1 + n_course,
                                      na.action = na.omit)
 grademodel_ <- lm(data = expdata,
-                 formula = grade ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa + year,
+                 formula = grade ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa,
                                      na.action = na.omit)
 examgrademodel_ <- lm(data = expdata %>% filter(obj_exam == 1),
-                     formula = t2_finalexam ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa + year,
+                     formula = t2_finalexam ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa,
                                      na.action = na.omit)
 enrollmentfallmodel_ <- glm(data = expdata,
-                           formula = f17_enrolled ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa + year,
+                           formula = f17_enrolled ~ treatment + s2_tsr + t2_tsr + s1_female + ir_f16_gpa,
                            family = "binomial",
                                      na.action = na.omit)
 ```
 
-Table \@ref(tab:noncausaltable) considers the relationship between similarity perception and ISR perception and the relationship between ISR perception and student outcomes. Again, because only the treatment was randomized, we cannot make causal inferences.
+Table \@ref(tab:noncausaltable) considers the association between similarity perception and ISR perception and the relationship between ISR perception and student outcomes. Again, because only the treatment was randomized, we cannot make causal inferences.
 
-In Models 1 and 2, we can see that student and instructor similarity perception are both significantly related to student and instructor ISR perception.
+In Models 1 and 2, we can see that student and instructor similarity perception are both significantly associated with student and instructor ISR perception. Unsurprisingly, student similarity perception is more strongly associated with student ISR perception ($\beta$ = 0.733, 95% CI [0.706, 0.76]), and instructor similarity perception is more strongly associated with instructor ISR perception ($\beta$ = 0.512, 95% CI [0.483, 0.541]).
 
-Unsurprisingly, student similarity perception relates more strongly to student ISR perception ($\beta$ = 0.733, 95% CI [0.706, 0.76]), and instructor similarity perception relates more strongly to instructor ISR perception ($\beta$ = 0.512, 95% CI [0.483, 0.541]).
+Models 3 and 4 show that student ISR perception is significantly associated course grade, while instructor ISR perception is significantly associated with course grade and final grade. Instructor perception is more strongly associated ($\beta$ = 0.34, 95% CI [0.295, 0.385] for course grade; $\beta$ = 0.643, 95% CI [0.642, 0.759] for final grade) than student perception ($\beta$ = 0.115, 95% CI [0.064, 0.164] for course grade).
 
-Models 3 and 4 show that student ISR perception is significantly related to course grade, while instructor ISR perception is significantly related to course grade and final grade. Instructor perception is a stronger predictor ($\beta$ = 0.339, 95% CI [0.294, 0.384] for course grade; $\beta$ = 0.643, 95% CI [0.527, 0.758] for final grade) than student perception ($\beta$ = 0.105, 95% CI [0.055, 0.155] for course grade).
-
-Model 5 indicates that ISR perception is not significantly related to persistence.
+Model 5 indicates that ISR perception is not significantly associated with persistence.
 
 ```{r noncausaltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1484,8 +1492,9 @@ stargazer(studentsecondrelationshipmodel_,
           ci = TRUE,
           initial.zero = FALSE,
           no.space = TRUE,
+          font.size = "small",
           notes.label = "",
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-10pt",
           label = "tab:noncausaltable",
           type = "latex",
@@ -1500,12 +1509,11 @@ stargazer(studentsecondrelationshipmodel_,
           covariate.labels = c("Treatment",
                              "Student sim. 2",
                              "Instructor sim. 2",
-                             "Course size",
+                             "Class size",
                              "Student ISR 2",
                              "Instructor ISR 2",
                              "Student female",
-                             "CGPA",
-                             "Year"))
+                             "CGPA"))
 ```
 
 ## Additional results
@@ -1521,7 +1529,7 @@ expdata <- expdata %>%
                              & t1_race_7 == s1_race_7,
                              1,
                              0)) %>%
-  mutate(gend_match = ifelse(t_female == s_female,
+  mutate(gend_match = ifelse(t_female == s1_female,
                              1,
                              0)) %>%
   mutate(age_dif = t_age - s1_age)
@@ -1539,7 +1547,7 @@ mystdgrademodel <- lm(data = expdata,
                                      na.action = na.omit)
 ```
 
-Table \@ref(tab:mymodeltable) shows the results of models that consider matching student-instructor traits. As with the replication results, there is a statistically significant relationship between treatment and initial student similarity perception ($\beta$ = 0.108, 95% CI [0.036, 0.179]). However, the coefficient is even lower than in the replication models. There is still no significant relationship between treatment and student end-of-term ISR perception. Additionally, there is no significant relationship between treatment and standardized course grade.
+Table \@ref(tab:mymodeltable) shows the results of models that consider matching student-instructor traits. As with the replication results, there is a measurable treatment effect for initial student similarity perception ($\beta$ = 0.108, 95% CI [0.036, 0.179]). However, the coefficient is even lower than in the replication models. There is still no treatment effect for student end-of-term ISR perception or standardized course grade.
 
 ```{r mymodeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1552,7 +1560,8 @@ stargazer(mystudentsecondsimilaritymodel,
           no.space = TRUE,
           notes.label = "",
           initial.zero = FALSE,
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          font.size = "small",
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-10pt",
           label = "tab:mymodeltable",
           type = "latex",
@@ -1562,7 +1571,7 @@ stargazer(mystudentsecondsimilaritymodel,
                              "Std. course grade"),
           covariate.labels = c("Treatment",
                                "CGPA", 
-                               "Course size",
+                               "Class size",
                                "Matching racial self-ID", "Matching gender self-ID", "Age difference", "Number of similarities")
           )
 ```
@@ -1612,7 +1621,7 @@ The environment of @citeoriginal's experiment is also relevant. They aimed to bu
 
 Further, the study indicates that the instructor and student populations are demographically different. Compared to the group of instructors, the student body had 3.5 times as many individuals who identified as Hispanic. Compared to students, the instructor population had 3.1 times as many individuals who identified as White. This is only a hint of the differences that may exist between the student and instructor populations. As most students will not go on to be instructors, we can expect, at the very least, that many students will not share life goals and trajectories with their instructors. If students feel fundamentally different from their instructors, based on life experience or socio-economic status, an intervention that provides superficial similarities is insufficient to bridge that gap.
 
-If colleges are considering investing in interventions that try to enhance similarity perception, we need to ask what it means to perceive similarity. Do some similarities matter more than others in ISRs? If demographics traits, which are already part of an inequitable campus environment, are important for perceived similarity, Should positive ISRs be contingent on similarity at all? There are other ways to cultivate ISRs that may make more sense and offer more equitable outcomes.
+If colleges are considering investing in interventions that try to enhance similarity perception, we need to ask what it means to perceive similarity. Do some similarities matter more than others in ISRs? As indicated by the results in Table \@ref(tab:modeltablerel2, some marginalized student identities may be associated with measurably lower ISR perceptions. If demographics traits, which are already part of an inequitable campus environment, are important for perceived similarity, should positive ISRs be contingent on similarity at all? There are other ways to cultivate ISRs that may make more sense and offer more equitable outcomes.
 
 ## Limitations
 
@@ -1620,11 +1629,13 @@ The study's internal validity comes from the successfully randomly-assigned trea
 
 The external validity is more questionable. The study participants were chosen in two main ways: the instructor was interested in the study and completed all the steps successfully, and the student agreed to participate and followed through. The sample of instructors that would be interested in the study would not necessarily be comparable to the overall population: they could be instructors who care more about supporting the work of other academics, instructors for whom a $150 giftcard was a significant draw, or instructors who are particularly interested in the role of ISRs.
 
-As with all survey studies, there is a risk that self-reported information is inaccurate. In particular, the surveys used by @citeoriginal had many Likert scale questions about very similar topics. Survey fatigue may have reduced the meaningfulness of the survey answers, especially those later in the survey.
+Any measurable effects could also be specific to this particular college campus. Interventions may not be transferable due to different demographics, cultures, and institutional structures.
+
+As with all survey studies, there is a risk that self-reported information is inaccurate. In particular, the surveys used by @citeoriginal had many Likert scale questions about very similar topics. Survey fatigue may have reduced the meaningfulness of the survey answers, especially those later in the survey. While responses that were given overly quickly were removed from the analysis, the fact that 428 cases had to be removed for this reason indicates a common problem with survey data: we cannot know if the participants actually considered their answers.
 
 ## Future directions
 
-Given the lack of significant findings, future studies could take a wide variety of approaches. First, more intensive, but similar, interventions to increase perceived similarity could be tested. These interventions could include more specific or important similarities between students and instructors. Second, different methods of increasing perceived similarity, perhaps based in actual instructor-student interaction, could be tested. Such interventions are less desirable from the college's point of view, because they would be more costly and demanding to implement. Third, interventions that aim to improve ISR without increasing perceived similarity could be considered. Similarity is only one of many theorized methods for improved ISRs. These would be entirely different lines of inquiry, however.
+Given the lack of significant findings, future studies could take a wide variety of approaches. First, more intensive, but similar, interventions to increase perceived similarity could be tested. These interventions could include more specific or important similarities between students and instructors. Second, different methods of increasing perceived similarity, perhaps based in actual instructor-student interaction, could be tested. Such interventions are less desirable from the college's point of view, because they would be more costly and demanding to implement. Third, interventions that aim to improve ISR without increasing perceived similarity could be considered. Similarity is only one of many theorized methods for improved ISRs.
 
 \newpage
 
@@ -1691,11 +1702,11 @@ demotab3 <- expdata %>%
                 t_age,
                 n_course) %>%
   mutate(treatment = ff_label(treatment, "Group"),
-         t_female = ff_label(t_female, "Teacher gender"), 
-         t_age = ff_label(t_age, "Teacher age"),
-         t_race = ff_label(t_race, "Teacher race"), 
-         t_firstgen = ff_label(t_firstgen, "Teacher first-gen status"), 
-         n_course = ff_label(n_course, "Course size")) %>%
+         t_female = ff_label(t_female, "Instructor gender"), 
+         t_age = ff_label(t_age, "Instructor age"),
+         t_race = ff_label(t_race, "Instructor race/ethnicity"), 
+         t_firstgen = ff_label(t_firstgen, "Instructor first-gen status"), 
+         n_course = ff_label(n_course, "Class size")) %>%
   summary_factorlist("treatment", 
                      c("t_female", "t_race", "t_firstgen", "t_age", "n_course"),
                      p = TRUE, 
@@ -1746,6 +1757,16 @@ expdata %>%
 
 # Appendix D
 
+Linear models are based on a number of assumptions: a linear relationship, homoscedasticity (homogeneity of variance), a lack of correlation between the independent variables, and normally-distributed residuals. Figure  \@ref(fig:model1performance) summarizes tests of these assumptions for the initial student similarity perception model. All assumptions seem to hold for this model. Figure  \@ref(fig:model2performance) shows the same tests for the end-of-term student similarity perception model.
+
+```{r model1performance, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height= 10, fig.cap="Initial student similarity perception model performance"}
+performance::check_model(studentfirstsimilaritymodel)
+```
+
+```{r model2performance, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height= 10, fig.cap="End-of-term student similarity perception model performance"}
+performance::check_model(studentsecondsimilaritymodel)
+```
+
 ```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
 set.seed(1847)
 expdata_split <- rsample::initial_split(expdata, prop = 0.80)
@@ -1756,14 +1777,14 @@ expdata_test  <-  rsample::testing(expdata_split)
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Make all replication models
 studentfirstsimilaritymodelv <- lm(data = expdata_train,
-                                  formula = s1_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                  formula = s1_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 studentsecondsimilaritymodelv <- lm(data = expdata_train,
-                                   formula = s2_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                   formula = s2_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 ```
 
-Table \@ref(tab:modelvtable) shows the two primary significant models, redone using a random train/test split (80% training, 20% testing). Table \@ref(tab:traintesttable) shows metrics to assess the performance of the two models on the training and testing datasets. 
+Table \@ref(tab:modelvtable) shows the two primary significant models, redone using a random train/test split (80% training, 20% testing). The treatment effect coefficient for initial student similarity perception is close to the coefficient in the first version of the model ($\beta$ = .202, 95% CI [.137, .267]), but the coefficient for end-of-term student similarity perception is more different ($\beta$ = .137, 95% CI [.055,.219]). Table \@ref(tab:traintesttable) shows metrics to assess the performance of the two models on the training and testing datasets. The root mean squared errors and mean absolute errors are slightly larger for the testing data, which makes sense, as the model was fit to the training data but not the testing data. From these numbers, we can conclude that minimal overfitting in the model has occurred.
 
 ```{r modelvtable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1773,19 +1794,20 @@ stargazer(studentfirstsimilaritymodelv,
           align = TRUE,
           ci = TRUE,
           no.space = TRUE,
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-10pt",
           label = "tab:modelvtable",
+          font.size = "small",
           notes.label = "",
           type = "latex",
           header = FALSE,
           initial.zero = FALSE,
-          keep = c("treatment", "n_course", "s_female", "ir_f16_gpa", "year", "Constant"),
+          keep = c("treatment", "n_course", "s1_female", "ir_f16_gpa", "year", "Constant"),
           #omit = c("teacherid"),
           #mit.labels = c("Instructor fixed effect"),
           dep.var.labels = c("Student sim. 1",
                              "Student sim. 2"),
-          covariate.labels = c("Treatment", "Course size", "Student female", "CGPA", "Year of study"))
+          covariate.labels = c("Treatment", "Class size", "Student female", "CGPA", "Year of study"))
 ```
 
 ```{r traintesttable, echo=FALSE, warning=FALSE, message=FALSE}
@@ -1801,6 +1823,8 @@ metrics(expdata_train, s1_sim, pred1) %>%
   bind_cols(metrics(expdata_test, s1_sim, pred1) %>% dplyr::select(.estimate)) %>%
   bind_rows(metrics(expdata_train, s2_sim, pred2) %>%
               bind_cols(metrics(expdata_test, s2_sim, pred2) %>% dplyr::select(.estimate))) %>%
+  mutate(.metric = c("Root mean square error", "R-squared", "Mean absolute error",
+                     "Root mean square error", "R-squared", "Mean absolute error")) %>%
 kable(caption = "Metrics for student similarity perception models",
         booktabs = TRUE,
         col.names = c("Metric", "Estimator", "Training data", "Testing data")) %>%
@@ -1820,29 +1844,29 @@ expdatahb <- expdata %>%
   filter(s_hisp_black == 1)
 
 studentfirstsimilaritymodelhb <- lm(data = expdatahb,
-                                  formula = s1_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                  formula = s1_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 studentsecondsimilaritymodelhb <- lm(data = expdatahb,
-                                   formula = s2_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                   formula = s2_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 studentsecondrelationshipmodelhb <- lm(data = expdatahb,
-                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + s_female + ir_f16_gpa + year,
+                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 teachersecondrelationshipmodelhb <- lm(data = expdatahb,
-                                     formula = t2_tsr ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                     formula = t2_tsr ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 grademodelhb <- lm(data = expdatahb,
-                 formula = grade ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                 formula = grade ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 examgrademodelhb <- lm(data = expdatahb %>% filter(obj_exam == 1),
-                     formula = t2_finalexam ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                     formula = t2_finalexam ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
-teachersecondsimilarityhb <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + s_female + ir_f16_gpa + year,
+teachersecondsimilarityhb <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                 data = expdatahb,
                                 Hess = TRUE,
                                      na.action = na.omit)
 enrollmentfallmodelhb <- glm(data = expdatahb,
-                           formula = f17_enrolled ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                           formula = f17_enrolled ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                            family = "binomial",
                                      na.action = na.omit)
 ```
@@ -1864,10 +1888,10 @@ stargazer(studentfirstsimilaritymodelhb,
           float.env = "sidewaystable",
           no.space = TRUE,
           notes.label = "",
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-12pt",
           label = "tab:modeltablehb",
-          font.size = "footnotesize",
+          font.size = "small",
           type = "latex",
           header = FALSE,
           #omit = c("teacherid"),
@@ -1880,7 +1904,7 @@ stargazer(studentfirstsimilaritymodelhb,
                              "Final grade",
                              "Instructor sim. 2",
                              "Persistence"),
-          covariate.labels = c("Treatment", "Student ISR 1", "Course size", "Student female", "CGPA", "Year of study"))
+          covariate.labels = c("Treatment", "Student ISR 1", "Class size", "Student female", "CGPA", "Year of study"))
 ```
 
 \newpage
@@ -1894,29 +1918,29 @@ expdata1g <- expdata %>%
   filter(s_firstgen == 1)
 
 studentfirstsimilaritymodel1g <- lm(data = expdata1g,
-                                  formula = s1_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                  formula = s1_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 studentsecondsimilaritymodel1g <- lm(data = expdata1g,
-                                   formula = s2_sim ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                   formula = s2_sim ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 studentsecondrelationshipmodel1g <- lm(data = expdata1g,
-                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + s_female + ir_f16_gpa + year,
+                                     formula = s2_tsr ~ treatment + s1_tsr + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 teachersecondrelationshipmodel1g <- lm(data = expdata1g,
-                                     formula = t2_tsr ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                                     formula = t2_tsr ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 grademodel1g <- lm(data = expdata1g,
-                 formula = grade ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                 formula = grade ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
 examgrademodel1g <- lm(data = expdata1g %>% filter(obj_exam == 1),
-                     formula = t2_finalexam ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                     formula = t2_finalexam ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                      na.action = na.omit)
-teachersecondsimilarity1g <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + s_female + ir_f16_gpa + year,
+teachersecondsimilarity1g <- polr(formula = as.factor(t2_sim1) ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                                 data = expdata1g,
                                 Hess = TRUE,
                                      na.action = na.omit)
 enrollmentfallmodel1g <- glm(data = expdata1g,
-                           formula = f17_enrolled ~ treatment + n_course + s_female + ir_f16_gpa + year,
+                           formula = f17_enrolled ~ treatment + n_course + s1_female + ir_f16_gpa + year,
                            family = "binomial",
                                      na.action = na.omit)
 ```
@@ -1938,9 +1962,9 @@ stargazer(studentfirstsimilaritymodel1g,
           notes.label = "",
           float.env = "sidewaystable",
           no.space = TRUE,
-          keep.stat = c("n", "rsq", "adj.rsq", "logrank", "aic", "res.dev", "ser", "sigma2"),
+          keep.stat = c("n", "rsq", "adj.rsq", "aic"),
           column.sep.width = "-12pt",
-          font.size = "footnotesize",
+          font.size = "small",
           label = "tab:modeltable1g",
           type = "latex",
           header = FALSE,
@@ -1954,7 +1978,7 @@ stargazer(studentfirstsimilaritymodel1g,
                              "Final grade",
                              "Instructor sim. 2",
                              "Persistence"),
-          covariate.labels = c("Treatment", "Student ISR 1", "Course size", "Student female", "CGPA", "Year of study"))
+          covariate.labels = c("Treatment", "Student ISR 1", "Class size", "Student female", "CGPA", "Year of study"))
 ```
 
 \newpage

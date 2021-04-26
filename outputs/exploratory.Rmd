@@ -547,24 +547,6 @@ stargazer(studentfirstsimilaritymodel,
 
 
 ```{r}
-ddata <- expdata %>%
-  dplyr::select(treatment,
-                s1_sim, s1_tsr, 
-                s2_sim, s2_tsr, 
-                t2_sim1, t2_tsr,
-                grade, std_grade, 
-                t2_finalexam, f17_enrolled,
-                obj_exam,
-                s_firstgen,
-                s_hisp_black,
-                year,
-                s_firstgen) %>%
-  mutate(all = 1)
-
-write_csv(ddata, here("takingittothenextlevel/ddata.csv"))
-```
-
-```{r}
 teststudentfirstsimilaritymodel <- lm(data = expdata,
                                   formula = s1_sim ~ treatment + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
                                      na.action = na.omit)
