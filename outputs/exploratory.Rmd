@@ -545,3 +545,88 @@ stargazer(studentfirstsimilaritymodel,
           omit.labels = c("Instructor fixed effect"))
 ```
 
+
+```{r}
+ddata <- expdata %>%
+  dplyr::select(treatment,
+                s1_sim, s1_tsr, 
+                s2_sim, s2_tsr, 
+                t2_sim1, t2_tsr,
+                grade, std_grade, 
+                t2_finalexam, f17_enrolled,
+                obj_exam,
+                s_firstgen,
+                s_hisp_black,
+                year,
+                s_firstgen) %>%
+  mutate(all = 1)
+
+write_csv(ddata, here("takingittothenextlevel/ddata.csv"))
+```
+
+```{r}
+teststudentfirstsimilaritymodel <- lm(data = expdata,
+                                  formula = s1_sim ~ treatment + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                                     na.action = na.omit)
+teststudentsecondsimilaritymodel <- lm(data = expdata,
+                                   formula = s2_sim ~ treatment + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                                     na.action = na.omit)
+teststudentsecondrelationshipmodel <- lm(data = expdata,
+                                     formula = s2_tsr ~ treatment + s1_tsr + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                                     na.action = na.omit)
+testteachersecondrelationshipmodel <- lm(data = expdata,
+                                     formula = t2_tsr ~ treatment + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                                     na.action = na.omit)
+testgrademodel <- lm(data = expdata,
+                 formula = grade ~ treatment + s1_female + ir_f16_gpa + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                                     na.action = na.omit)
+testexamgrademodel <- lm(data = expdata %>% filter(obj_exam == 1),
+                     formula = t2_finalexam ~ treatment + s1_female + ir_f16_gpa + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                                     na.action = na.omit)
+testteachersecondsimilarity <- polr(formula = as.factor(t2_sim1) ~ treatment + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                                data = expdata,
+                                Hess = TRUE,
+                                     na.action = na.omit)
+testenrollmentfallmodel <- glm(data = expdata,
+                           formula = f17_enrolled ~ treatment + s1_female + ir_f16_gpa + teacherid + s_female + s_race + s_firstgen + ir_f16_gpa + year,
+                           family = "binomial",
+                                     na.action = na.omit)
+```
+
+```{r testmodeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+# Make table to display model results
+stargazer(teststudentfirstsimilaritymodel,
+          teststudentsecondsimilaritymodel,
+          teststudentsecondrelationshipmodel,
+          testteachersecondrelationshipmodel,
+          testgrademodel,
+          testexamgrademodel,
+          testteachersecondsimilarity,
+          testenrollmentfallmodel,
+          title = "Replication model results",
+          align = TRUE,
+          ci = TRUE,
+          float.env = "sidewaystable",
+          no.space = TRUE,
+          omit.stat=c("ser","f"),
+          column.sep.width = "-10pt",
+          label = "tab:modeltable",
+          type = "latex",
+          header = FALSE,
+          initial.zero = FALSE,
+          omit = c("teacherid"),
+          omit.labels = c("Instructor fixed effect"))
+```
+
+```{r}
+ols_plot_resid_qq(studentfirstsimilaritymodel)
+```
+
+
+```{r}
+ols_plot_resid_fit(studentfirstsimilaritymodel)
+```
+
+```{r}
+ols_plot_resid_hist(studentfirstsimilaritymodel)
+```
