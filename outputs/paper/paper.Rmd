@@ -373,7 +373,7 @@ demotab2 %>%
 
 There are differences between the students and instructors. Notably, the student sample is 62.7% female, while the instructor sample is 78.2% female. The student sample is 19.8% White, while the instructor sample is 38.7% White. The student sample is 47% Hispanic, while the instructor sample is only 3.4%. Finally, the student sample is 9.8% multiracial, but the instructor sample is 52.1% multiracial. Some of these differences may be due to self-identification: while one person who is Hispanic may select only Hispanic, another may select, for example, Hispanic as well as White, and be classified differently as a result. For this reason, it is very difficult to draw conclusions. Additionally, students are 43.5% first-generation college students, while only 25.2% of instructors are.
 
-In light of the different percentages in student and instructor racial self-identification, Figure \@ref(fig:racegraph) shows the percentages of each group that selected a given racial identity, as well as the percentage that selected more than one of these categories. More students identified as Hispanic, while more instructors identified as White and selected multiple options.
+In light of the different percentages in student and instructor racial self-identification, Figure \@ref(fig:racegraph) shows the percentages of each group that selected a given racial identity, as well as the percentage that selected more than one of these categories. While the tables display race/ethnicity as a single variable (it is either a single identity, mixed race/ethnicity, or unknown), this graph, and the subsequent analysis, deal with multiple racial/ethnic identities that are either selected or not. On the graph, we can see that more students identified as Hispanic, while more instructors identified as White and selected multiple options. Viewing only the table, where race is shown as a one-dimensional variable, does not show the nuance of multiple racial/ethnic identities. Still, these categories are limiting, and do not necessarily truly reflect the social or cultural identities of study participants.
 
 ```{r racegraph, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(8,4), fig.cap="Bar chart illustrating racial identification proprtions of participants"}
 
@@ -529,6 +529,8 @@ sumtable %>%
 ```
 
 Figure \@ref(fig:continuousoutcomes) shows key continuous outcome distributions for both treatment and control. Corresponding to Table \@ref(tab:summarytable), the only visible differences in distributions are in the initial student similarity perception and end-of-term student similarity perception.
+
+Interestingly, there is a large difference between how students rate perceived similarity and how instructors rate perceived similarity. Students, on average, rate end of term similarity at 3.6, while instructors give an average rating of 2.7. Students give an average end-of-term ISR rating of 4.1, while instructors give an average of only 3.5. This could be due to more positive student perceptions, or due to students giving higher ratings for equivalent perceptions. Both groups rate ISR more highly than similarity, but it is difficult to compare the weight of these scores as the scales are not necessarily measuring in the same units.
 
 ```{r continuousoutcomes, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height= 10, fig.cap="Histograms illustrating continous and ordinal key outcomes"}
 s1_simplot <- expdata %>% 
@@ -1244,13 +1246,13 @@ instructor_complete - isrdata %>%
 
 $treatment_{i}$ is the indicator that treatment was given.
 
-$X_{1i}$ is a vector of student-level covariates (student ISR anticipation, gender, CGPA, year of study).  The original study used gender and CGPA are used as controls for grade based outcomes only. @citeoriginal state this is because females earn higher grades generally. This paper uses them as controls for the majority of outcomes. ISR anticipation is used as a control only for end-of-term student ISR perception.
+$X_{1i}$ is a vector of student-level covariates (student ISR anticipation, gender, CGPA, year of study). Different covariates are used to model different outcomes. The original study used gender and CGPA are used as controls for grade based outcomes only. @citeoriginal state this is because females earn higher grades generally. This paper uses them as controls for the majority of outcomes. ISR anticipation is used as a control only for end-of-term student ISR perception.
 
-$X_{2j}$ is a vector of instructor-level covariates (class size). The original study consider instructor fixed effects instead. Because each participating instructor taught one class in the study, the class sizes correspond directly to the instructor IDs, so it was inadvisable to use both. This paper selected class size because of the larger potential for transferable insights.
+$X_{2j}$ is a vector of instructor-level covariates (class size). Different covariates are used to model different outcomes. The original study consider instructor fixed effects instead. Because each participating instructor taught one class in the study, the class sizes correspond directly to the instructor IDs, so it was inadvisable to use both. This paper selected class size because of the larger potential for transferable insights.
 
 $\epsilon_{ij}$ is a standard error. As this paper does not use clustered standard errors like @citeoriginal, there are slight differences in standard error and p-values when compared with the original paper. This does not affect the regression coefficients.
 
-$\beta_{0}$, $\beta_{1}$, $\Gamma_{1}$, $\Gamma_{2}$, and $a_{k}$ are coefficients on the resulting models.
+In the resulting models, $\beta_{0}$ and $a_{k}$ are constant terms. $\beta_{1}$ is the coefficient that indicates treatment effect. $\Gamma_{1}$ and $\Gamma_{2}$ are coefficients for the covariates.
 
 ### Linear models
 
@@ -1258,7 +1260,7 @@ Equation \@ref(eq:linmodel) is @citeoriginal's linear model, used for continuous
 
 \begin{equation}
 (\#eq:linmodel)
-Outcome_{ij} = \beta_{0} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Gamma_{2} + \epsilon_{ij}
+Outcome_{ij} = \beta_{0} + \beta_{1}treatment_{i} + \Gamma_{1}X_{1i} + \Gamma_{2}X_{2j} + \epsilon_{ij}
 \end{equation}
 
 ### Ordinal logistic models
@@ -1267,7 +1269,7 @@ Equation \@ref(eq:ordlogmodel) is @citeoriginal's ordinal logistic model, used f
 
 \begin{equation}
 (\#eq:ordlogmodel)
-prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Gamma_{2} + \epsilon_{ij} > k
+prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + \Gamma_{1}X_{1i} + \Gamma_{2}X_{2j} + \epsilon_{ij} > k
 \end{equation}
 
 ### Logistic models
@@ -1276,7 +1278,7 @@ Equation \@ref(eq:logmodel) is @citeoriginal's logistic model, used for the bina
 
 \begin{equation}
 (\#eq:logmodel)
-prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Gamma_{2} + \epsilon_{ij} > k
+prob(outcome_{ij}) = a_{k} + \beta_{1}treatment_{i} + \Gamma_{1}X_{1i} + \Gamma_{2}X_{2j} + \epsilon_{ij} > k
 \end{equation}
 
 ## Additional models
@@ -1289,6 +1291,8 @@ Outcome_{ij} = \beta_{0} + \beta_{1}treatment_{i} + X_{1i}\Gamma_{1} + X_{2j}\Ga
 \end{equation}
 
 # Results
+
+All results are reported using the treatment coefficient, $\beta_{1}$, and covariate coefficients, which are represented with $\Gamma$. 95% confidence intervals for those coefficients are shown in brackets below the coefficients. Significance levels are indicated with stars. Initial perceptions are indicated with 1, and end-of-term perceptions with 2. ISR refers to instructor-student relationship perception, and sim. refers to similarity perception. Final grade refers to the grade given for an objectively graded final exam in the course, and Std. course grade refers to a standardized final course grade.
 
 ## Replication results
 
@@ -1322,9 +1326,11 @@ enrollmentfallmodel <- glm(data = expdata,
                                      na.action = na.omit)
 ```
 
-In Table \@ref(tab:modeltable), Model 1 shows that the treatment had a statistically significant effect on initial student similarity perception ($\beta$ = 0.194, 95% CI [0.136, 0.253]). Similarly, Model 2 that the treatment had a statistically significant effect on  student end-of-term similarity perception ($\beta$ = 0.11, 95% CI [0.038, 0.183]), though this effect size is smaller. Both coefficients are minimal on a scale of 1 to 5. The adjusted R-squared values, which indicate the proportion of variation in the outcome that can be explained by the treatment and covariates, are low (0.032 and 0.022). These models are helpful for analyzing treatment effect, but they do not aim to be and are not useful predictors of student similarity perception, not even within the sample.
+In Table \@ref(tab:modeltable), Model 1 shows that the treatment had a statistically significant effect on initial student similarity perception ($\beta_{1}$ = 0.194, 95% CI [0.136, 0.253]). Similarly, Model 2 that the treatment had a statistically significant effect on  student end-of-term similarity perception ($\beta_{1}$ = 0.11, 95% CI [0.038, 0.183]), though this effect size is smaller. Both coefficients are minimal on a scale of 1 to 5. The adjusted R-squared values, which indicate the proportion of variation in the outcome that can be explained by the treatment and covariates, are low (0.032 and 0.022). These models are helpful for analyzing treatment effect, but they do not aim to be and are not useful predictors of student similarity perception, not even within the sample.
 
-Model 3 shows no evidence that treatment impacted student end-of-term ISR perception. However, it does show a significant association between student ISR anticipation and student end-of-term ISR perception ($\beta$ = 0.671, 95% CI [0.624, 0.717]). For every 1 point increase in ISR anticipation on a 1 to 5 scale, the expected increase in end-of-term ISR perception is 0.671. Models 4, 5, 6, 7, and 8 show no significant treatment effect on end-of-term instructor ISR perception, course grade, objectively graded exam grade, end-of-term instructor similarity perception, or enrollment in the subsequent term.
+Model 3 shows no evidence that treatment impacted student end-of-term ISR perception. However, it does show a significant association between student ISR anticipation and student end-of-term ISR perception ($\Gamma$ = 0.671, 95% CI [0.624, 0.717]). For every 1 point increase in ISR anticipation on a 1 to 5 scale, the expected increase in end-of-term ISR perception is 0.671. Models 4, 5, 6, 7, and 8 show no significant treatment effect on end-of-term instructor ISR perception, course grade, objectively graded exam grade, end-of-term instructor similarity perception, or enrollment in the subsequent term.
+
+All models in Table \@ref(tab:modeltable) use gender, prior GPA, and year of study as student-level covariates. Instructor-level covariates are limited to the class size. This is based on the assumption that student traits will be more likely to affect student experiences, and therefore student outcomes. Race/ethnicity is not included because that covariate is further explored in separate models.
 
 Model performance and validation for the two models with significant treatment effects, Models 1 and 2 from Table \@ref(tab:modeltable), can be found in [Appendix D].
 
@@ -1364,9 +1370,9 @@ stargazer(studentfirstsimilaritymodel,
           covariate.labels = c("Treatment", "Student ISR 1", "Class size", "Student female", "CGPA", "Year of study"))
 ```
 
-Because some students are more commonly targeted by persistence interventions, the subset of Hispanic and/or Black college student participants is considered separately from the rest of the student population. While the effect of treatment on student similarity perception is larger than for the general student population ($\beta$ = 0.199, 95% CI [0.124, 0.274] for initial perception; $\beta$ = 0.116, 95% CI [0.021, 0.211] for end-of-term perception), there is still no effect on ISR perception, instructor perception, or student outcomes. Full results are in [Appendix E].
+Because some students are more commonly targeted by persistence interventions, the subset of Hispanic and/or Black college student participants is considered separately from the rest of the student population. While the effect of treatment on student similarity perception is larger than for the general student population ($\beta_{1}$ = 0.199, 95% CI [0.124, 0.274] for initial perception; $\beta_{1}$ = 0.116, 95% CI [0.021, 0.211] for end-of-term perception), there is still no effect on ISR perception, instructor perception, or student outcomes. Full results are in [Appendix E].
 
-Similarly, the subset of first-generation college student participants is considered. The effect of treatment on student similarity perception is larger than for the general student population and the Black and/or Hispanic student participants ($\beta$ = 0.265, 95% CI [0.177, 0.353] for initial perception; $\beta$ = 0.15, 95% CI [0.039, 0.26] for end-of-term perception), but there is still no effect on ISR perception, instructor perception, or student outcomes. Full results are in [Appendix F].
+Similarly, the subset of first-generation college student participants is considered. The effect of treatment on student similarity perception is larger than for the general student population and the Black and/or Hispanic student participants ($\beta_{1}$ = 0.265, 95% CI [0.177, 0.353] for initial perception; $\beta_{1}$ = 0.15, 95% CI [0.039, 0.26] for end-of-term perception), but there is still no effect on ISR perception, instructor perception, or student outcomes. Full results are in [Appendix F].
 
 ### Exploratory replication results
 
@@ -1425,7 +1431,7 @@ teachersecondrelationshipmodelhb <- lm(data = expdata,
 
 ```
 
-Table \@ref(tab:modeltablerel2), however, shows that there is a significant negative association between student identification as Hispanic and/or Black and end-of-term instructor ISR perception ($\beta$ = -0.096, 95% CI [-0.166, -0.026]).
+Table \@ref(tab:modeltablerel2), however, shows that there is a significant negative association between student identification as Hispanic and/or Black and end-of-term instructor ISR perception ($\Gamma$ = -0.096, 95% CI [-0.166, -0.026]).
 
 ```{r modeltablerel2, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1472,11 +1478,11 @@ enrollmentfallmodel_ <- glm(data = expdata,
                                      na.action = na.omit)
 ```
 
-Table \@ref(tab:noncausaltable) considers the association between similarity perception and ISR perception and the relationship between ISR perception and student outcomes. Again, because only the treatment was randomized, we cannot make causal inferences.
+Table \@ref(tab:noncausaltable) considers the association between similarity perception and ISR perception and the relationship between ISR perception and student outcomes. Again, because only the treatment was randomized, we cannot make causal inferences. Course size is used as a covariate for ISR perception because it directly shapes how students and instructors relate to one another. Student gender and prior GPA are used as covariates for student outcomes for the reasons previously outlined from @citeoriginal.
 
-In Models 1 and 2, we can see that student and instructor similarity perception are both significantly associated with student and instructor ISR perception. Unsurprisingly, student similarity perception is more strongly associated with student ISR perception ($\beta$ = 0.733, 95% CI [0.706, 0.76]), and instructor similarity perception is more strongly associated with instructor ISR perception ($\beta$ = 0.512, 95% CI [0.483, 0.541]).
+In Models 1 and 2, we can see that student and instructor similarity perception are both significantly associated with student and instructor ISR perception. Unsurprisingly, student similarity perception is more strongly associated with student ISR perception ($\Gamma$ = 0.733, 95% CI [0.706, 0.76]), and instructor similarity perception is more strongly associated with instructor ISR perception ($\Gamma$ = 0.512, 95% CI [0.483, 0.541]).
 
-Models 3 and 4 show that student ISR perception is significantly associated course grade, while instructor ISR perception is significantly associated with course grade and final grade. Instructor perception is more strongly associated ($\beta$ = 0.34, 95% CI [0.295, 0.385] for course grade; $\beta$ = 0.643, 95% CI [0.642, 0.759] for final grade) than student perception ($\beta$ = 0.115, 95% CI [0.064, 0.164] for course grade).
+Models 3 and 4 show that student ISR perception is significantly associated course grade, while instructor ISR perception is significantly associated with course grade and final grade. Instructor perception is more strongly associated ($\Gamma$ = 0.34, 95% CI [0.295, 0.385] for course grade; $\Gamma$ = 0.643, 95% CI [0.642, 0.759] for final grade) than student perception ($\Gamma$ = 0.115, 95% CI [0.064, 0.164] for course grade).
 
 Model 5 indicates that ISR perception is not significantly associated with persistence.
 
@@ -1547,7 +1553,7 @@ mystdgrademodel <- lm(data = expdata,
                                      na.action = na.omit)
 ```
 
-Table \@ref(tab:mymodeltable) shows the results of models that consider matching student-instructor traits. As with the replication results, there is a measurable treatment effect for initial student similarity perception ($\beta$ = 0.108, 95% CI [0.036, 0.179]). However, the coefficient is even lower than in the replication models. There is still no treatment effect for student end-of-term ISR perception or standardized course grade.
+Table \@ref(tab:mymodeltable) shows the results of models that consider matching student-instructor traits. As with the replication results, there is a measurable treatment effect for initial student similarity perception ($\beta_{1}$ = 0.108, 95% CI [0.036, 0.179]). However, the coefficient is even lower than in the replication models. There is still no treatment effect for student end-of-term ISR perception or standardized course grade. Because the matching ID covariates were used, student covariates like gender and race were not included. Prior GPA and class size were still included, because they do not have a "matching" trait.
 
 ```{r mymodeltable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
@@ -1784,7 +1790,7 @@ studentsecondsimilaritymodelv <- lm(data = expdata_train,
                                      na.action = na.omit)
 ```
 
-Table \@ref(tab:modelvtable) shows the two primary significant models, redone using a random train/test split (80% training, 20% testing). The treatment effect coefficient for initial student similarity perception is close to the coefficient in the first version of the model ($\beta$ = .202, 95% CI [.137, .267]), but the coefficient for end-of-term student similarity perception is more different ($\beta$ = .137, 95% CI [.055,.219]). Table \@ref(tab:traintesttable) shows metrics to assess the performance of the two models on the training and testing datasets. The root mean squared errors and mean absolute errors are slightly larger for the testing data, which makes sense, as the model was fit to the training data but not the testing data. From these numbers, we can conclude that minimal overfitting in the model has occurred.
+Table \@ref(tab:modelvtable) shows the two primary significant models, redone using a random train/test split (80% training, 20% testing). The treatment effect coefficient for initial student similarity perception is close to the coefficient in the first version of the model ($\beta_{1}$ = .202, 95% CI [.137, .267]), but the coefficient for end-of-term student similarity perception differs more ($\beta_{1}$ = .137, 95% CI [.055,.219]). Table \@ref(tab:traintesttable) shows metrics to assess the performance of the two models on the training and testing datasets. The root mean squared errors and mean absolute errors are slightly larger for the testing data, which makes sense, as the model was fit to the training data but not the testing data. From these numbers, we can conclude that minimal overfitting in the model has occurred.
 
 ```{r modelvtable, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
 # Make table to display model results
