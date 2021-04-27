@@ -6,6 +6,9 @@
 # Pre-requisites: 01_import_data.R
 # to-dos:
 
+# this script replicates the data selection and cleaning that is done in the paper.Rmd file.
+# the data is then filtered to include only what is necessary for the shiny app and saved.
+
 expdata <- isrdata %>%
   filter(t1_consent == 1 # Only include if instructor consented to first survey
          & t1_complete == 1 # Only included if instructor completed first survey
@@ -14,7 +17,7 @@ expdata <- isrdata %>%
          & s1_timer_consent_3 > 1 # Only include if student read consent
          & s1_fullsurvey == 1 # Only include if the student completed the whole first survey
          & t2_complete == 1 # Only include if the instructor completed the whole second survey
-         # The rest of the lines make sure that the survey taker looked at each page for more than three seconds
+         # Make sure that the survey taker looked at each page for more than three seconds
          & t1_timer_gtky1_3 > 10
          & t1_timer_gtky2_3 > 10
          & t1_timer_gtky3_3 > 10
@@ -40,6 +43,7 @@ expdata <- isrdata %>%
          & (s2_timer3c_3 > 10 | is.na(s2_timer3c_3))
          & (s2_timer4_3 > 10 | is.na(s2_timer4_3))
          & t2_timer > 10
+         # Remove specific drop reasons
          & t_drop_reasons != "Teacher administered GTKY survey mistakenly at end of semester"
          & t_drop_reasons != "Taught online course"
          & t_drop_reasons != "Administered to only graduate students"
@@ -52,6 +56,10 @@ expdata <- expdata %>%
          f17_enrolled = as.factor(f17_enrolled),
          s1_female = as.factor(s1_female),
          t_female = as.factor(t_female))
+
+# The original coding of race contained errors -- ex. a professor who selected White and Asian in the survey,
+# and was marked as Asian for most cases, but white for one random case.
+# This remakes the variable t_race, for consistency
 
 expdata <- expdata %>%
   mutate(t1_race_1 = replace_na(as.numeric(t1_race_1), 0),
@@ -92,9 +100,12 @@ expdata <- expdata %>%
                                                                           "Other Race"))))))))) %>%
   mutate(s_hisp_black = ifelse((s1_race_2 == 1 | s1_race_3 == 1), 1, 0))
 
+# This creates a variable that is the final grade if the final was an objectively graded exam
+# and otherwise NA
 expdata <- expdata %>%
   mutate(t2_finalexamobj = ifelse(obj_exam == 1, t2_finalexam, NA))
 
+# Select only what we need for the SHiny app.
 ddata <- expdata %>%
   dplyr::select(treatment,
                 s1_sim, s1_tsr, 
